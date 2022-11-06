@@ -78,7 +78,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
     <a href="../../.." title="Java Architect" class="md-header__button md-logo" aria-label="Java Architect" data-md-component="logo">
       
@@ -144,14 +146,8 @@
     
   </nav>
   
-</header>
     
-    <div class="md-container" data-md-component="container">
       
-      
-        
-          
-            
 <nav class="md-tabs" aria-label="标签" data-md-component="tabs">
   <div class="md-tabs__inner md-grid">
     <ul class="md-tabs__list">
@@ -212,7 +208,13 @@
     </ul>
   </div>
 </nav>
-          
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
         
       
       <main class="md-main" data-md-component="main">
@@ -329,9 +331,82 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Spring源码编译教程
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Spring源码编译教程
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spring_1" class="md-nav__link">
+    下载Spring源码所需要的依赖
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spring_2" class="md-nav__link">
+    下载Spring源码
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideagradle" class="md-nav__link">
+    修改IDEA的gradle配置
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    运行代码
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    问题1
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    问题2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    问题3
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -346,6 +421,34 @@
     <li class="md-nav__item">
       <a href="../Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="md-nav__link">
         1.Spring核心知识点
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="md-nav__link">
+        2.手写模拟Spring底层原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        3.Spring之底层架构核心概念解析
       </a>
     </li>
   
@@ -461,6 +564,63 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spring_1" class="md-nav__link">
+    下载Spring源码所需要的依赖
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spring_2" class="md-nav__link">
+    下载Spring源码
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideagradle" class="md-nav__link">
+    修改IDEA的gradle配置
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    运行代码
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    问题1
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    问题2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    问题3
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -479,1098 +639,60 @@
 <p>此教程是基于周瑜老师的Spring5.3.10注释版源码编译的，并不是Github原生的Spring5.3.10源码，有一些差别，但都是gradle配置文件的微小改动，比如把某些依赖从optional改成compile级别（主要是为了方便编译），其他都没改动。</p>
 <p>讲的是最新的Spring版本，我之前用的是2019的某个IDEA版本，但是我尝试过后发现编译不成功，所以改用了最新版本IDEA版本2021.1.3，所以对于大家而言也尽量用这个版本，用其他IDEA版本可能会遇到各种各样的问题，解决问题会比较费时间，所以为了节省大家和我的时间，请大家用2021.1.3这个IDEA版本。</p>
 <p>Spring带注释源码地址：</p>
-<p>git clone的地址为：https://gitee.com/archguide/spring-framework-5.3.10.git</p>
+<p>git clone的地址为：<a href="https://gitee.com/archguide/spring-framework-5.3.10.git">https://gitee.com/archguide/spring-framework-5.3.10.git</a></p>
 <p>附上2021.1.3版的百度网盘链接：</p>
 <p>链接：https://pan.baidu.com/s/1X79-2bFGtkL0763QjAya3w 提取码：uk7w </p>
 <p>此链接中还有IDEA破解所需要的工具包，和一个.gradle.zip压缩包（后续会用到，我是用的360压缩软件进行压缩的，建议大家也用这个软件来解压，有同学反馈用其他软件可能解压会遇到问题，上面网盘链接里有一个.gradle的压缩包和一个未压缩的.gradle文件夹），还有一个JDK1.8的安装包（因为如果用稍微老一点的1.8小版本，也会出现奇葩问题，所以也尽量用我提供的这个JDK）</p>
-<p>附上IDEA破解教程链接：https://www.exception.site/essay/idea-reset-eval</p>
+<p>附上IDEA破解教程链接：<a href="https://www.exception.site/essay/idea-reset-eval">https://www.exception.site/essay/idea-reset-eval</a></p>
 <p>2021.1.3IDEA版本截图：</p>
-<p>InteliJIDEA</p>
-<p>UltiMate2021.1</p>
-<p>JIDEA2021.1.3(UltimateEdition)</p>
-<p>InteliJID</p>
-<p>Build#IU-211.7628.21,builtonJune30,2</p>
-<p>LicensedtolntelliJIDEAEvaluator</p>
-<p>Expirationdate:September21,</p>
-<p>Runtimeversion:11.0.11+9-b1341.60amd64</p>
-<p>VM:OpenJDK64-BitServerVMbyJetBrainsS.r.O.</p>
-<p>JET</p>
-<p>Poweredbyopen-sourcesoftware</p>
-<p>BRAINS</p>
-<p>Copyright2000-2021JetBrainss..o.</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629630253830-990e69c4-d2c9-4ee0-845c-573233be273f.png" /></p>
-<p>下载Spring源码所需要的依赖 </p>
-<p>百度网盘链接：https://pan.baidu.com/s/1X79-2bFGtkL0763QjAya3w 提取码：uk7w </p>
-<p>下载得到.gradle.zip压缩包，并解压，比如解压到D盘</p>
-<p>新加卷(D:&gt;gradle</p>
-<p>此电脑</p>
-<p>名称</p>
-<p>类型</p>
-<p>修改日期</p>
-<p>大小</p>
-<p>build-scan-data</p>
-<p>文件夹</p>
-<p>2021/8/2216:56</p>
-<p>文件夹</p>
-<p>2021/8/2216:57</p>
-<p>caches</p>
-<p>文件夹</p>
-<p>2021/8/2216:57</p>
-<p>daemon</p>
-<p>文件夹</p>
-<p>2021/8/2216:54</p>
-<p>jdks</p>
-<p>文件夹</p>
-<p>kotlin-profile</p>
-<p>2021/8/2217:14</p>
-<p>文件夹</p>
-<p>2021/8/2216:57</p>
-<p>native</p>
-<p>文件夹</p>
-<p>2021/8/2216:54</p>
-<p>workers</p>
-<p>文件夹</p>
-<p>2021/8/2216:57</p>
-<p>wrapper</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629631653104-1e6db8f3-15a1-40ce-b3ec-877ef6a12aa4.png" /></p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/idea.png" /></p>
+<h2 id="spring_1">下载Spring源码所需要的依赖</h2>
+<p>百度网盘链接：<a href="https://pan.baidu.com/s/1X79-2bFGtkL0763QjAya3w">https://pan.baidu.com/s/1X79-2bFGtkL0763QjAya3w</a> 提取码：uk7w </p>
+<p>下载得到.gradle.zip压缩包，并解压，比如解压到D盘<img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/gradle.png" /></p>
 <p>因为Spring源码存在很多依赖包，如果大家自行下载，会需要下很久（1小时都有可能），所以我直接把我电脑上的依赖包给到大家。</p>
 <p>Spring是通过gradle来编译源码下载依赖的，.gradle文件夹可以理解为gradle的仓库（和mave类似，不懂gradle的先这么理解），而我给大家的这个仓库，只包含了Spring源码所需要的依赖。</p>
-<p>下载Spring源码 </p>
-<p>git clone的地址为：https://gitee.com/archguide/spring-framework-5.3.10.git</p>
-<p>建议直接用IDEA的git来下载源码：</p>
-<p>EditviwNavigateCodeAnalyze</p>
-<p>BuilD</p>
-<p>ToolsVcSWindow</p>
-<p>ZhouyuDemo</p>
-<p>File</p>
-<p>Run</p>
-<p>Help</p>
-<p>Refactor</p>
-<p>Project...</p>
-<p>New</p>
-<p>Zh</p>
-<p>ProjectfromExistingSources...</p>
-<p>gpen...</p>
-<p>5a[o-d</p>
-<p>ProjectfromVersionControl...</p>
-<p>OpenRecent</p>
-<p>Module...</p>
-<p>CloseProject</p>
-<p>ModulefromExistingSources...</p>
-<p>Settings...</p>
-<p>Ctrl+Alt+S</p>
-<p>Ctrl+Alt+shift+S</p>
-<p>ProjectStructure...</p>
-<p>JavaClass</p>
-<p>FileProperties</p>
-<p>KotlinClass/File</p>
-<p>File</p>
-<p>LocalHistory</p>
-<p>Ctrl+Alt+Shift+lnsert</p>
-<p>ScratchFile</p>
-<p>日SaveAll</p>
-<p>Ctrl+S</p>
-<p>Package</p>
-<p>ReloadAllfromDisk</p>
-<p>Ctrl+Alt+Y</p>
-<p>FXMLFIIe</p>
-<p>lnvalidateCaches...</p>
-<p>package-info.java</p>
-<p>ManageIDESettings</p>
-<p>HTMLFile</p>
-<p>SearchEverywhereDoubleShift</p>
-<p>NewProjectsSettings</p>
-<p>essStylesheet</p>
-<p>Export</p>
-<p>JavaScriptFile</p>
-<p>GotoFileCtrl+Shift+N</p>
-<p>Js</p>
-<p>Print...</p>
-<p>TypeScriptFile</p>
-<p>TS</p>
-<p>AddtoFavorites</p>
-<p>RecentFilesCtrl+E</p>
-<p>packagejsonFile</p>
-<p>PowerSaveMode</p>
-<p>KotlinScript</p>
-<p>Exit</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629632519132-d48a877f-b098-4094-ab09-af07da81db9b.png" /></p>
-<p>GetfromVersionControl</p>
-<p>RepositoryURL</p>
-<p>Versioncontrol:</p>
-<p>Git</p>
-<p>GitHub</p>
-<p>https://gitee.com/archguide/spring-framework-5.3.10.git</p>
-<p>URL:</p>
-<p>Noaccounts</p>
-<p>D:ldeaProjectslspring-framework-5.3.10</p>
-<p>Directory:</p>
-<p>GitHubEnterprise</p>
-<p>Noaccounts</p>
-<p>Space</p>
-<p>Noaccount</p>
-<p>Clone</p>
-<p>Cancel</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629632538257-fc53376a-a945-4ae9-b06b-822b84f94f0c.png" /></p>
+<h2 id="spring_2"><strong>下载Spring源码</strong></h2>
+<p>git clone的地址为：<a href="https://gitee.com/archguide/spring-framework-5.3.10.git">https://gitee.com/archguide/spring-framework-5.3.10.git</a></p>
+<p>建议直接用IDEA的git来下载源码：<img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_Nds5E7397I.png" /></p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_gJMkhJJ3vU.png" /></p>
 <p>输入地址，点击Clone，就会开始下载源码工程（因为是从gitee上下载，所以会比从github上下载快很多）。</p>
 <p>一旦下载完成，IDEA就会自动下载gradle，下载完gradle就会开始下载Spring源码依赖，但是我们已经有现成的了，所以可以直接取消这个过程。</p>
-<p>Git</p>
-<p>READMEmd</p>
-<p>AddConfiguration...</p>
-<p>spring-framework-5.3.10</p>
-<p>三云中-READMEmD</p>
-<p>Project</p>
-<p>Gradle</p>
-<p>三I</p>
-<p>spring-framework-5.3.10</p>
-<p>HIHT</p>
-<p>三云田十大</p>
-<p>qithub</p>
-<p>lle咖Database</p>
-<p>spring-framework-5.3.10</p>
-<p>buildsrc</p>
-<p>Ci</p>
-<p>Spring</p>
-<p>Framework</p>
-<p>framework-bom</p>
-<p>buildpassing</p>
-<p>gradle</p>
-<p>integration-tests</p>
-<p>spring-aop</p>
-<p>spring-aspects</p>
-<p>spring-beans</p>
-<p>ThisisthehomeoftheSpringFramworkhoundaij</p>
-<p>spring-context</p>
-<p>CollectvelythespringFramoworkandthetamyspringprojecsarien</p>
-<p>spring-context-indexer</p>
-<p>Spring-context-support</p>
-<p>referredtosimplyas"Spring</p>
-<p>spring-core</p>
-<p>spring-expression</p>
-<p>Springproyideseveryhingrqurdbeyond</p>
-<p>spring-instrument</p>
-<p>creatingenterpriseapplicaionowdricur</p>
-<p>springjc</p>
-<p>spring-jabc</p>
-<p>Pleasereadtheoveryiewsecionli</p>
-<p>spring-ims</p>
-<p>spring-messaging</p>
-<p>Build</p>
-<p>Sync</p>
-<p>1G川</p>
-<p>Sprigframework-5.3.10:Downloadgradle-6.2c</p>
-<p>DowLodhtto:seceh</p>
-<p>TODO</p>
-<p>GProfler</p>
-<p>口</p>
-<p>Git</p>
-<p>erminal</p>
-<p>SequenceDiagram</p>
-<p>EventLog</p>
-<p>rablems</p>
-<p>JPAfrmeworksaredetected./configure(momentsaqo)</p>
-<p>2:1LFUTF84spaces</p>
-<p>GRadle:Downloadqrd-6.8.3-bin.zip(14.67.8)</p>
-<p>Web</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629632733626-bc59e79a-6393-477c-bbd8-3ba16c63f18c.png?x-oss-process=image%2Fresize%2Cw_750%2Climit_0" /></p>
-<p>修改IDEA的gradle配置 </p>
-<p>Tools</p>
-<p>Build</p>
-<p>spring-framework-5.3.10-README.md</p>
-<p>Help</p>
-<p>Edit</p>
-<p>View</p>
-<p>Git</p>
-<p>CodeAnalyze</p>
-<p>Refactor</p>
-<p>Navigate</p>
-<p>Run</p>
-<p>File</p>
-<p>Window</p>
-<p>New</p>
-<p>SPi</p>
-<p>Open...</p>
-<p>Da[odd</p>
-<p>README.mdx</p>
-<p>OpenRecent</p>
-<p>BIOHHT</p>
-<p>自</p>
-<p>CloseProject</p>
-<p>Ctrl+Alt+S</p>
-<p>Settings</p>
-<p>aJmonns"</p>
-<p>ProjectStructure...</p>
-<p>Ctrl+Alt+Shift+S</p>
-<p>FileProperties</p>
-<p>Spring</p>
-<p>Framework</p>
-<p>LocalHistory</p>
-<p>build</p>
-<p>passing</p>
-<p>日</p>
-<p>Ctrl+S</p>
-<p>SaveAll</p>
-<p>ReloadAllfromDisk</p>
-<p>Ctrl+Alt+Y</p>
-<p>GradleEnterprise</p>
-<p>Revvedupby</p>
-<p>lnvalidateCaches...</p>
-<p>ManageIDESettings</p>
-<p>NewProjectsSettings</p>
-<p>ThisisthehomeoftheSpringFramework:theoudainospringprojecs</p>
-<p>Export</p>
-<p>CollectivelytheSpringFramworkandthampingor</p>
-<p>Print...</p>
-<p>referredtosimplyas"Spring"</p>
-<p>PowerSaveMode</p>
-<p>Exit</p>
-<p>Springprovideseverythingrequirdbeyondthargrmminguae</p>
-<p>spring-expression</p>
-<p>cratingenterpriseappicationwirdrur</p>
-<p>spring-instrument</p>
-<p>spring-jc</p>
-<p>Pleasereadtheoveryiewsecionrrmleei</p>
-<p>spring-jdbc</p>
-<p>spring-jms</p>
-<p>cnrina-maccani</p>
-<p>Build:</p>
-<p>Sync</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629632826667-81cabddf-6c6d-4097-a276-ecd8c539c45c.png" /></p>
-<p>Settings</p>
-<p>BuilD,Execution,Deployment&gt;BuildToolsGradle</p>
-<p>Generalsettings</p>
-<p>Appearance&amp;Behavior</p>
-<p>keymap</p>
-<p>dradleuserhome:</p>
-<p>CUsers\周瑜gradle</p>
-<p>Editor</p>
-<p>bvemoelheogasuociowe</p>
-<p>口</p>
-<p>Plugins</p>
-<p>Generate*imlfilesformodulesimportedfromGradle</p>
-<p>GmablaiyouhivemkdptwhDAm</p>
-<p>口</p>
-<p>VersionControl</p>
-<p>BuildExecutionDeployment</p>
-<p>Gradleprojects</p>
-<p>口</p>
-<p>BuildTools</p>
-<p>spring-framework-</p>
-<p>Downloadexternalannotationsfordependencies</p>
-<p>口</p>
-<p>Maven</p>
-<p>口</p>
-<p>Gradle</p>
-<p>Buildandrun</p>
-<p>Gant</p>
-<p>BydefaultInteliIDEAusesGradletobuildtheprojectandruntheask</p>
-<p>Compiler</p>
-<p>lnapureyolipoedin</p>
-<p>Debugger</p>
-<p>NoethutthelbedoentsGdaomobmhem</p>
-<p>口</p>
-<p>RemoteJarRepositories</p>
-<p>Buildandrunusing:</p>
-<p>GradleDefault)</p>
-<p>ApplicationServers</p>
-<p>Runtestsusing:</p>
-<p>Gradle(Default)</p>
-<p>Coverage</p>
-<p>Docker</p>
-<p>Gradle</p>
-<p>JavaProfiler</p>
-<p>gradle-wrapper.properties'file</p>
-<p>UseGradlefrom:</p>
-<p>ReguiredPlugins</p>
-<p>GradleJVM:</p>
-<p>JAVAHOMEversion1.8.0212</p>
-<p>RunTargets</p>
-<p>TrustedLocations</p>
-<p>Languages&amp;Frameworks</p>
-<p>Tools</p>
-<p>Apply</p>
-<p>OK</p>
-<p>Cancel</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629632842158-14c997c4-670e-4868-ac20-a6427dc0656b.png" /></p>
-<p>首先把gradle user home改为.gradle压缩包的解压之后的文件路径，比如D:.gradle</p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_RPl8JJnLwm.png" /></p>
+<h2 id="ideagradle">修改IDEA的gradle配置</h2>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_QloU44ImmY.png" /></p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_fWL0xaIANZ.png" /></p>
+<p>首先把gradle user home改为<strong>.gradle压缩包</strong>的解压之后的文件路径，比如D:.gradle</p>
 <p>然后把Build and run suing和Run tests using都改为IntelliJ IDEA，其他都不用动，改为之后如下图：</p>
-<p>Settings</p>
-<p>BuilD,Execution,DeloymenBuildToolsGe</p>
-<p>Reset</p>
-<p>Generalsettings</p>
-<p>Appearance&amp;Behavior</p>
-<p>keymap</p>
-<p>Gradleuserhome</p>
-<p>D:gradle</p>
-<p>Editor</p>
-<p>QVerdethedbautlioatowo.</p>
-<p>日</p>
-<p>Plugins</p>
-<p>Generate*imlfilesformodulesimportedfromGdle</p>
-<p>mablaiyouhivemkdptwhDAm</p>
-<p>口</p>
-<p>VersionControl</p>
-<p>BuildExecutionDeployment</p>
-<p>Gradleprojects</p>
-<p>口</p>
-<p>BuildTools</p>
-<p>spring-framework-</p>
-<p>Downloadexternalannotationsfordependenci</p>
-<p>口</p>
-<p>Maven</p>
-<p>口</p>
-<p>Gradle</p>
-<p>Buildandrun</p>
-<p>Gant</p>
-<p>BydefaultIntelijIDEAusesGradletobuildtheprojectandrunthetasks</p>
-<p>Compiler</p>
-<p>lhapue.y/kolipon</p>
-<p>Debugger</p>
-<p>NoethatthelDEdowmtmGomoehm</p>
-<p>口</p>
-<p>RemoteJarRepositories</p>
-<p>Buildandrunusing:</p>
-<p>lntelliIDEA</p>
-<p>ApplicationServers</p>
-<p>Runtestsusing:</p>
-<p>IntelliIDEA</p>
-<p>Coverage</p>
-<p>Docker</p>
-<p>Gradle</p>
-<p>JavaProfiler</p>
-<p>gradle-wrapper.properties'file</p>
-<p>UseGradlefrom:</p>
-<p>ReguiredPlugins</p>
-<p>GradleJVM:</p>
-<p>JAVAHOMEversion1.8.0212</p>
-<p>RunTargets</p>
-<p>TrustedLocations</p>
-<p>Languages&amp;Frameworks</p>
-<p>Tools</p>
-<p>OK</p>
-<p>Cancel</p>
-<p>Apply</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629632974859-75be193d-42c6-4104-8943-817254dfcb87.png" /></p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_4AR2K9svdw.png" /></p>
 <p>改完之后点击Apply，再点击OK，会自动触发gradle的重新编译。</p>
-<p>Navigate</p>
-<p>spring-framework-5.3.10READMEMD</p>
-<p>Help</p>
-<p>Window</p>
-<p>Refactor</p>
-<p>Code</p>
-<p>Analyze</p>
-<p>Build</p>
-<p>View</p>
-<p>Gi</p>
-<p>Edit</p>
-<p>LGG-OGit</p>
-<p>README.md</p>
-<p>是</p>
-<p>pring-framework-5.3.10</p>
-<p>AddConfiauration..</p>
-<p>莎三二中</p>
-<p>READMEMd</p>
-<p>Project</p>
-<p>Gradle</p>
-<p>odd</p>
-<p>spring-framework-5.3.1deaProjects</p>
-<p>至二十</p>
-<p>中</p>
-<p>三</p>
-<p>HIHT</p>
-<p>0</p>
-<p>github</p>
-<p>spring-tramework-5.3.10</p>
-<p>gradle</p>
-<p>aJmarns"</p>
-<p>idea</p>
-<p>build</p>
-<p>SpringFramework</p>
-<p>buildSrc</p>
-<p>bulldpassing</p>
-<p>ci</p>
-<p>framework-bom</p>
-<p>GradleEntempnlse</p>
-<p>Rewvedupby</p>
-<p>gradle</p>
-<p>integration-tests</p>
-<p>spring-aop</p>
-<p>ThisisthehomeoftheSpringFramework:theoundaionspringprojects</p>
-<p>spring-aspects</p>
-<p>ColecivelytheSpringFrameworkandthetamlyofspringprojecsareofen</p>
-<p>spring-beans</p>
-<p>referredtosimplyas"Spring"</p>
-<p>spring-context-indexer</p>
-<p>spring-context-support</p>
-<p>Spiingprovideseverythingequirdbeyontrogring</p>
-<p>spring-core</p>
-<p>creatingenterpiseapplcationwu</p>
-<p>spring-expression</p>
-<p>spring-instrument</p>
-<p>Pleasereadthooveryiowsecionsrmi</p>
-<p>spring-jcI</p>
-<p>spring-idbc</p>
-<p>crrnn.imr</p>
-<p>Build:</p>
-<p>Syng,</p>
-<p>LDSK:uUILUSIC:CUMpTLeTeSLJaDU-SUURLE</p>
-<p>36</p>
-<p>i:击</p>
-<p>spring-framework-5.3.10:Buildmodel..</p>
-<p>Task:buildSc:compieestroovyNoS</p>
-<p>Task:buildsrc:processTestResourcesNO-SqURCE</p>
-<p>Task:buildsrc:testclassesUP-TO-DATE</p>
-<p>Task:buildsrc:testSKIPPED</p>
-<p>Task:buildsrc:yalidatePlugiFo-cAcH</p>
-<p>Task:buildsrc:checkSKIPPED</p>
-<p>SEIIUJOMET</p>
-<p>Task:buildsrc:build</p>
-<p>PrObensFGEETErminaETODOCPIOFIER</p>
-<p>EventLog</p>
-<p>ISaquonceDiagram</p>
-<p>Gradle:Buildmodel...</p>
-<p>Pmain</p>
-<p>Fameworksdetectedwebmwokrdeedcong</p>
-<p>Showall(22:1LFU</p>
-<p>spaces</p>
-<p>e6minutesago)</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629633043130-ade4c0e6-eef6-404d-b91b-b74b87546009.png?x-oss-process=image%2Fresize%2Cw_750%2Climit_0" /></p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_09uqxW5Vvm.png" /></p>
 <p>如果没有触发可以，点击</p>
-<p>A</p>
-<p>spring-READMEMd[Sspringl</p>
-<p>YIEWNAVIGARECODEANANERETACTORBUIDRUNIooLiT</p>
-<p>x</p>
-<p>Window</p>
-<p>File</p>
-<p>dit</p>
-<p>Help</p>
-<p>GC:DGiL:</p>
-<p>Q</p>
-<p>spring-framework-5.3.10</p>
-<p>READMEMD</p>
-<p>AddConfiguration.</p>
-<p>123od星</p>
-<p>三云</p>
-<p>品READMEmd</p>
-<p>|中</p>
-<p>Project</p>
-<p>年GRADIe</p>
-<p>Gradle</p>
-<p>spring-framework5.3.10pringjDade</p>
-<p>三三四味</p>
-<p>IOHIHT</p>
-<p>三六</p>
-<p>T@</p>
-<p>+</p>
-<p>qithub</p>
-<p>spring</p>
-<p>gradle</p>
-<p>amBnns号</p>
-<p>idea</p>
-<p>build</p>
-<p>SpringFramework</p>
-<p>buildsre[opring-framework-5.3.10.bu</p>
-<p>bUllD</p>
-<p>passing</p>
-<p>framework-bom</p>
-<p>RevvedupbyGraodleEnterprise</p>
-<p>gradle</p>
-<p>integradion-tests</p>
-<p>Spnng-aOP</p>
-<p>ThisisthehomeoftheSpringFramework:theoudonospringprojects</p>
-<p>apnng-aspects</p>
-<p>CollectivelytheSpringFrameworkandtamypirojsr</p>
-<p>spnng-beans</p>
-<p>Spring-conText</p>
-<p>referredtosimplyas"Spring"</p>
-<p>spning-context-indexer</p>
-<p>Spang-context-support</p>
-<p>SpringprovideseverythingequirdbeyondtJaprogramingna</p>
-<p>spang-core</p>
-<p>creatingenterprseapplcaio</p>
-<p>Spning-expression</p>
-<p>spning-instrument</p>
-<p>sprng-icl</p>
-<p>.</p>
-<p>Build</p>
-<p>Sync</p>
-<p>dcradlefeaturesweeUsedinthiuiw</p>
-<p>1G团</p>
-<p>DeprecatedGradL</p>
-<p>spring-framework-5.3.10:finishdAt8c568</p>
-<p>sel--warning-modeatl'toshowtheindividulionn</p>
-<p>Use</p>
-<p>Seehtps:/ldoc.rqc.m.m</p>
-<p>o</p>
-<p>BUILDSUCCESSFULin40S</p>
-<p>Abutldscanwasntputishdyuenit</p>
-<p>回按</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629633081924-4a7cf7a3-e00c-4e49-9c37-fedceb570bca.png?x-oss-process=image%2Fresize%2Cw_750%2Climit_0" /></p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_RnplhySe53.png" /></p>
 <p>正常情况下，此时gradle编译将比较快，会有一个索引文件过程，但是不需要额外的下载gradle和依赖了。</p>
 <p>编译成功截图：</p>
-<p>SPring-READMEMDsPrIng]</p>
-<p>Window</p>
-<p>Navigate</p>
-<p>Code</p>
-<p>Analyze</p>
-<p>Git</p>
-<p>Refactor</p>
-<p>Build</p>
-<p>Help</p>
-<p>View</p>
-<p>?希CG</p>
-<p>Git:Lv</p>
-<p>READMEMD</p>
-<p>spring-framework-5.3.10</p>
-<p>AddConfiquration...</p>
-<p>pa[aLd</p>
-<p>王六</p>
-<p>中</p>
-<p>READMEmdx</p>
-<p>Project</p>
-<p>Gradle</p>
-<p>spring-ffammework-5.3.10[spring]</p>
-<p>三二</p>
-<p>十</p>
-<p>?</p>
-<p>HLHT@</p>
-<p>github</p>
-<p>Rspring</p>
-<p>gradle</p>
-<p>manns号</p>
-<p>idea</p>
-<p>build</p>
-<p>SpringFramework</p>
-<p>buildSrc[spring-framework-5.3.10.bu</p>
-<p>bulLDpassing</p>
-<p>framework-bom</p>
-<p>RevvedupbyGradleFnterprise</p>
-<p>radle</p>
-<p>integration-tests</p>
-<p>Sprng-aop</p>
-<p>ThisisthehomeofthespringFramwork:houdain</p>
-<p>spnng-aspocts</p>
-<p>ColecivelythespringFramworkandthtamypringprojcsari</p>
-<p>spring-beans</p>
-<p>spring-context</p>
-<p>referredtosimplyas"Spring</p>
-<p>spning-context-indexer</p>
-<p>sprng-context-support</p>
-<p>SpringproyideseverythingrquirdbeyonJng</p>
-<p>spring-core</p>
-<p>creatingenterpiseapication</p>
-<p>Spring-expression</p>
-<p>一</p>
-<p>sprng-instrument</p>
-<p>spring-icl</p>
-<p>Build:</p>
-<p>Sync</p>
-<p>Deprecgtedcrdefoatususedthisu</p>
-<p>Spring-framework-5.3.1finishedt48ec56m</p>
-<p>el--warningmodeatt'toshowtheindividulcatnng</p>
-<p>大白</p>
-<p>Use</p>
-<p>htps//0c.qaqcm.</p>
-<p>see</p>
-<p>BUILDSUCCESSFULinGFS</p>
-<p>Abuiidscanwasnotputishedasyouhyeuhentict</p>
-<p>SIUOMD</p>
-<p>BUILDsuccESsFuLin547mS</p>
-<p>EndngintS</p>
-<p>ETODO</p>
-<p>GProl</p>
-<p>-TeminaI</p>
-<p>SequgnceDi</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629633179337-181a4574-0e31-4257-b4df-c1faf93357c0.png?x-oss-process=image%2Fresize%2Cw_750%2Climit_0" /></p>
-<p>运行代码 </p>
-<p>编译成功后，在左侧可以看到如下模块，其中有一个tuling模块，这是我写的一个模块，可以直接运行，在它下面有一个Test类，直接运行main方法。</p>
-<p>spring-Testjava[spring.tuling.min</p>
-<p>Help</p>
-<p>Build</p>
-<p>FIleEDIt</p>
-<p>Window</p>
-<p>Iools</p>
-<p>Navigate</p>
-<p>Git</p>
-<p>Kiew</p>
-<p>Refactor</p>
-<p>Analyze</p>
-<p>Run</p>
-<p>5</p>
-<p>AddConfiguration.CGGit</p>
-<p>GTest</p>
-<p>Git:</p>
-<p>zhouyu</p>
-<p>tuling</p>
-<p>spring-framework-5.3.10</p>
-<p>15aJ01d</p>
-<p>3三</p>
-<p>GTestiava</p>
-<p>Project</p>
-<p>Spring-instrument</p>
-<p>packagecom.zhouyu;</p>
-<p>Analy</p>
-<p>1</p>
-<p>spring-jcl</p>
-<p>NL</p>
-<p>spring-jdbe</p>
-<p>spring-jms</p>
-<p>import</p>
-<p>sprning-messaging</p>
-<p>spring-omm</p>
-<p>publicclassrest</p>
-<p>spring-oxm</p>
-<p>spring-r2dbc</p>
-<p>7</p>
-<p>spring-test</p>
-<p>publicstaticvoidmain(stringa</p>
-<p>8</p>
-<p>spring-t</p>
-<p>9</p>
-<p>spring-Webflux</p>
-<p>Amotetionconficdpplicationontextcotextnewmttinoniictiootxto</p>
-<p>10</p>
-<p>sPrng-WebMVc</p>
-<p>5pring-websocket</p>
-<p>context.register(Appconfig.class</p>
-<p>11</p>
-<p>src</p>
-<p>context.refreshO;</p>
-<p>12</p>
-<p>tuling</p>
-<p>build</p>
-<p>13</p>
-<p>src</p>
-<p>Userserwiceusrservicecontext.getBauser</p>
-<p>14</p>
-<p>main</p>
-<p>userService.testO:</p>
-<p>15</p>
-<p>java</p>
-<p>acom.zhouyu</p>
-<p>16</p>
-<p>aspect</p>
-<p>17</p>
-<p>AppConfig</p>
-<p>18</p>
-<p>Test</p>
-<p>19</p>
-<p>resources</p>
-<p>20</p>
-<p>tuling-boot</p>
-<p>tuling-vip-demo</p>
-<p>tuling-Web</p>
-<p>李editorconfig</p>
-<p>gitattributes</p>
-<p>Serpane</p>
-<p>egitignore</p>
-<p>.mailmap</p>
-<p>build.gradle</p>
-<p>GProfler</p>
-<p>TODO</p>
-<p>卢Glt</p>
-<p>Problem</p>
-<p>Endpoints</p>
-<p>Spring</p>
-<p>Bud</p>
-<p>TSoquencoDlagram</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629633323263-7b1175ba-018d-474a-9cfd-466650ecf65f.png?x-oss-process=image%2Fresize%2Cw_750%2Climit_0" /></p>
-<p>问题1 </p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_1DwPOlQdnM.png" /></p>
+<h2 id="_1">运行代码</h2>
+<p>编译成功后，在左侧可以看到如下模块，其中有一个tuling模块，这是我写的一个模块，可以直接运行，在它下面有一个Test类，直接运行main方法。<img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_u8yWZXXRX4.png" /></p>
+<h2 id="1">问题1</h2>
 <p>第一次运行可能会比较慢，在运行过程也可能会出现问题，比如</p>
-<p>spring-Testjava[spring.tuling.main]</p>
-<p>Refactor</p>
-<p>Window</p>
-<p>Help</p>
-<p>avigate</p>
-<p>Run</p>
-<p>Build</p>
-<p>Edit</p>
-<p>View</p>
-<p>Tools</p>
-<p>Testaqo-hGit入o5</p>
-<p>spring-framework-5.3.10</p>
-<p>java</p>
-<p>com</p>
-<p>13aJoJd</p>
-<p>中</p>
-<p>GTestjava</p>
-<p>6</p>
-<p>Project</p>
-<p>corc</p>
-<p>publicCLAssTest</p>
-<p>6</p>
-<p>iang</p>
-<p>obienesis</p>
-<p>7</p>
-<p>autil</p>
-<p>publicstaticvoidmaincstringljargs)</p>
-<p>kotlin</p>
-<p>test</p>
-<p>Amotationconfigupticationttott</p>
-<p>10</p>
-<p>testFixtures</p>
-<p>springcore.gradle</p>
-<p>context.registerAppconfig.class</p>
-<p>11</p>
-<p>spring-expression</p>
-<p>12</p>
-<p>context.refreshO;</p>
-<p>pring-instrument</p>
-<p>13</p>
-<p>spring-jcI</p>
-<p>spring-jdbe</p>
-<p>14</p>
-<p>UserServiceUserServicecontext.geTBean</p>
-<p>"userservice",userservice.class);代理对象</p>
-<p>name</p>
-<p>Spring-jms</p>
-<p>15</p>
-<p>spring-messaging</p>
-<p>userservice.testOi</p>
-<p>spring-omm</p>
-<p>16</p>
-<p>spring-oxm</p>
-<p>17</p>
-<p>Spring-r2dbc</p>
-<p>sprng-test</p>
-<p>18</p>
-<p>spring-tx</p>
-<p>Testomaing</p>
-<p>Build:</p>
-<p>SyncxBuildoutput</p>
-<p>Springbuildfaidt2021/8/219:59thc</p>
-<p>HorelsrcinainljavalorgspringframeworkicqLbcosact</p>
-<p>D:IdeAProjctspring-framewok-5.3iqco</p>
-<p>kotlin:Languageversion1.5isexperimentalth</p>
-<p>java:程厅@org.springframework.cq.co.in</p>
-<p>Kotlin:Classpathentrypointstoanomexistetlocati</p>
-<p>KotlinClasspathentrypointstoanon-existentlocati</p>
-<p>AbstraciclassGeneratorjavaspringcorelsclmainjav</p>
-<p>程疗包org-springframeworkcglib.coreinternal不存</p>
-<p>穆序包org.springtramework.cglib.coreinterna不有</p>
-<p>找不到荷号:37</p>
-<p>找不到付号:47</p>
-<p>找不到特号:49</p>
-<p>找不到焙号:176</p>
-<p>找不判待号:204</p>
-<p>我不到韵号:213</p>
-<p>州十别尔日3日</p>
-<p>ProbensNGEETerminalETODOGProfiler</p>
-<p>SequenceDiagram</p>
-<p>EventLog</p>
-<p>Sprlng</p>
-<p>Tab</p>
-<p>Buildcompletedwith100rorsand3wainginu</p>
-<p>17:1LFUTF-B</p>
-<p>main</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629633671922-a504d86f-0190-42e1-9af3-346ff46e873a.png?x-oss-process=image%2Fresize%2Cw_750%2Climit_0" /></p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_FWiL9ZPJDm.png" /></p>
 <p>那么请运行一下：</p>
-<p>spring-Testjaya[spring.tuling.main]</p>
-<p>Navigate</p>
-<p>Git</p>
-<p>Build</p>
-<p>Window</p>
-<p>Help</p>
-<p>Run</p>
-<p>View</p>
-<p>edit</p>
-<p>Code</p>
-<p>Tools</p>
-<p>Reractor</p>
-<p>GG:DGIt:</p>
-<p>Test</p>
-<p>spring-tramework-5.3.10:pringcorebuild</p>
-<p>zhouyu</p>
-<p>uling</p>
-<p>java</p>
-<p>com</p>
-<p>spring-framework</p>
-<p>main</p>
-<p>主云</p>
-<p>Testiava</p>
-<p>Project</p>
-<p>cOntEXLFETrESNOi</p>
-<p>三二蛋十</p>
-<p>pning-core</p>
-<p>13</p>
-<p>spring-context</p>
-<p>kotlin-coroutines[spring-kotlin-coroutines]</p>
-<p>UserserviceuserservicecontextgeBean</p>
-<p>14</p>
-<p>spring-context-support</p>
-<p>15</p>
-<p>Userservice.testO;</p>
-<p>sprng-core</p>
-<p>jmh</p>
-<p>16</p>
-<p>alosks</p>
-<p>main</p>
-<p>abuild</p>
-<p>17</p>
-<p>a5semble</p>
-<p>org.springtramework</p>
-<p>18</p>
-<p>build</p>
-<p>asm</p>
-<p>buildbependents</p>
-<p>19</p>
-<p>dcglib</p>
-<p>buildNeeded</p>
-<p>20</p>
-<p>AbstractclassGenerator</p>
-<p>clean</p>
-<p>AsmApi</p>
-<p>jar</p>
-<p>imhclasses</p>
-<p>package-into.java</p>
-<p>lostFixturesclasses</p>
-<p>Reflectutils</p>
-<p>testFixtureslar</p>
-<p>SpringNamingPolicy</p>
-<p>documentation</p>
-<p>proxy</p>
-<p>help</p>
-<p>package-infojava</p>
-<p>Test</p>
-<p>ide</p>
-<p>maino</p>
-<p>spring-framework-5.3.10:pring-corefbuild]</p>
-<p>Run:</p>
-<p>1G:团</p>
-<p>spring-framework-5.3.10:pnincmin23c29m</p>
-<p>See</p>
-<p>tes/lecm</p>
-<p>springcore.compileTestKotlin1316c833m</p>
-<p>KotlinReactiveAdapterRegistryTestsktsrctes</p>
-<p>ThisisadelicateAPlanditsuserequiresca</p>
-<p>BUILDSUCCESSFULin1m23s</p>
-<p>26actionabletasks:18executd,romcac</p>
-<p>o</p>
-<p>AbuidsCanwasnotpubhutishdyouhayentuthetictdhs</p>
-<p>SIUOnE</p>
-<p>2Q:83:日6:Taskexecutionfinished*buiid</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629633825350-4d60a034-ad84-481d-a5cf-b0c574a565f5.png?x-oss-process=image%2Fresize%2Cw_750%2Climit_0" /></p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_wDrwljqZ4A.png" /></p>
 <p>如果build之后出现了错误，比如：</p>
-<p>称湾上代</p>
-<p>中文</p>
-<p>口</p>
-<p>口</p>
-<p>Tall园</p>
-<p>?</p>
-<p>aQ</p>
-<p>-</p>
-<p>iRabe</p>
-<p>址spnng-tramework-5.3.10onng-corelouu</p>
-<p>COReEIAbALRIGICLALLGENcRaTOR</p>
-<p>pring-tramework.53.10pringcorcfremain</p>
-<p>cgab</p>
-<p>pringtranorore</p>
-<p>红三</p>
-<p>给月别男科设科月分员民第出出给果</p>
-<p>0</p>
-<p>cBL1b.core</p>
-<p>packageorg.springfranework</p>
-<p>诺Sring</p>
-<p>年PringContent</p>
-<p>ng.ref.MeakReference;</p>
-<p>java.5pcurity.protectionoomain;</p>
-<p>Dapordenciee</p>
-<p>SprIngcontextsupport</p>
-<p>import</p>
-<p>java-util.HashSet;</p>
-<p>fremcwort-bom</p>
-<p>Spring-core</p>
-<p>import</p>
-<p>java.util.Map;</p>
-<p>kotlin.coroutnes[epringkotincoroutine]</p>
-<p>javautil.Set;</p>
-<p>ImportJjavavtilMEakHashp</p>
-<p>Lmportorg.springfreneork.cgb.core.nte.Fucton;</p>
-<p>dongspringfrsmewvork</p>
-<p>tmortong.springtramgork.cqlib.core.intea.toadincche</p>
-<p>dEEM</p>
-<p>ocgm</p>
-<p>dcore</p>
-<p>Abstroctctassoratcodqnui</p>
-<p>Tbad</p>
-<p>EABAUSCICaSSGEIAraLor</p>
-<p>ingbdttiontocochiogenrtedeoo</p>
-<p>curtenttngthedcodectassodet</p>
-<p>Oppltedboforegeneration.</p>
-<p>中burldDepcrdents</p>
-<p>ClassloaderAwareGoneratorstretogy</p>
-<p>/rantypes,unchecked</p>
-<p>上出出宝生生子贝</p>
-<p>abstroctpubltcdasAbtecc</p>
-<p>dean</p>
-<p>THreadLocalcuRENTnewThreadLocai0;</p>
-<p>privatestaticfinalTh</p>
-<p>SpringNamingPalicy</p>
-<p>Dtc球clas5cs</p>
-<p>QtosthnwuresCa5505</p>
-<p>PPtvatestaiicwomtieMapcLasd</p>
-<p>pactg-ifojav</p>
-<p>PRIVASTATFInIBOoLEaNDEFAULTUSECACHE</p>
-<p>RunHCPRINgfRaMewoRk5.3.10prngcor[uld</p>
-<p>ERRCUTLONFHLEdFORtASK:SpringcoR.ChaCKSTYLGIN</p>
-<p>ICH</p>
-<p>御pringtmGworsopringcorebu7c6</p>
-<p>加心</p>
-<p>O:pringcoto.chackshyaManoror</p>
-<p>QCheckstylenuleviolatianswerefound.Scotherepar</p>
-<p>Checkstylefilesnithvioletions1</p>
-<p>Checkstyleviolationsbyseverity:[error:]</p>
-<p>*Try</p>
-<p>地品</p>
-<p>激法Windowe</p>
-<p><img alt="EE559FE08AF355D2336360BDC3BFA854.jpg" src="https://cdn.nlark.com/yuque/0/2021/jpeg/365147/1635493782959-bee591a7-04e8-4dec-9ed9-4d70959bd638.jpeg?x-oss-process=image%2Fresize%2Cw_750%2Climit_0%2Finterlace%2C1" /></p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_69i8Fu0oFG.png" /></p>
 <p>没关系，请忽略，继续往下走。</p>
 <p>再次执行Test类中的main方法，可能就直接运行成功了：</p>
-<p>6</p>
-<p>spingD:daPojecspringlmewk5.3.</p>
-<p>x</p>
-<p>Build</p>
-<p>IoOlsGitHindow</p>
-<p>Help</p>
-<p>Run</p>
-<p>Retactor</p>
-<p>Analyze</p>
-<p>Git:</p>
-<p>G</p>
-<p>5</p>
-<p>Test</p>
-<p>9</p>
-<p>tuling</p>
-<p>zhouyu</p>
-<p>Test</p>
-<p>com</p>
-<p>src</p>
-<p>spring-framework-5.3.10</p>
-<p>java</p>
-<p>i50faUd</p>
-<p>中</p>
-<p>Proje..</p>
-<p>Testjava</p>
-<p>AbstractclassGenerator.java</p>
-<p>E</p>
-<p>Grsdle</p>
-<p>Spring-to</p>
-<p>5</p>
-<p>spring-web</p>
-<p>Test</p>
-<p>wDateDasE</p>
-<p>6</p>
-<p>CLass</p>
-<p>public</p>
-<p>aMOn4S</p>
-<p>Spring-WEbflux</p>
-<p>7</p>
-<p>spring-webmvc</p>
-<p>pring-Wabfockat</p>
-<p>8</p>
-<p>args)</p>
-<p>publicstaticvoidmain(stringl</p>
-<p>STC</p>
-<p>9</p>
-<p>tuling</p>
-<p>build</p>
-<p>Amotationconfiodpplicotioncontextcontextnemmtiooniictioott;</p>
-<p>10</p>
-<p>context.registerppconfig.clas</p>
-<p>11</p>
-<p>context.refreshO;</p>
-<p>12</p>
-<p>java</p>
-<p>13</p>
-<p>com.zhOUwu</p>
-<p>apect</p>
-<p>usgrservtceusersevccontgeBnm</p>
-<p>14</p>
-<p>Scrvice</p>
-<p>Userservice.testO;</p>
-<p>Appconfg15</p>
-<p>Test</p>
-<p>16</p>
-<p>Fresources</p>
-<p>17</p>
-<p>build.gradle</p>
-<p>tuling-boot</p>
-<p>18</p>
-<p>tuling-vip-demo</p>
-<p>Testomaino</p>
-<p>Run:</p>
-<p>Test</p>
-<p>c:lProgramfiLesJayaldi</p>
-<p>个</p>
-<p>冒9尤兄</p>
-<p>test</p>
-<p>1五中日</p>
-<p>Processfinishedwithexitcode</p>
-<p>SEIUONS+</p>
-<p>GitTermInalETODoGProfiler</p>
-<p>EwentLog</p>
-<p>Endpalnts</p>
-<p>Spring</p>
-<p>ShouenceDiagram</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1629634605332-889b9ca4-6f0c-4f73-8bbe-1f9c16b196fd.png?x-oss-process=image%2Fresize%2Cw_750%2Climit_0" /></p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_HmXTxoEq3e.png" /></p>
 <p>到此，恭喜你，你已经成功的编译好了Spring源码，可以直接查看并进行调试了。</p>
-<p>问题2 </p>
+<h2 id="2">问题2</h2>
 <p>如果出现了：</p>
-<p><img alt="img" src="https://cdn.nlark.com/yuque/0/2020/png/365147/1601451511575-4da3b3a6-152d-4e5e-9a64-056b6beefe0b.png?date=1630926988041&amp;x-oss-process=image%2Fresize%2Cw_750%2Climit_0" /></p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_D2BWWFvZIZ.png" /></p>
 <p>报错的CoroutinesUtils是一个kotlin中的类，解决办法：</p>
 <p>点击File -&gt; Project Structure -&gt; Libraries -&gt; “+” -&gt; Java，然后选择spring-framework/spring-core/kotlin-coroutines/build/libs/kotlin-coroutines-5.2.4.BUILD-SNAPSHOT.jar，在弹出的对话框中选择spring-core.main，在重新运行Test类中的main方法即可，注意我图中是报错的模块spring-core，所以操作的是spring-core.main，如果是其他模块报类似的错，就做类似的操作。</p>
-<p>问题3 </p>
-<p>Annotationconf1gppticationcontxto</p>
-<p>SPaing-context-support</p>
-<p>Aspang-core</p>
-<p>Userserviceuserservicecuserservice)</p>
-<p>lsprng-expression</p>
-<p>CONTeX上:叶</p>
-<p>Wspring-instrament</p>
-<p>Wspring-jal</p>
-<p>Userservice.testO;</p>
-<p>AIVspring-jdbc</p>
-<p>澳spring-ims</p>
-<p>spring-messaging</p>
-<p>雷</p>
-<p>sispring-orm</p>
-<p>Aspring-oxm</p>
-<p>Espring-2dbe</p>
-<p>Causedby:net.ubygrapefruit.patformExen</p>
-<p>sec.825ms</p>
-<p>ANIdeaProjec</p>
-<p>I</p>
-<p>EventL</p>
-<p>24428LF</p>
-<p>西善吃市</p>
-<p>acer</p>
-<p><img alt="%2WG4(5E[HTHQSV]QX4)()Y.jpg" src="https://cdn.nlark.com/yuque/0/2021/jpeg/365147/1631166175130-0d7b9cd6-75ac-4f3f-b903-707205abf141.jpeg?x-oss-process=image%2Fresize%2Cw_1344%2Climit_0%2Finterlace%2C1" /></p>
+<h2 id="3">问题3</h2>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_6RskdXiQ7C.png" /></p>
 <p>需要重新安装电脑上的git，并且最好是按照最新版本的git（上面网盘中有按照文件），安装的时候注意以下页面选择第二项：</p>
-<p>Git2.33.0.2Setup</p>
-<p>AdjustingyourPATHenvironment</p>
-<p>HowwouldyouliketouseGitfromthecommandline?</p>
-<p>UseGItfromGitBashonly</p>
-<p>ThisisthemostcautiouschoceasyouPAHwobdiedYOU</p>
-<p>onlybeabletousetheGitcommandlinetoolsfromGiash</p>
-<p>Gitfromthecommandlneandalsoomrdartywr</p>
-<p>(Recommnded)Thisoptionaddsonlysomeminiitwrstoour</p>
-<p>PATHtoavoidcutringyuenironentwthotioixl</p>
-<p>YoUWILbEAletoUsEGiROMGIBShhmwnd</p>
-<p>Powershellaswellasanythirawioii</p>
-<p>UseGitandoptionalUnixtoolsfromtheComandPompt</p>
-<p>BothGitandtheoptionalUnixtoolswillbeadded</p>
-<p>edtoyourPATH.</p>
-<p>"FInd"and"</p>
-<p>"sort'.Only</p>
-<p>Warning:ThiswilloverrideWindowstoolsi</p>
-<p>lslike"</p>
-<p>usethisoptionifyouunderstandtheimplications</p>
-<p>htts://gitforwindows.org/</p>
-<p>Next</p>
-<p>Cancel</p>
-<p>Back</p>
-<p>Qnlyshownewoptions</p>
-<p><img alt="image.png" src="https://cdn.nlark.com/yuque/0/2021/png/365147/1631166537094-4d4d79d8-2d98-4e64-81d0-af917bca8803.png" /></p>
+<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/chrome_y3SDwmCPyz.png" /></p>
 <p>如果大家在编译的过程中遇到了其他问题，那么可以在本文后面进行评论，最好是把解决方案也给出，方便其他小伙伴，感谢。</p>
 
 
@@ -1645,7 +767,7 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
     
     
       <script src="../../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
