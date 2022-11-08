@@ -1,0 +1,1513 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.8">
+    
+    
+      
+        <title>02Nginx配置文件解读 - Java Architect</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.815d1a91.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#nginx" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Java Architect" class="md-header__button md-logo" aria-label="Java Architect" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Java Architect
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              02Nginx配置文件解读
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/Spring%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/" class="md-tabs__link">
+        Java源码系列
+      </a>
+    </li>
+  
+
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../01Nginx%E5%AE%89%E8%A3%85/" class="md-tabs__link md-tabs__link--active">
+        Ngnix
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Java Architect" class="md-nav__button md-logo" aria-label="Java Architect" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Java Architect
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Java源码系列
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Java源码系列" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Java源码系列
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1">
+          Spring
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Spring" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Spring
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/Spring%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/" class="md-nav__link">
+        Spring源码编译教程
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="md-nav__link">
+        1.Spring核心知识点
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="md-nav__link">
+        2.手写模拟Spring底层原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        3.Spring之底层架构核心概念解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+        4.Spring之Bean生命周期源码解析上
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Ngnix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ngnix" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ngnix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01Nginx%E5%AE%89%E8%A3%85/" class="md-nav__link">
+        01Nginx安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          02Nginx配置文件解读
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        02Nginx配置文件解读
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#nginx" class="md-nav__link">
+    Nginx 配置文件解读
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03Nginx%E4%BB%A3%E7%90%86/" class="md-nav__link">
+        03Nginx代理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="md-nav__link">
+        04Nginx负载均衡
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05Nginx%E9%99%90%E6%B5%81%E7%86%94%E6%96%AD/" class="md-nav__link">
+        05Nginx限流熔断
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06Nginx%E5%AE%9E%E7%8E%B0%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/" class="md-nav__link">
+        06Nginx实现动静分离
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07Nginx%E8%B0%83%E4%BC%98/" class="md-nav__link">
+        07Nginx调优
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08Nginx%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="md-nav__link">
+        08Nginx镜像服务器
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09Nginx%E7%83%AD%E5%A4%87%E9%83%A8%E7%BD%B2/" class="md-nav__link">
+        09Nginx热备部署
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        10Nginx安全认证
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#nginx" class="md-nav__link">
+    Nginx 配置文件解读
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>02Nginx配置文件解读</h1>
+
+<h2 id="nginx">Nginx 配置文件解读</h2>
+<p>配置文件的几大块 </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span>
+<span class="normal"><a href="#__codelineno-0-6">6</a></span>
+<span class="normal"><a href="#__codelineno-0-7">7</a></span>
+<span class="normal"><a href="#__codelineno-0-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>#   nginx配置文件主要分为六个区域： 核心区域 
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a>#    main(全局设置)  作用域是全局 
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>#    events(nginx工作模式)
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a>#   upstream(负载均衡服务器设置）
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a>#    http(http设置) 
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a>#        sever(主机设置) 
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a>#            location(URL匹配)
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a>#   
+</code></pre></div></td></tr></table></div>
+<p>配置文件 </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">  1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">  2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">  3</a></span>
+<span class="normal"><a href="#__codelineno-1-4">  4</a></span>
+<span class="normal"><a href="#__codelineno-1-5">  5</a></span>
+<span class="normal"><a href="#__codelineno-1-6">  6</a></span>
+<span class="normal"><a href="#__codelineno-1-7">  7</a></span>
+<span class="normal"><a href="#__codelineno-1-8">  8</a></span>
+<span class="normal"><a href="#__codelineno-1-9">  9</a></span>
+<span class="normal"><a href="#__codelineno-1-10"> 10</a></span>
+<span class="normal"><a href="#__codelineno-1-11"> 11</a></span>
+<span class="normal"><a href="#__codelineno-1-12"> 12</a></span>
+<span class="normal"><a href="#__codelineno-1-13"> 13</a></span>
+<span class="normal"><a href="#__codelineno-1-14"> 14</a></span>
+<span class="normal"><a href="#__codelineno-1-15"> 15</a></span>
+<span class="normal"><a href="#__codelineno-1-16"> 16</a></span>
+<span class="normal"><a href="#__codelineno-1-17"> 17</a></span>
+<span class="normal"><a href="#__codelineno-1-18"> 18</a></span>
+<span class="normal"><a href="#__codelineno-1-19"> 19</a></span>
+<span class="normal"><a href="#__codelineno-1-20"> 20</a></span>
+<span class="normal"><a href="#__codelineno-1-21"> 21</a></span>
+<span class="normal"><a href="#__codelineno-1-22"> 22</a></span>
+<span class="normal"><a href="#__codelineno-1-23"> 23</a></span>
+<span class="normal"><a href="#__codelineno-1-24"> 24</a></span>
+<span class="normal"><a href="#__codelineno-1-25"> 25</a></span>
+<span class="normal"><a href="#__codelineno-1-26"> 26</a></span>
+<span class="normal"><a href="#__codelineno-1-27"> 27</a></span>
+<span class="normal"><a href="#__codelineno-1-28"> 28</a></span>
+<span class="normal"><a href="#__codelineno-1-29"> 29</a></span>
+<span class="normal"><a href="#__codelineno-1-30"> 30</a></span>
+<span class="normal"><a href="#__codelineno-1-31"> 31</a></span>
+<span class="normal"><a href="#__codelineno-1-32"> 32</a></span>
+<span class="normal"><a href="#__codelineno-1-33"> 33</a></span>
+<span class="normal"><a href="#__codelineno-1-34"> 34</a></span>
+<span class="normal"><a href="#__codelineno-1-35"> 35</a></span>
+<span class="normal"><a href="#__codelineno-1-36"> 36</a></span>
+<span class="normal"><a href="#__codelineno-1-37"> 37</a></span>
+<span class="normal"><a href="#__codelineno-1-38"> 38</a></span>
+<span class="normal"><a href="#__codelineno-1-39"> 39</a></span>
+<span class="normal"><a href="#__codelineno-1-40"> 40</a></span>
+<span class="normal"><a href="#__codelineno-1-41"> 41</a></span>
+<span class="normal"><a href="#__codelineno-1-42"> 42</a></span>
+<span class="normal"><a href="#__codelineno-1-43"> 43</a></span>
+<span class="normal"><a href="#__codelineno-1-44"> 44</a></span>
+<span class="normal"><a href="#__codelineno-1-45"> 45</a></span>
+<span class="normal"><a href="#__codelineno-1-46"> 46</a></span>
+<span class="normal"><a href="#__codelineno-1-47"> 47</a></span>
+<span class="normal"><a href="#__codelineno-1-48"> 48</a></span>
+<span class="normal"><a href="#__codelineno-1-49"> 49</a></span>
+<span class="normal"><a href="#__codelineno-1-50"> 50</a></span>
+<span class="normal"><a href="#__codelineno-1-51"> 51</a></span>
+<span class="normal"><a href="#__codelineno-1-52"> 52</a></span>
+<span class="normal"><a href="#__codelineno-1-53"> 53</a></span>
+<span class="normal"><a href="#__codelineno-1-54"> 54</a></span>
+<span class="normal"><a href="#__codelineno-1-55"> 55</a></span>
+<span class="normal"><a href="#__codelineno-1-56"> 56</a></span>
+<span class="normal"><a href="#__codelineno-1-57"> 57</a></span>
+<span class="normal"><a href="#__codelineno-1-58"> 58</a></span>
+<span class="normal"><a href="#__codelineno-1-59"> 59</a></span>
+<span class="normal"><a href="#__codelineno-1-60"> 60</a></span>
+<span class="normal"><a href="#__codelineno-1-61"> 61</a></span>
+<span class="normal"><a href="#__codelineno-1-62"> 62</a></span>
+<span class="normal"><a href="#__codelineno-1-63"> 63</a></span>
+<span class="normal"><a href="#__codelineno-1-64"> 64</a></span>
+<span class="normal"><a href="#__codelineno-1-65"> 65</a></span>
+<span class="normal"><a href="#__codelineno-1-66"> 66</a></span>
+<span class="normal"><a href="#__codelineno-1-67"> 67</a></span>
+<span class="normal"><a href="#__codelineno-1-68"> 68</a></span>
+<span class="normal"><a href="#__codelineno-1-69"> 69</a></span>
+<span class="normal"><a href="#__codelineno-1-70"> 70</a></span>
+<span class="normal"><a href="#__codelineno-1-71"> 71</a></span>
+<span class="normal"><a href="#__codelineno-1-72"> 72</a></span>
+<span class="normal"><a href="#__codelineno-1-73"> 73</a></span>
+<span class="normal"><a href="#__codelineno-1-74"> 74</a></span>
+<span class="normal"><a href="#__codelineno-1-75"> 75</a></span>
+<span class="normal"><a href="#__codelineno-1-76"> 76</a></span>
+<span class="normal"><a href="#__codelineno-1-77"> 77</a></span>
+<span class="normal"><a href="#__codelineno-1-78"> 78</a></span>
+<span class="normal"><a href="#__codelineno-1-79"> 79</a></span>
+<span class="normal"><a href="#__codelineno-1-80"> 80</a></span>
+<span class="normal"><a href="#__codelineno-1-81"> 81</a></span>
+<span class="normal"><a href="#__codelineno-1-82"> 82</a></span>
+<span class="normal"><a href="#__codelineno-1-83"> 83</a></span>
+<span class="normal"><a href="#__codelineno-1-84"> 84</a></span>
+<span class="normal"><a href="#__codelineno-1-85"> 85</a></span>
+<span class="normal"><a href="#__codelineno-1-86"> 86</a></span>
+<span class="normal"><a href="#__codelineno-1-87"> 87</a></span>
+<span class="normal"><a href="#__codelineno-1-88"> 88</a></span>
+<span class="normal"><a href="#__codelineno-1-89"> 89</a></span>
+<span class="normal"><a href="#__codelineno-1-90"> 90</a></span>
+<span class="normal"><a href="#__codelineno-1-91"> 91</a></span>
+<span class="normal"><a href="#__codelineno-1-92"> 92</a></span>
+<span class="normal"><a href="#__codelineno-1-93"> 93</a></span>
+<span class="normal"><a href="#__codelineno-1-94"> 94</a></span>
+<span class="normal"><a href="#__codelineno-1-95"> 95</a></span>
+<span class="normal"><a href="#__codelineno-1-96"> 96</a></span>
+<span class="normal"><a href="#__codelineno-1-97"> 97</a></span>
+<span class="normal"><a href="#__codelineno-1-98"> 98</a></span>
+<span class="normal"><a href="#__codelineno-1-99"> 99</a></span>
+<span class="normal"><a href="#__codelineno-1-100">100</a></span>
+<span class="normal"><a href="#__codelineno-1-101">101</a></span>
+<span class="normal"><a href="#__codelineno-1-102">102</a></span>
+<span class="normal"><a href="#__codelineno-1-103">103</a></span>
+<span class="normal"><a href="#__codelineno-1-104">104</a></span>
+<span class="normal"><a href="#__codelineno-1-105">105</a></span>
+<span class="normal"><a href="#__codelineno-1-106">106</a></span>
+<span class="normal"><a href="#__codelineno-1-107">107</a></span>
+<span class="normal"><a href="#__codelineno-1-108">108</a></span>
+<span class="normal"><a href="#__codelineno-1-109">109</a></span>
+<span class="normal"><a href="#__codelineno-1-110">110</a></span>
+<span class="normal"><a href="#__codelineno-1-111">111</a></span>
+<span class="normal"><a href="#__codelineno-1-112">112</a></span>
+<span class="normal"><a href="#__codelineno-1-113">113</a></span>
+<span class="normal"><a href="#__codelineno-1-114">114</a></span>
+<span class="normal"><a href="#__codelineno-1-115">115</a></span>
+<span class="normal"><a href="#__codelineno-1-116">116</a></span>
+<span class="normal"><a href="#__codelineno-1-117">117</a></span>
+<span class="normal"><a href="#__codelineno-1-118">118</a></span>
+<span class="normal"><a href="#__codelineno-1-119">119</a></span>
+<span class="normal"><a href="#__codelineno-1-120">120</a></span>
+<span class="normal"><a href="#__codelineno-1-121">121</a></span>
+<span class="normal"><a href="#__codelineno-1-122">122</a></span>
+<span class="normal"><a href="#__codelineno-1-123">123</a></span>
+<span class="normal"><a href="#__codelineno-1-124">124</a></span>
+<span class="normal"><a href="#__codelineno-1-125">125</a></span>
+<span class="normal"><a href="#__codelineno-1-126">126</a></span>
+<span class="normal"><a href="#__codelineno-1-127">127</a></span>
+<span class="normal"><a href="#__codelineno-1-128">128</a></span>
+<span class="normal"><a href="#__codelineno-1-129">129</a></span>
+<span class="normal"><a href="#__codelineno-1-130">130</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>#设置用户的权限  root nobody 指定 用户名虚拟机内用户   或者 Ip访问 
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>#user  nobody;
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a>#设置工作进程数 一般为 Cpu 核心*2  4*2 
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a>worker_processes  8;  
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a># 日志输出参数 
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a>#error_log  logs/error.log;
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a>#error_log  logs/error.log  notice;
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a>#error_log  logs/error.log  info;
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a># 进程ID 
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a>#pid        logs/nginx.pid;
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a>events {
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a>#指定运行模型 
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a>    use epoll;
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a># 工作连接数  默认512 根据自己的情况调整 
+<a id="__codelineno-1-16" name="__codelineno-1-16"></a>    worker_connections  1024;
+<a id="__codelineno-1-17" name="__codelineno-1-17"></a>}
+<a id="__codelineno-1-18" name="__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19"></a>#http模块 
+<a id="__codelineno-1-20" name="__codelineno-1-20"></a>http {
+<a id="__codelineno-1-21" name="__codelineno-1-21"></a>#  能够支持的类型 在 这个文件下写着  mime.types
+<a id="__codelineno-1-22" name="__codelineno-1-22"></a>    include       mime.types;
+<a id="__codelineno-1-23" name="__codelineno-1-23"></a># 默认的类型  在 application/octet-stream;
+<a id="__codelineno-1-24" name="__codelineno-1-24"></a>    default_type  application/octet-stream;
+<a id="__codelineno-1-25" name="__codelineno-1-25"></a># 日志的格式 
+<a id="__codelineno-1-26" name="__codelineno-1-26"></a>    #log_format  main  &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;
+<a id="__codelineno-1-27" name="__codelineno-1-27"></a>    #                  &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;
+<a id="__codelineno-1-28" name="__codelineno-1-28"></a>    #                  &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;
+<a id="__codelineno-1-29" name="__codelineno-1-29"></a>#访问日志记录 
+<a id="__codelineno-1-30" name="__codelineno-1-30"></a>    #access_log  logs/access.log  main;
+<a id="__codelineno-1-31" name="__codelineno-1-31"></a>#启动 发送文件 
+<a id="__codelineno-1-32" name="__codelineno-1-32"></a>    sendfile        on;
+<a id="__codelineno-1-33" name="__codelineno-1-33"></a># 开启TCP 推送 
+<a id="__codelineno-1-34" name="__codelineno-1-34"></a>    #tcp_nopush     on;
+<a id="__codelineno-1-35" name="__codelineno-1-35"></a># 连接超时时间 
+<a id="__codelineno-1-36" name="__codelineno-1-36"></a>    #keepalive_timeout  0;
+<a id="__codelineno-1-37" name="__codelineno-1-37"></a>    keepalive_timeout  65;
+<a id="__codelineno-1-38" name="__codelineno-1-38"></a># 开启压缩文件 
+<a id="__codelineno-1-39" name="__codelineno-1-39"></a>    #gzip  on;
+<a id="__codelineno-1-40" name="__codelineno-1-40"></a># 服务 
+<a id="__codelineno-1-41" name="__codelineno-1-41"></a># 服务分组  反向代理的核心关键 
+<a id="__codelineno-1-42" name="__codelineno-1-42"></a> upstream tuling {
+<a id="__codelineno-1-43" name="__codelineno-1-43"></a># ip 方式 最大失败3个连接  间隔 30S  权重为 5
+<a id="__codelineno-1-44" name="__codelineno-1-44"></a>        server 127.0.0.1:8080       max_fails=3 fail_timeout=30s weight=5;
+<a id="__codelineno-1-45" name="__codelineno-1-45"></a>#根据ip 利用Hash算法决定访问哪台机器 
+<a id="__codelineno-1-46" name="__codelineno-1-46"></a>   ip_hash;
+<a id="__codelineno-1-47" name="__codelineno-1-47"></a>    }
+<a id="__codelineno-1-48" name="__codelineno-1-48"></a>    server {
+<a id="__codelineno-1-49" name="__codelineno-1-49"></a>        listen       80;
+<a id="__codelineno-1-50" name="__codelineno-1-50"></a>        server_name  localhost;
+<a id="__codelineno-1-51" name="__codelineno-1-51"></a>        #charset koi8-r;
+<a id="__codelineno-1-52" name="__codelineno-1-52"></a>#访问日志记录 以及位置  
+<a id="__codelineno-1-53" name="__codelineno-1-53"></a>        #access_log  logs/host.access.log  main;
+<a id="__codelineno-1-54" name="__codelineno-1-54"></a># 匹配位置 支持正则表达式 
+<a id="__codelineno-1-55" name="__codelineno-1-55"></a>        location / {
+<a id="__codelineno-1-56" name="__codelineno-1-56"></a># 寻找位置 默认在Nginx 目录下的  类型 
+<a id="__codelineno-1-57" name="__codelineno-1-57"></a>            root   html;
+<a id="__codelineno-1-58" name="__codelineno-1-58"></a>            index  index.html index.htm;
+<a id="__codelineno-1-59" name="__codelineno-1-59"></a>             proxy_pass   http://127.0.0.1;
+<a id="__codelineno-1-60" name="__codelineno-1-60"></a>        }
+<a id="__codelineno-1-61" name="__codelineno-1-61"></a>#错误信息 页面 
+<a id="__codelineno-1-62" name="__codelineno-1-62"></a>        #error_page  404              /404.html;
+<a id="__codelineno-1-63" name="__codelineno-1-63"></a>#将服务器错误页重定向到静态页/50x.html
+<a id="__codelineno-1-64" name="__codelineno-1-64"></a>        # redirect server error pages to the static page /50x.html
+<a id="__codelineno-1-65" name="__codelineno-1-65"></a>        #
+<a id="__codelineno-1-66" name="__codelineno-1-66"></a>        error_page   500 502 503 504  /50x.html;
+<a id="__codelineno-1-67" name="__codelineno-1-67"></a>        location = /50x.html {
+<a id="__codelineno-1-68" name="__codelineno-1-68"></a>            root   html;
+<a id="__codelineno-1-69" name="__codelineno-1-69"></a>        }
+<a id="__codelineno-1-70" name="__codelineno-1-70"></a>#实例 入 将访问尾缀为 \.php 跳转到 127.0.0.1
+<a id="__codelineno-1-71" name="__codelineno-1-71"></a>        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+<a id="__codelineno-1-72" name="__codelineno-1-72"></a>        #
+<a id="__codelineno-1-73" name="__codelineno-1-73"></a>        #location ~ \.php$ {
+<a id="__codelineno-1-74" name="__codelineno-1-74"></a>        #    proxy_pass   http://127.0.0.1;
+<a id="__codelineno-1-75" name="__codelineno-1-75"></a>        #}
+<a id="__codelineno-1-76" name="__codelineno-1-76"></a>#将PHP脚本传递给正在侦听127.0.0.1:9000的FastCGI服务器
+<a id="__codelineno-1-77" name="__codelineno-1-77"></a>        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+<a id="__codelineno-1-78" name="__codelineno-1-78"></a>        #
+<a id="__codelineno-1-79" name="__codelineno-1-79"></a>        #location ~ \.php$ {
+<a id="__codelineno-1-80" name="__codelineno-1-80"></a>        #    root           html;
+<a id="__codelineno-1-81" name="__codelineno-1-81"></a>        #    fastcgi_pass   127.0.0.1:9000;
+<a id="__codelineno-1-82" name="__codelineno-1-82"></a>        #    fastcgi_index  index.php;
+<a id="__codelineno-1-83" name="__codelineno-1-83"></a>        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+<a id="__codelineno-1-84" name="__codelineno-1-84"></a>        #    include        fastcgi_params;
+<a id="__codelineno-1-85" name="__codelineno-1-85"></a>        #}
+<a id="__codelineno-1-86" name="__codelineno-1-86"></a>#拒绝访问.htaccess文件，如果Apache的文档根
+<a id="__codelineno-1-87" name="__codelineno-1-87"></a>        # deny access to .htaccess files, if Apache&#39;s document root
+<a id="__codelineno-1-88" name="__codelineno-1-88"></a>        # concurs with nginx&#39;s one
+<a id="__codelineno-1-89" name="__codelineno-1-89"></a>        #
+<a id="__codelineno-1-90" name="__codelineno-1-90"></a>        #location ~ /\.ht {
+<a id="__codelineno-1-91" name="__codelineno-1-91"></a>        #    deny  all;
+<a id="__codelineno-1-92" name="__codelineno-1-92"></a>        #}
+<a id="__codelineno-1-93" name="__codelineno-1-93"></a>    }
+<a id="__codelineno-1-94" name="__codelineno-1-94"></a>
+<a id="__codelineno-1-95" name="__codelineno-1-95"></a>
+<a id="__codelineno-1-96" name="__codelineno-1-96"></a>    # another virtual host using mix of IP-, name-, and port-based configuration
+<a id="__codelineno-1-97" name="__codelineno-1-97"></a>    #
+<a id="__codelineno-1-98" name="__codelineno-1-98"></a>    #server {
+<a id="__codelineno-1-99" name="__codelineno-1-99"></a>    #    listen       8000;
+<a id="__codelineno-1-100" name="__codelineno-1-100"></a>    #    listen       somename:8080;
+<a id="__codelineno-1-101" name="__codelineno-1-101"></a>    #    server_name  somename  alias  another.alias;
+<a id="__codelineno-1-102" name="__codelineno-1-102"></a>
+<a id="__codelineno-1-103" name="__codelineno-1-103"></a>    #    location / {
+<a id="__codelineno-1-104" name="__codelineno-1-104"></a>    #        root   html;
+<a id="__codelineno-1-105" name="__codelineno-1-105"></a>    #        index  index.html index.htm;
+<a id="__codelineno-1-106" name="__codelineno-1-106"></a>    #    }
+<a id="__codelineno-1-107" name="__codelineno-1-107"></a>    #}
+<a id="__codelineno-1-108" name="__codelineno-1-108"></a>
+<a id="__codelineno-1-109" name="__codelineno-1-109"></a>
+<a id="__codelineno-1-110" name="__codelineno-1-110"></a>    # HTTPS server
+<a id="__codelineno-1-111" name="__codelineno-1-111"></a>    #
+<a id="__codelineno-1-112" name="__codelineno-1-112"></a>    #server {
+<a id="__codelineno-1-113" name="__codelineno-1-113"></a>    #    listen       443 ssl;
+<a id="__codelineno-1-114" name="__codelineno-1-114"></a>    #    server_name  localhost;
+<a id="__codelineno-1-115" name="__codelineno-1-115"></a>
+<a id="__codelineno-1-116" name="__codelineno-1-116"></a>    #    ssl_certificate      cert.pem;
+<a id="__codelineno-1-117" name="__codelineno-1-117"></a>    #    ssl_certificate_key  cert.key;
+<a id="__codelineno-1-118" name="__codelineno-1-118"></a>
+<a id="__codelineno-1-119" name="__codelineno-1-119"></a>    #    ssl_session_cache    shared:SSL:1m;
+<a id="__codelineno-1-120" name="__codelineno-1-120"></a>    #    ssl_session_timeout  5m;
+<a id="__codelineno-1-121" name="__codelineno-1-121"></a>
+<a id="__codelineno-1-122" name="__codelineno-1-122"></a>    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+<a id="__codelineno-1-123" name="__codelineno-1-123"></a>    #    ssl_prefer_server_ciphers  on;
+<a id="__codelineno-1-124" name="__codelineno-1-124"></a>
+<a id="__codelineno-1-125" name="__codelineno-1-125"></a>    #    location / {
+<a id="__codelineno-1-126" name="__codelineno-1-126"></a>    #        root   html;
+<a id="__codelineno-1-127" name="__codelineno-1-127"></a>    #        index  index.html index.htm;
+<a id="__codelineno-1-128" name="__codelineno-1-128"></a>    #    }
+<a id="__codelineno-1-129" name="__codelineno-1-129"></a>    #}
+<a id="__codelineno-1-130" name="__codelineno-1-130"></a>}
+</code></pre></div></td></tr></table></div>
+<p>文字版描述 </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">  1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">  2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">  3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">  4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">  5</a></span>
+<span class="normal"><a href="#__codelineno-2-6">  6</a></span>
+<span class="normal"><a href="#__codelineno-2-7">  7</a></span>
+<span class="normal"><a href="#__codelineno-2-8">  8</a></span>
+<span class="normal"><a href="#__codelineno-2-9">  9</a></span>
+<span class="normal"><a href="#__codelineno-2-10"> 10</a></span>
+<span class="normal"><a href="#__codelineno-2-11"> 11</a></span>
+<span class="normal"><a href="#__codelineno-2-12"> 12</a></span>
+<span class="normal"><a href="#__codelineno-2-13"> 13</a></span>
+<span class="normal"><a href="#__codelineno-2-14"> 14</a></span>
+<span class="normal"><a href="#__codelineno-2-15"> 15</a></span>
+<span class="normal"><a href="#__codelineno-2-16"> 16</a></span>
+<span class="normal"><a href="#__codelineno-2-17"> 17</a></span>
+<span class="normal"><a href="#__codelineno-2-18"> 18</a></span>
+<span class="normal"><a href="#__codelineno-2-19"> 19</a></span>
+<span class="normal"><a href="#__codelineno-2-20"> 20</a></span>
+<span class="normal"><a href="#__codelineno-2-21"> 21</a></span>
+<span class="normal"><a href="#__codelineno-2-22"> 22</a></span>
+<span class="normal"><a href="#__codelineno-2-23"> 23</a></span>
+<span class="normal"><a href="#__codelineno-2-24"> 24</a></span>
+<span class="normal"><a href="#__codelineno-2-25"> 25</a></span>
+<span class="normal"><a href="#__codelineno-2-26"> 26</a></span>
+<span class="normal"><a href="#__codelineno-2-27"> 27</a></span>
+<span class="normal"><a href="#__codelineno-2-28"> 28</a></span>
+<span class="normal"><a href="#__codelineno-2-29"> 29</a></span>
+<span class="normal"><a href="#__codelineno-2-30"> 30</a></span>
+<span class="normal"><a href="#__codelineno-2-31"> 31</a></span>
+<span class="normal"><a href="#__codelineno-2-32"> 32</a></span>
+<span class="normal"><a href="#__codelineno-2-33"> 33</a></span>
+<span class="normal"><a href="#__codelineno-2-34"> 34</a></span>
+<span class="normal"><a href="#__codelineno-2-35"> 35</a></span>
+<span class="normal"><a href="#__codelineno-2-36"> 36</a></span>
+<span class="normal"><a href="#__codelineno-2-37"> 37</a></span>
+<span class="normal"><a href="#__codelineno-2-38"> 38</a></span>
+<span class="normal"><a href="#__codelineno-2-39"> 39</a></span>
+<span class="normal"><a href="#__codelineno-2-40"> 40</a></span>
+<span class="normal"><a href="#__codelineno-2-41"> 41</a></span>
+<span class="normal"><a href="#__codelineno-2-42"> 42</a></span>
+<span class="normal"><a href="#__codelineno-2-43"> 43</a></span>
+<span class="normal"><a href="#__codelineno-2-44"> 44</a></span>
+<span class="normal"><a href="#__codelineno-2-45"> 45</a></span>
+<span class="normal"><a href="#__codelineno-2-46"> 46</a></span>
+<span class="normal"><a href="#__codelineno-2-47"> 47</a></span>
+<span class="normal"><a href="#__codelineno-2-48"> 48</a></span>
+<span class="normal"><a href="#__codelineno-2-49"> 49</a></span>
+<span class="normal"><a href="#__codelineno-2-50"> 50</a></span>
+<span class="normal"><a href="#__codelineno-2-51"> 51</a></span>
+<span class="normal"><a href="#__codelineno-2-52"> 52</a></span>
+<span class="normal"><a href="#__codelineno-2-53"> 53</a></span>
+<span class="normal"><a href="#__codelineno-2-54"> 54</a></span>
+<span class="normal"><a href="#__codelineno-2-55"> 55</a></span>
+<span class="normal"><a href="#__codelineno-2-56"> 56</a></span>
+<span class="normal"><a href="#__codelineno-2-57"> 57</a></span>
+<span class="normal"><a href="#__codelineno-2-58"> 58</a></span>
+<span class="normal"><a href="#__codelineno-2-59"> 59</a></span>
+<span class="normal"><a href="#__codelineno-2-60"> 60</a></span>
+<span class="normal"><a href="#__codelineno-2-61"> 61</a></span>
+<span class="normal"><a href="#__codelineno-2-62"> 62</a></span>
+<span class="normal"><a href="#__codelineno-2-63"> 63</a></span>
+<span class="normal"><a href="#__codelineno-2-64"> 64</a></span>
+<span class="normal"><a href="#__codelineno-2-65"> 65</a></span>
+<span class="normal"><a href="#__codelineno-2-66"> 66</a></span>
+<span class="normal"><a href="#__codelineno-2-67"> 67</a></span>
+<span class="normal"><a href="#__codelineno-2-68"> 68</a></span>
+<span class="normal"><a href="#__codelineno-2-69"> 69</a></span>
+<span class="normal"><a href="#__codelineno-2-70"> 70</a></span>
+<span class="normal"><a href="#__codelineno-2-71"> 71</a></span>
+<span class="normal"><a href="#__codelineno-2-72"> 72</a></span>
+<span class="normal"><a href="#__codelineno-2-73"> 73</a></span>
+<span class="normal"><a href="#__codelineno-2-74"> 74</a></span>
+<span class="normal"><a href="#__codelineno-2-75"> 75</a></span>
+<span class="normal"><a href="#__codelineno-2-76"> 76</a></span>
+<span class="normal"><a href="#__codelineno-2-77"> 77</a></span>
+<span class="normal"><a href="#__codelineno-2-78"> 78</a></span>
+<span class="normal"><a href="#__codelineno-2-79"> 79</a></span>
+<span class="normal"><a href="#__codelineno-2-80"> 80</a></span>
+<span class="normal"><a href="#__codelineno-2-81"> 81</a></span>
+<span class="normal"><a href="#__codelineno-2-82"> 82</a></span>
+<span class="normal"><a href="#__codelineno-2-83"> 83</a></span>
+<span class="normal"><a href="#__codelineno-2-84"> 84</a></span>
+<span class="normal"><a href="#__codelineno-2-85"> 85</a></span>
+<span class="normal"><a href="#__codelineno-2-86"> 86</a></span>
+<span class="normal"><a href="#__codelineno-2-87"> 87</a></span>
+<span class="normal"><a href="#__codelineno-2-88"> 88</a></span>
+<span class="normal"><a href="#__codelineno-2-89"> 89</a></span>
+<span class="normal"><a href="#__codelineno-2-90"> 90</a></span>
+<span class="normal"><a href="#__codelineno-2-91"> 91</a></span>
+<span class="normal"><a href="#__codelineno-2-92"> 92</a></span>
+<span class="normal"><a href="#__codelineno-2-93"> 93</a></span>
+<span class="normal"><a href="#__codelineno-2-94"> 94</a></span>
+<span class="normal"><a href="#__codelineno-2-95"> 95</a></span>
+<span class="normal"><a href="#__codelineno-2-96"> 96</a></span>
+<span class="normal"><a href="#__codelineno-2-97"> 97</a></span>
+<span class="normal"><a href="#__codelineno-2-98"> 98</a></span>
+<span class="normal"><a href="#__codelineno-2-99"> 99</a></span>
+<span class="normal"><a href="#__codelineno-2-100">100</a></span>
+<span class="normal"><a href="#__codelineno-2-101">101</a></span>
+<span class="normal"><a href="#__codelineno-2-102">102</a></span>
+<span class="normal"><a href="#__codelineno-2-103">103</a></span>
+<span class="normal"><a href="#__codelineno-2-104">104</a></span>
+<span class="normal"><a href="#__codelineno-2-105">105</a></span>
+<span class="normal"><a href="#__codelineno-2-106">106</a></span>
+<span class="normal"><a href="#__codelineno-2-107">107</a></span>
+<span class="normal"><a href="#__codelineno-2-108">108</a></span>
+<span class="normal"><a href="#__codelineno-2-109">109</a></span>
+<span class="normal"><a href="#__codelineno-2-110">110</a></span>
+<span class="normal"><a href="#__codelineno-2-111">111</a></span>
+<span class="normal"><a href="#__codelineno-2-112">112</a></span>
+<span class="normal"><a href="#__codelineno-2-113">113</a></span>
+<span class="normal"><a href="#__codelineno-2-114">114</a></span>
+<span class="normal"><a href="#__codelineno-2-115">115</a></span>
+<span class="normal"><a href="#__codelineno-2-116">116</a></span>
+<span class="normal"><a href="#__codelineno-2-117">117</a></span>
+<span class="normal"><a href="#__codelineno-2-118">118</a></span>
+<span class="normal"><a href="#__codelineno-2-119">119</a></span>
+<span class="normal"><a href="#__codelineno-2-120">120</a></span>
+<span class="normal"><a href="#__codelineno-2-121">121</a></span>
+<span class="normal"><a href="#__codelineno-2-122">122</a></span>
+<span class="normal"><a href="#__codelineno-2-123">123</a></span>
+<span class="normal"><a href="#__codelineno-2-124">124</a></span>
+<span class="normal"><a href="#__codelineno-2-125">125</a></span>
+<span class="normal"><a href="#__codelineno-2-126">126</a></span>
+<span class="normal"><a href="#__codelineno-2-127">127</a></span>
+<span class="normal"><a href="#__codelineno-2-128">128</a></span>
+<span class="normal"><a href="#__codelineno-2-129">129</a></span>
+<span class="normal"><a href="#__codelineno-2-130">130</a></span>
+<span class="normal"><a href="#__codelineno-2-131">131</a></span>
+<span class="normal"><a href="#__codelineno-2-132">132</a></span>
+<span class="normal"><a href="#__codelineno-2-133">133</a></span>
+<span class="normal"><a href="#__codelineno-2-134">134</a></span>
+<span class="normal"><a href="#__codelineno-2-135">135</a></span>
+<span class="normal"><a href="#__codelineno-2-136">136</a></span>
+<span class="normal"><a href="#__codelineno-2-137">137</a></span>
+<span class="normal"><a href="#__codelineno-2-138">138</a></span>
+<span class="normal"><a href="#__codelineno-2-139">139</a></span>
+<span class="normal"><a href="#__codelineno-2-140">140</a></span>
+<span class="normal"><a href="#__codelineno-2-141">141</a></span>
+<span class="normal"><a href="#__codelineno-2-142">142</a></span>
+<span class="normal"><a href="#__codelineno-2-143">143</a></span>
+<span class="normal"><a href="#__codelineno-2-144">144</a></span>
+<span class="normal"><a href="#__codelineno-2-145">145</a></span>
+<span class="normal"><a href="#__codelineno-2-146">146</a></span>
+<span class="normal"><a href="#__codelineno-2-147">147</a></span>
+<span class="normal"><a href="#__codelineno-2-148">148</a></span>
+<span class="normal"><a href="#__codelineno-2-149">149</a></span>
+<span class="normal"><a href="#__codelineno-2-150">150</a></span>
+<span class="normal"><a href="#__codelineno-2-151">151</a></span>
+<span class="normal"><a href="#__codelineno-2-152">152</a></span>
+<span class="normal"><a href="#__codelineno-2-153">153</a></span>
+<span class="normal"><a href="#__codelineno-2-154">154</a></span>
+<span class="normal"><a href="#__codelineno-2-155">155</a></span>
+<span class="normal"><a href="#__codelineno-2-156">156</a></span>
+<span class="normal"><a href="#__codelineno-2-157">157</a></span>
+<span class="normal"><a href="#__codelineno-2-158">158</a></span>
+<span class="normal"><a href="#__codelineno-2-159">159</a></span>
+<span class="normal"><a href="#__codelineno-2-160">160</a></span>
+<span class="normal"><a href="#__codelineno-2-161">161</a></span>
+<span class="normal"><a href="#__codelineno-2-162">162</a></span>
+<span class="normal"><a href="#__codelineno-2-163">163</a></span>
+<span class="normal"><a href="#__codelineno-2-164">164</a></span>
+<span class="normal"><a href="#__codelineno-2-165">165</a></span>
+<span class="normal"><a href="#__codelineno-2-166">166</a></span>
+<span class="normal"><a href="#__codelineno-2-167">167</a></span>
+<span class="normal"><a href="#__codelineno-2-168">168</a></span>
+<span class="normal"><a href="#__codelineno-2-169">169</a></span>
+<span class="normal"><a href="#__codelineno-2-170">170</a></span>
+<span class="normal"><a href="#__codelineno-2-171">171</a></span>
+<span class="normal"><a href="#__codelineno-2-172">172</a></span>
+<span class="normal"><a href="#__codelineno-2-173">173</a></span>
+<span class="normal"><a href="#__codelineno-2-174">174</a></span>
+<span class="normal"><a href="#__codelineno-2-175">175</a></span>
+<span class="normal"><a href="#__codelineno-2-176">176</a></span>
+<span class="normal"><a href="#__codelineno-2-177">177</a></span>
+<span class="normal"><a href="#__codelineno-2-178">178</a></span>
+<span class="normal"><a href="#__codelineno-2-179">179</a></span>
+<span class="normal"><a href="#__codelineno-2-180">180</a></span>
+<span class="normal"><a href="#__codelineno-2-181">181</a></span>
+<span class="normal"><a href="#__codelineno-2-182">182</a></span>
+<span class="normal"><a href="#__codelineno-2-183">183</a></span>
+<span class="normal"><a href="#__codelineno-2-184">184</a></span>
+<span class="normal"><a href="#__codelineno-2-185">185</a></span>
+<span class="normal"><a href="#__codelineno-2-186">186</a></span>
+<span class="normal"><a href="#__codelineno-2-187">187</a></span>
+<span class="normal"><a href="#__codelineno-2-188">188</a></span>
+<span class="normal"><a href="#__codelineno-2-189">189</a></span>
+<span class="normal"><a href="#__codelineno-2-190">190</a></span>
+<span class="normal"><a href="#__codelineno-2-191">191</a></span>
+<span class="normal"><a href="#__codelineno-2-192">192</a></span>
+<span class="normal"><a href="#__codelineno-2-193">193</a></span>
+<span class="normal"><a href="#__codelineno-2-194">194</a></span>
+<span class="normal"><a href="#__codelineno-2-195">195</a></span>
+<span class="normal"><a href="#__codelineno-2-196">196</a></span>
+<span class="normal"><a href="#__codelineno-2-197">197</a></span>
+<span class="normal"><a href="#__codelineno-2-198">198</a></span>
+<span class="normal"><a href="#__codelineno-2-199">199</a></span>
+<span class="normal"><a href="#__codelineno-2-200">200</a></span>
+<span class="normal"><a href="#__codelineno-2-201">201</a></span>
+<span class="normal"><a href="#__codelineno-2-202">202</a></span>
+<span class="normal"><a href="#__codelineno-2-203">203</a></span>
+<span class="normal"><a href="#__codelineno-2-204">204</a></span>
+<span class="normal"><a href="#__codelineno-2-205">205</a></span>
+<span class="normal"><a href="#__codelineno-2-206">206</a></span>
+<span class="normal"><a href="#__codelineno-2-207">207</a></span>
+<span class="normal"><a href="#__codelineno-2-208">208</a></span>
+<span class="normal"><a href="#__codelineno-2-209">209</a></span>
+<span class="normal"><a href="#__codelineno-2-210">210</a></span>
+<span class="normal"><a href="#__codelineno-2-211">211</a></span>
+<span class="normal"><a href="#__codelineno-2-212">212</a></span>
+<span class="normal"><a href="#__codelineno-2-213">213</a></span>
+<span class="normal"><a href="#__codelineno-2-214">214</a></span>
+<span class="normal"><a href="#__codelineno-2-215">215</a></span>
+<span class="normal"><a href="#__codelineno-2-216">216</a></span>
+<span class="normal"><a href="#__codelineno-2-217">217</a></span>
+<span class="normal"><a href="#__codelineno-2-218">218</a></span>
+<span class="normal"><a href="#__codelineno-2-219">219</a></span>
+<span class="normal"><a href="#__codelineno-2-220">220</a></span>
+<span class="normal"><a href="#__codelineno-2-221">221</a></span>
+<span class="normal"><a href="#__codelineno-2-222">222</a></span>
+<span class="normal"><a href="#__codelineno-2-223">223</a></span>
+<span class="normal"><a href="#__codelineno-2-224">224</a></span>
+<span class="normal"><a href="#__codelineno-2-225">225</a></span>
+<span class="normal"><a href="#__codelineno-2-226">226</a></span>
+<span class="normal"><a href="#__codelineno-2-227">227</a></span>
+<span class="normal"><a href="#__codelineno-2-228">228</a></span>
+<span class="normal"><a href="#__codelineno-2-229">229</a></span>
+<span class="normal"><a href="#__codelineno-2-230">230</a></span>
+<span class="normal"><a href="#__codelineno-2-231">231</a></span>
+<span class="normal"><a href="#__codelineno-2-232">232</a></span>
+<span class="normal"><a href="#__codelineno-2-233">233</a></span>
+<span class="normal"><a href="#__codelineno-2-234">234</a></span>
+<span class="normal"><a href="#__codelineno-2-235">235</a></span>
+<span class="normal"><a href="#__codelineno-2-236">236</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>################### main区域 #################################
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>#user :来指定Nginx Worker进程运行用户以及用户组，默认由nobody账号运行。也可以创建nginx用户指定用户。
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>#    创建www用户，在nginx配置文件中把user noboby noboby;--&gt;user www www;即可
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>#    /usr/sbin/groupadd www 
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a>#    /usr/sbin/useradd -g www www
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a>#worker_processes:来指定了Nginx要开启的子进程数。每个Nginx进程平均耗费10M~12M内存。根据经验，一般指定1个进程就足够了，如果是多核CPU，
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a>#    建议指定和CPU的数量一样的进程数即可。我这里写2，那么就会开启2个子进程，总共3个进程。
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a>#error_log:用来定义全局错误日志文件。日志输出级别有debug、info、notice、warn、error、crit可供选择，其中，debug输出日志最为最详细，而crit输出日志最少。
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a>#pid:用来指定进程id的存储文件位置。
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a>#worker_rlimit_nofile:用于指定一个nginx进程可以打开的最多文件描述符数目，这里是65535，需要使用命令“ulimit -n 65535”来设置。
+<a id="__codelineno-2-11" name="__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12"></a>user  nobody;
+<a id="__codelineno-2-13" name="__codelineno-2-13"></a>worker_processes  1;
+<a id="__codelineno-2-14" name="__codelineno-2-14"></a>error_log  logs/error.log;
+<a id="__codelineno-2-15" name="__codelineno-2-15"></a>error_log  logs/error.log  notice;
+<a id="__codelineno-2-16" name="__codelineno-2-16"></a>error_log  logs/error.log  info;
+<a id="__codelineno-2-17" name="__codelineno-2-17"></a>pid        logs/nginx.pid;
+<a id="__codelineno-2-18" name="__codelineno-2-18"></a>
+<a id="__codelineno-2-19" name="__codelineno-2-19"></a>
+<a id="__codelineno-2-20" name="__codelineno-2-20"></a>#####################event 区域###############################
+<a id="__codelineno-2-21" name="__codelineno-2-21"></a>#use：用来指定Nginx的工作模式。Nginx支持的工作模式有select、poll、kqueue、epoll、rtsig和/dev/poll。
+<a id="__codelineno-2-22" name="__codelineno-2-22"></a>#    其中select和poll都是标准的工作模式，kqueue和epoll是高效的工作模式，不同的是epoll用在Linux平台上，
+<a id="__codelineno-2-23" name="__codelineno-2-23"></a>#    而kqueue用在BSD系统中,对于Linux系统，epoll工作模式是首选。
+<a id="__codelineno-2-24" name="__codelineno-2-24"></a>#worker_connections：用于定义Nginx每个进程的最大连接数，即接收前端的最大请求数，默认是1024。
+<a id="__codelineno-2-25" name="__codelineno-2-25"></a>#    最大客户端连接数由worker_processes和worker_connections决定，即Max_clients=worker_processes*worker_connections，
+<a id="__codelineno-2-26" name="__codelineno-2-26"></a>#   在作为反向代理时，Max_clients变为：Max_clients = worker_processes * worker_connections/4。 
+<a id="__codelineno-2-27" name="__codelineno-2-27"></a>#    进程的最大连接数受Linux系统进程的最大打开文件数限制，在执行操作系统命令“ulimit -n 65536”后worker_connections的设置才能生效。
+<a id="__codelineno-2-28" name="__codelineno-2-28"></a>
+<a id="__codelineno-2-29" name="__codelineno-2-29"></a>events {
+<a id="__codelineno-2-30" name="__codelineno-2-30"></a>    use epoll;
+<a id="__codelineno-2-31" name="__codelineno-2-31"></a>    worker_connections  1024;
+<a id="__codelineno-2-32" name="__codelineno-2-32"></a>}
+<a id="__codelineno-2-33" name="__codelineno-2-33"></a>######################### http设置#####################################
+<a id="__codelineno-2-34" name="__codelineno-2-34"></a>#    http模块负责HTTP服务器相关属性的配置，有server和upstream两个子模块
+<a id="__codelineno-2-35" name="__codelineno-2-35"></a>http {
+<a id="__codelineno-2-36" name="__codelineno-2-36"></a>#include ：来用设定文件的mime类型,类型在配置文件目录下的mime.type文件定义，来告诉nginx来识别文件类型。
+<a id="__codelineno-2-37" name="__codelineno-2-37"></a>#default_type：设定了默认的类型为二进制流，也就是当文件类型未定义时使用这种方式，例如在没有配置asp的locate环境时，Nginx是不予解析的，此时，用浏览器访问asp文件就会出现下载了。
+<a id="__codelineno-2-38" name="__codelineno-2-38"></a>#log_format：用于设置日志的格式，和记录哪些参数，这里设置为main，刚好用于access_log来纪录这种类型。
+<a id="__codelineno-2-39" name="__codelineno-2-39"></a>    include       mime.types;
+<a id="__codelineno-2-40" name="__codelineno-2-40"></a>    default_type  application/octet-stream;
+<a id="__codelineno-2-41" name="__codelineno-2-41"></a>    log_format  main  &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;
+<a id="__codelineno-2-42" name="__codelineno-2-42"></a>                      &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;
+<a id="__codelineno-2-43" name="__codelineno-2-43"></a>                      &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;
+<a id="__codelineno-2-44" name="__codelineno-2-44"></a>    access_log  logs/access.log  main;
+<a id="__codelineno-2-45" name="__codelineno-2-45"></a>    sendfile        on;
+<a id="__codelineno-2-46" name="__codelineno-2-46"></a>    tcp_nopush     on;
+<a id="__codelineno-2-47" name="__codelineno-2-47"></a>    keepalive_timeout  0;
+<a id="__codelineno-2-48" name="__codelineno-2-48"></a>    keepalive_timeout  65;
+<a id="__codelineno-2-49" name="__codelineno-2-49"></a>    gzip  on;
+<a id="__codelineno-2-50" name="__codelineno-2-50"></a>
+<a id="__codelineno-2-51" name="__codelineno-2-51"></a>######################### server设置#####################################
+<a id="__codelineno-2-52" name="__codelineno-2-52"></a>#server用来定一个虚拟主机，标志定义虚拟主机开始。
+<a id="__codelineno-2-53" name="__codelineno-2-53"></a>#listen：用于指定虚拟主机的服务端口。
+<a id="__codelineno-2-54" name="__codelineno-2-54"></a>#server_name：用来指定IP地址或者域名，多个域名之间用空格分开。
+<a id="__codelineno-2-55" name="__codelineno-2-55"></a>#root ：表示在这整个server虚拟主机内，全部的root web根目录。注意要和locate {}下面定义的区分开来。
+<a id="__codelineno-2-56" name="__codelineno-2-56"></a>#index ：全局定义访问的默认首页地址。注意要和locate {}下面定义的区分开来。
+<a id="__codelineno-2-57" name="__codelineno-2-57"></a>#charset：用于设置网页的默认编码格式。
+<a id="__codelineno-2-58" name="__codelineno-2-58"></a>#access_log：用来指定此虚拟主机的访问日志存放路径，最后的main用于指定访问日志的输出格式。
+<a id="__codelineno-2-59" name="__codelineno-2-59"></a>    server {
+<a id="__codelineno-2-60" name="__codelineno-2-60"></a>        listen       80;
+<a id="__codelineno-2-61" name="__codelineno-2-61"></a>        server_name  localhost;
+<a id="__codelineno-2-62" name="__codelineno-2-62"></a>        root   /Users/hk/www;
+<a id="__codelineno-2-63" name="__codelineno-2-63"></a>        index  index.php index.html index.htm; 
+<a id="__codelineno-2-64" name="__codelineno-2-64"></a>        charset utf-8;
+<a id="__codelineno-2-65" name="__codelineno-2-65"></a>        access_log  logs/host.access.log  main;
+<a id="__codelineno-2-66" name="__codelineno-2-66"></a>        aerror_log  logs/host.error.log   main;
+<a id="__codelineno-2-67" name="__codelineno-2-67"></a>
+<a id="__codelineno-2-68" name="__codelineno-2-68"></a>######################### location设置#####################################
+<a id="__codelineno-2-69" name="__codelineno-2-69"></a># location模块 负载均衡,反向代理,虚拟域名等配置。是来定位的，定位URL，解析URL，它也提供了强大的正则匹配功能，也支持条件判断匹配，
+<a id="__codelineno-2-70" name="__codelineno-2-70"></a>#    可以通过location指令实现Nginx对动,静态网页进行过滤处理。
+<a id="__codelineno-2-71" name="__codelineno-2-71"></a>#/表示匹配访问根目录。
+<a id="__codelineno-2-72" name="__codelineno-2-72"></a>#root指令用于指定访问根目录时，虚拟主机的web目录，这个目录可以是相对路径（相对路径是相对于nginx的安装目录）。也可以是绝对路径。
+<a id="__codelineno-2-73" name="__codelineno-2-73"></a>#proxy_pass：代理转发，如果在proxy_pass后面的url加/，表示绝对根路径；如果没有/，表示相对路径，把匹配的路径部分也给代理走。
+<a id="__codelineno-2-74" name="__codelineno-2-74"></a>#proxy_set_header：允许重新定义或者添加发往后端服务器的请求头。
+<a id="__codelineno-2-75" name="__codelineno-2-75"></a>#include：加载配置文件，后面介绍nginx多个配置文件时候会提到。
+<a id="__codelineno-2-76" name="__codelineno-2-76"></a>#root：定位localtion匹配的url资源路径。
+<a id="__codelineno-2-77" name="__codelineno-2-77"></a>#index：定义页面显示html，一般和alias配合使用。
+<a id="__codelineno-2-78" name="__codelineno-2-78"></a>        location / {       
+<a id="__codelineno-2-79" name="__codelineno-2-79"></a>            root   html;    
+<a id="__codelineno-2-80" name="__codelineno-2-80"></a>            index  index.html index.htm;
+<a id="__codelineno-2-81" name="__codelineno-2-81"></a>        }
+<a id="__codelineno-2-82" name="__codelineno-2-82"></a>
+<a id="__codelineno-2-83" name="__codelineno-2-83"></a>        error_page  404              /404.html;       
+<a id="__codelineno-2-84" name="__codelineno-2-84"></a>        error_page   500 502 503 504  /50x.html;
+<a id="__codelineno-2-85" name="__codelineno-2-85"></a>        location = /50x.html {
+<a id="__codelineno-2-86" name="__codelineno-2-86"></a>            root   html;
+<a id="__codelineno-2-87" name="__codelineno-2-87"></a>        }
+<a id="__codelineno-2-88" name="__codelineno-2-88"></a>
+<a id="__codelineno-2-89" name="__codelineno-2-89"></a>
+<a id="__codelineno-2-90" name="__codelineno-2-90"></a>        #反向代理配置
+<a id="__codelineno-2-91" name="__codelineno-2-91"></a>        location /jyb {
+<a id="__codelineno-2-92" name="__codelineno-2-92"></a>            proxy_pass http://qurt/;
+<a id="__codelineno-2-93" name="__codelineno-2-93"></a>            proxy_read_timeout 1800s;
+<a id="__codelineno-2-94" name="__codelineno-2-94"></a>            proxy_set_header   Host $host:$server_port;
+<a id="__codelineno-2-95" name="__codelineno-2-95"></a>            proxy_set_header   X-real-ip  $remote_addr;
+<a id="__codelineno-2-96" name="__codelineno-2-96"></a>            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;  
+<a id="__codelineno-2-97" name="__codelineno-2-97"></a>            proxy_set_header   X-Forwarded-Proto  $scheme; 
+<a id="__codelineno-2-98" name="__codelineno-2-98"></a>         }
+<a id="__codelineno-2-99" name="__codelineno-2-99"></a>
+<a id="__codelineno-2-100" name="__codelineno-2-100"></a>
+<a id="__codelineno-2-101" name="__codelineno-2-101"></a>         #采用uwsgi方式
+<a id="__codelineno-2-102" name="__codelineno-2-102"></a>         location /python/ {
+<a id="__codelineno-2-103" name="__codelineno-2-103"></a>             include uwsgi_params;
+<a id="__codelineno-2-104" name="__codelineno-2-104"></a>             uwsgi_pass 127.0.0.1:33333;
+<a id="__codelineno-2-105" name="__codelineno-2-105"></a>         }
+<a id="__codelineno-2-106" name="__codelineno-2-106"></a>
+<a id="__codelineno-2-107" name="__codelineno-2-107"></a>        # FastCGI方式
+<a id="__codelineno-2-108" name="__codelineno-2-108"></a>        location ~ \.php$ {
+<a id="__codelineno-2-109" name="__codelineno-2-109"></a>            root           html;
+<a id="__codelineno-2-110" name="__codelineno-2-110"></a>            fastcgi_pass   127.0.0.1:9000;
+<a id="__codelineno-2-111" name="__codelineno-2-111"></a>            fastcgi_index  index.php;
+<a id="__codelineno-2-112" name="__codelineno-2-112"></a>            fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+<a id="__codelineno-2-113" name="__codelineno-2-113"></a>            include        fastcgi_params;
+<a id="__codelineno-2-114" name="__codelineno-2-114"></a>        }
+<a id="__codelineno-2-115" name="__codelineno-2-115"></a>
+<a id="__codelineno-2-116" name="__codelineno-2-116"></a>        #访问nginx本机目录的文件
+<a id="__codelineno-2-117" name="__codelineno-2-117"></a>        location / {
+<a id="__codelineno-2-118" name="__codelineno-2-118"></a>            root   /home/hk/;
+<a id="__codelineno-2-119" name="__codelineno-2-119"></a>            index  index.html index.htm;
+<a id="__codelineno-2-120" name="__codelineno-2-120"></a>        }
+<a id="__codelineno-2-121" name="__codelineno-2-121"></a>
+<a id="__codelineno-2-122" name="__codelineno-2-122"></a>        location  /static/ {
+<a id="__codelineno-2-123" name="__codelineno-2-123"></a>             alias /var/static/;
+<a id="__codelineno-2-124" name="__codelineno-2-124"></a>        }
+<a id="__codelineno-2-125" name="__codelineno-2-125"></a>
+<a id="__codelineno-2-126" name="__codelineno-2-126"></a>        # deny access to .htaccess files, if Apache&#39;s document root
+<a id="__codelineno-2-127" name="__codelineno-2-127"></a>        # concurs with nginx&#39;s one
+<a id="__codelineno-2-128" name="__codelineno-2-128"></a>        #
+<a id="__codelineno-2-129" name="__codelineno-2-129"></a>        location ~ /\.ht {
+<a id="__codelineno-2-130" name="__codelineno-2-130"></a>            deny  all;
+<a id="__codelineno-2-131" name="__codelineno-2-131"></a>        }
+<a id="__codelineno-2-132" name="__codelineno-2-132"></a>    }
+<a id="__codelineno-2-133" name="__codelineno-2-133"></a>
+<a id="__codelineno-2-134" name="__codelineno-2-134"></a>
+<a id="__codelineno-2-135" name="__codelineno-2-135"></a>    # another virtual host using mix of IP-, name-, and port-based configuration
+<a id="__codelineno-2-136" name="__codelineno-2-136"></a>    server {
+<a id="__codelineno-2-137" name="__codelineno-2-137"></a>        listen       8000;
+<a id="__codelineno-2-138" name="__codelineno-2-138"></a>        listen       somename:8080;
+<a id="__codelineno-2-139" name="__codelineno-2-139"></a>        server_name  somename  alias  another.alias;
+<a id="__codelineno-2-140" name="__codelineno-2-140"></a>
+<a id="__codelineno-2-141" name="__codelineno-2-141"></a>        location / {
+<a id="__codelineno-2-142" name="__codelineno-2-142"></a>            root   html;
+<a id="__codelineno-2-143" name="__codelineno-2-143"></a>            index  index.html index.htm;
+<a id="__codelineno-2-144" name="__codelineno-2-144"></a>        }
+<a id="__codelineno-2-145" name="__codelineno-2-145"></a>    }
+<a id="__codelineno-2-146" name="__codelineno-2-146"></a>
+<a id="__codelineno-2-147" name="__codelineno-2-147"></a>
+<a id="__codelineno-2-148" name="__codelineno-2-148"></a>    # HTTPS server    
+<a id="__codelineno-2-149" name="__codelineno-2-149"></a>    server {
+<a id="__codelineno-2-150" name="__codelineno-2-150"></a>        listen       443 ssl;
+<a id="__codelineno-2-151" name="__codelineno-2-151"></a>        server_name  localhost;
+<a id="__codelineno-2-152" name="__codelineno-2-152"></a>
+<a id="__codelineno-2-153" name="__codelineno-2-153"></a>        ssl_certificate      cert.pem;
+<a id="__codelineno-2-154" name="__codelineno-2-154"></a>        ssl_certificate_key  cert.key;
+<a id="__codelineno-2-155" name="__codelineno-2-155"></a>
+<a id="__codelineno-2-156" name="__codelineno-2-156"></a>        ssl_session_cache    shared:SSL:1m;
+<a id="__codelineno-2-157" name="__codelineno-2-157"></a>        ssl_session_timeout  5m;
+<a id="__codelineno-2-158" name="__codelineno-2-158"></a>
+<a id="__codelineno-2-159" name="__codelineno-2-159"></a>        ssl_ciphers  HIGH:!aNULL:!MD5;
+<a id="__codelineno-2-160" name="__codelineno-2-160"></a>        ssl_prefer_server_ciphers  on;
+<a id="__codelineno-2-161" name="__codelineno-2-161"></a>
+<a id="__codelineno-2-162" name="__codelineno-2-162"></a>        location / {
+<a id="__codelineno-2-163" name="__codelineno-2-163"></a>            root   html;
+<a id="__codelineno-2-164" name="__codelineno-2-164"></a>            index  index.html index.htm;
+<a id="__codelineno-2-165" name="__codelineno-2-165"></a>        }
+<a id="__codelineno-2-166" name="__codelineno-2-166"></a>    }
+<a id="__codelineno-2-167" name="__codelineno-2-167"></a>
+<a id="__codelineno-2-168" name="__codelineno-2-168"></a>##############upstram 模块################
+<a id="__codelineno-2-169" name="__codelineno-2-169"></a># upstream 模块  负载均衡模块，通过一个简单的调度算法来实现客户端IP到后端服务器的负载均衡。
+<a id="__codelineno-2-170" name="__codelineno-2-170"></a>#Nginx的负载均衡模块目前支持4种调度算法:
+<a id="__codelineno-2-171" name="__codelineno-2-171"></a>#    weight 轮询（默认）。每个请求按时间顺序逐一分配到不同的后端服务器，如果后端某台服务器宕机，故障系统被自动剔除，使用户访问不受影响。
+<a id="__codelineno-2-172" name="__codelineno-2-172"></a>#        weight指定轮询权值，weight值越大，分配到的访问机率越高，主要用于后端每个服务器性能不均的情况下。
+<a id="__codelineno-2-173" name="__codelineno-2-173"></a>#    ip_hash。每个请求按访问IP的hash结果分配，这样来自同一个IP的访客固定访问一个后端服务器，有效解决了动态网页存在的session共享问题。
+<a id="__codelineno-2-174" name="__codelineno-2-174"></a>#    fair。比上面两个更加智能的负载均衡算法。此种算法可以依据页面大小和加载时间长短智能地进行负载均衡，
+<a id="__codelineno-2-175" name="__codelineno-2-175"></a>#        也就是根据后端服务器的响应时间来分配请求，响应时间短的优先分配。Nginx本身是不支持fair的，如果需要使用这种调度算法，必须下载Nginx的upstream_fair模块。
+<a id="__codelineno-2-176" name="__codelineno-2-176"></a>#    url_hash。按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，可以进一步提高后端缓存服务器的效率。Nginx本身是不支持url_hash的，
+<a id="__codelineno-2-177" name="__codelineno-2-177"></a>#        如果需要使用这种调度算法，必须安装Nginx 的hash软件包。
+<a id="__codelineno-2-178" name="__codelineno-2-178"></a>
+<a id="__codelineno-2-179" name="__codelineno-2-179"></a>#在HTTP Upstream模块中，可以通过server指令指定后端服务器的IP地址和端口，同时还可以设定每个后端服务器在负载均衡调度中的状态。常用的状态有：
+<a id="__codelineno-2-180" name="__codelineno-2-180"></a>#    down，表示当前的server暂时不参与负载均衡。
+<a id="__codelineno-2-181" name="__codelineno-2-181"></a>#    backup，预留的备份机器。当其他所有的非backup机器出现故障或者忙的时候，才会请求backup机器，因此这台机器的压力最轻。
+<a id="__codelineno-2-182" name="__codelineno-2-182"></a>#    max_fails，允许请求失败的次数，默认为1。当超过最大次数时，返回proxy_next_upstream 模块定义的错误。
+<a id="__codelineno-2-183" name="__codelineno-2-183"></a>#    fail_timeout，在经历了max_fails次失败后，暂停服务的时间。max_fails可以和fail_timeout一起使用。
+<a id="__codelineno-2-184" name="__codelineno-2-184"></a>
+<a id="__codelineno-2-185" name="__codelineno-2-185"></a>#注意 当负载调度算法为ip_hash时，后端服务器在负载均衡调度中的状态不能是weight和backup。
+<a id="__codelineno-2-186" name="__codelineno-2-186"></a>#备注： nginx的worker_rlimit_nofile达到上限时，再有客户端链接报502错误. 用了log_format指令设置了日志格式之后，需要用access_log指令指定日志文件的存放路径。
+<a id="__codelineno-2-187" name="__codelineno-2-187"></a>
+<a id="__codelineno-2-188" name="__codelineno-2-188"></a>    upstream server_group {
+<a id="__codelineno-2-189" name="__codelineno-2-189"></a>        ip_hash;
+<a id="__codelineno-2-190" name="__codelineno-2-190"></a>        server 192.168.123.1:80;
+<a id="__codelineno-2-191" name="__codelineno-2-191"></a>        server 192.168.123.2:80 down;
+<a id="__codelineno-2-192" name="__codelineno-2-192"></a>        server 192.168.123.3:8080  max_fails=3  fail_timeout=20s;
+<a id="__codelineno-2-193" name="__codelineno-2-193"></a>        server 192.168.123.4:8080;
+<a id="__codelineno-2-194" name="__codelineno-2-194"></a>    }
+<a id="__codelineno-2-195" name="__codelineno-2-195"></a>
+<a id="__codelineno-2-196" name="__codelineno-2-196"></a>    server {
+<a id="__codelineno-2-197" name="__codelineno-2-197"></a>        listen       80;
+<a id="__codelineno-2-198" name="__codelineno-2-198"></a>        server_name  localhost;
+<a id="__codelineno-2-199" name="__codelineno-2-199"></a>
+<a id="__codelineno-2-200" name="__codelineno-2-200"></a>        location / {
+<a id="__codelineno-2-201" name="__codelineno-2-201"></a>            proxy_pass http://server_group/;
+<a id="__codelineno-2-202" name="__codelineno-2-202"></a>        }
+<a id="__codelineno-2-203" name="__codelineno-2-203"></a>    }
+<a id="__codelineno-2-204" name="__codelineno-2-204"></a>
+<a id="__codelineno-2-205" name="__codelineno-2-205"></a>}
+<a id="__codelineno-2-206" name="__codelineno-2-206"></a>
+<a id="__codelineno-2-207" name="__codelineno-2-207"></a>
+<a id="__codelineno-2-208" name="__codelineno-2-208"></a>######################nginx 中location中root和alias的区别 ####################
+<a id="__codelineno-2-209" name="__codelineno-2-209"></a>    nginx指定文件路径有两种方式root和alias，这两者的用法区别，使用方法总结了。
+<a id="__codelineno-2-210" name="__codelineno-2-210"></a>    root与alias主要区别在于nginx如何解释location后面的uri，这会使两者分别以不同的方式将请求映射到服务器文件上。
+<a id="__codelineno-2-211" name="__codelineno-2-211"></a>    [root]
+<a id="__codelineno-2-212" name="__codelineno-2-212"></a>        语法：root path
+<a id="__codelineno-2-213" name="__codelineno-2-213"></a>        默认值：root html
+<a id="__codelineno-2-214" name="__codelineno-2-214"></a>        配置段：http、server、location、if
+<a id="__codelineno-2-215" name="__codelineno-2-215"></a>
+<a id="__codelineno-2-216" name="__codelineno-2-216"></a>    [alias]
+<a id="__codelineno-2-217" name="__codelineno-2-217"></a>        语法：alias path
+<a id="__codelineno-2-218" name="__codelineno-2-218"></a>        配置段：location
+<a id="__codelineno-2-219" name="__codelineno-2-219"></a>
+<a id="__codelineno-2-220" name="__codelineno-2-220"></a>    root实例：
+<a id="__codelineno-2-221" name="__codelineno-2-221"></a>
+<a id="__codelineno-2-222" name="__codelineno-2-222"></a>        location ^~ /t/ {
+<a id="__codelineno-2-223" name="__codelineno-2-223"></a>            root /www/root/html/;
+<a id="__codelineno-2-224" name="__codelineno-2-224"></a>        }
+<a id="__codelineno-2-225" name="__codelineno-2-225"></a>        如果一个请求的URI是/t/a.html时，web服务器将会返回服务器上的/www/root/html/t/a.html的文件。
+<a id="__codelineno-2-226" name="__codelineno-2-226"></a>
+<a id="__codelineno-2-227" name="__codelineno-2-227"></a>    alias实例：
+<a id="__codelineno-2-228" name="__codelineno-2-228"></a>        location ^~ /t/ {
+<a id="__codelineno-2-229" name="__codelineno-2-229"></a>            alias /www/root/html/new_t/;
+<a id="__codelineno-2-230" name="__codelineno-2-230"></a>        }
+<a id="__codelineno-2-231" name="__codelineno-2-231"></a>        如果一个请求的URI是/t/a.html时，web服务器将会返回服务器上的/www/root/html/new_t/a.html的文件。注意这里是new_t，
+<a id="__codelineno-2-232" name="__codelineno-2-232"></a>        因为alias会把location后面配置的路径丢弃掉，把当前匹配到的目录指向到指定的目录。
+<a id="__codelineno-2-233" name="__codelineno-2-233"></a>    注意：
+<a id="__codelineno-2-234" name="__codelineno-2-234"></a>        1. 使用alias时，目录名后面一定要加&quot;/&quot;。
+<a id="__codelineno-2-235" name="__codelineno-2-235"></a>        2. alias在使用正则匹配时，必须捕捉要匹配的内容并在指定的内容处使用。
+<a id="__codelineno-2-236" name="__codelineno-2-236"></a>        3. alias只能位于location块中。（root可以不放在location中）
+</code></pre></div></td></tr></table></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="页脚" >
+      
+        
+        <a href="../01Nginx%E5%AE%89%E8%A3%85/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 01Nginx安装" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              01Nginx安装
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../03Nginx%E4%BB%A3%E7%90%86/" class="md-footer__link md-footer__link--next" aria-label="下一页: 03Nginx代理" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              03Nginx代理
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      
+    
+  </body>
+</html>
