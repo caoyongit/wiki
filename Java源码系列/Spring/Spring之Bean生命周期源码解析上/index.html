@@ -389,7 +389,8 @@
     5. 实例化
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="5. 实例化">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#51-supplier" class="md-nav__link">
@@ -409,6 +410,11 @@
   <a href="#53" class="md-nav__link">
     5.3 推断构造方法
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -533,14 +539,14 @@
       
       
         <label class="md-nav__link" for="__nav_2">
-          Ngnix
+          Nginx
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Ngnix" data-md-level="1">
+      <nav class="md-nav" aria-label="Nginx" data-md-level="1">
         <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
-          Ngnix
+          Nginx
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -755,7 +761,8 @@
     5. 实例化
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="5. 实例化">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#51-supplier" class="md-nav__link">
@@ -775,6 +782,11 @@
   <a href="#53" class="md-nav__link">
     5.3 推断构造方法
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -865,8 +877,8 @@
 
 <p>Spring最重要的功能就是帮助程序员创建对象（也就是IOC），而启动Spring就是为创建Bean对象 做准备，所以我们先明白Spring到底是怎么去创建Bean的，也就是先弄明白Bean的生命周期。 </p>
 <p>Bean的生命周期就是指：在Spring中，一个Bean是如何生成的，如何销毁的</p>
-<p>Bean生命周期流程图：https://www.processon.com/view/link/5f8588c87d9c0806f27358c1 </p>
-<p>附带资料JFR介绍：https://zhuanlan.zhihu.com/p/122247741</p>
+<p>Bean生命周期流程图：<a href="https://www.processon.com/view/link/5f8588c87d9c0806f27358c1">https://www.processon.com/view/link/5f8588c87d9c0806f27358c1</a> </p>
+<p>附带资料JFR介绍：<a href="https://zhuanlan.zhihu.com/p/122247741">https://zhuanlan.zhihu.com/p/122247741</a></p>
 <h2 id="bean">Bean的生成过程</h2>
 <h3 id="1-beandefinition">1. 生成BeanDefinition</h3>
 <p>Spring启动的时候会进行扫描，会先调用<code>org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider#scanCandidateComponents(String basePackage)</code>
@@ -874,7 +886,7 @@
 ​</p>
 <p><strong>关于Spring启动流程，后续会单独的课详细讲，这里先讲一下Spring扫描的底层实现：</strong>
 <strong>​</strong></p>
-<p>Spring扫描底层流程：https://www.processon.com/view/link/61370ee60e3e7412ecd95d43
+<p>Spring扫描底层流程：<a href="https://www.processon.com/view/link/61370ee60e3e7412ecd95d43">https://www.processon.com/view/link/61370ee60e3e7412ecd95d43</a>
 <strong>​</strong></p>
 <ol>
 <li>首先，通过ResourcePatternResolver获得指定包路径下的所有<code>.class</code>文件（Spring源码中将此文件包装成了Resource对象）</li>
@@ -1015,7 +1027,7 @@
 <p>userService这个Bean，在实例化前会直接返回一个由我们所定义的UserService对象。如果是这样，表示不需要Spring来实例化了，并且后续的Spring依赖注入也不会进行了，会跳过一些步骤，直接执行初始化后这一步。</p>
 <h3 id="5">5. 实例化</h3>
 <p>在这个步骤中就会根据BeanDefinition去创建一个对象了。</p>
-<h3 id="51-supplier">5.1 Supplier创建对象</h3>
+<h4 id="51-supplier">5.1 Supplier创建对象</h4>
 <p>首先判断BeanDefinition中是否设置了Supplier，如果设置了则调用Supplier的get()得到对象。
 ​</p>
 <p>得直接使用BeanDefinition对象来设置Supplier，比如：</p>
@@ -1035,7 +1047,7 @@
 <a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="p">});</span><span class="w"></span>
 <a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="n">context</span><span class="p">.</span><span class="na">registerBeanDefinition</span><span class="p">(</span><span class="s">&quot;userService&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">beanDefinition</span><span class="p">);</span><span class="w"></span>
 </code></pre></div></td></tr></table></div>
-<h3 id="52">5.2 工厂方法创建对象</h3>
+<h4 id="52">5.2 工厂方法创建对象</h4>
 <p>如果没有设置Supplier，则检查BeanDefinition中是否设置了factoryMethod，也就是工厂方法，有两种方式可以设置factoryMethod，比如：
 ​</p>
 <p>方式一：</p>
@@ -1089,7 +1101,7 @@
 <p>Spring发现当前BeanDefinition方法设置了工厂方法后，就会区分这两种方式，然后调用工厂方法得到对象。
 ​</p>
 <p>值得注意的是，我们通过@Bean所定义的BeanDefinition，是存在factoryMethod和factoryBean的，也就是和上面的方式二非常类似，@Bean所注解的方法就是factoryMethod，AppConfig对象就是factoryBean。如果@Bean所所注解的方法是static的，那么对应的就是方式一。</p>
-<h3 id="53">5.3 推断构造方法</h3>
+<h4 id="53">5.3 推断构造方法</h4>
 <p>第一节已经讲过一遍大概原理了，后面有一节课单独分析源码实现。推断完构造方法后，就会使用构造方法来进行实例化了。
 ​</p>
 <p>额外的，在推断构造方法逻辑中除开会去选择构造方法以及查找入参对象意外，会还判断是否在对应的类中是否存在使用<strong>@Lookup注解</strong>了方法。如果存在则把该方法封装为LookupOverride对象并添加到BeanDefinition中。
