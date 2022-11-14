@@ -351,6 +351,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+        7.Spring依赖注入源码解析下.md
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -873,8 +887,7 @@
 <span class="normal"><a href="#__codelineno-6-26">26</a></span>
 <span class="normal"><a href="#__codelineno-6-27">27</a></span>
 <span class="normal"><a href="#__codelineno-6-28">28</a></span>
-<span class="normal"><a href="#__codelineno-6-29">29</a></span>
-<span class="normal"><a href="#__codelineno-6-30">30</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="k">worker_processes</span><span class="w">  </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="normal"><a href="#__codelineno-6-29">29</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="k">worker_processes</span><span class="w">  </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-6-2" name="__codelineno-6-2"></a>
 <a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="k">error_log</span><span class="w">  </span><span class="s">logs/error.log</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-6-4" name="__codelineno-6-4"></a>
@@ -903,22 +916,21 @@
 <a id="__codelineno-6-27" name="__codelineno-6-27"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
 <a id="__codelineno-6-28" name="__codelineno-6-28"></a>
 <a id="__codelineno-6-29" name="__codelineno-6-29"></a><span class="p">}</span><span class="w"></span>
-<a id="__codelineno-6-30" name="__codelineno-6-30"></a><span class="k">1234567891011121314151617181920212223242526272829</span><span class="w"></span>
 </code></pre></div></td></tr></table></div>
 <p>通过./nginx -s reload平滑重启Nginx，通过浏览器访问http://192.168.20.9/，会出现如下的效果：</p>
-<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/20201027131945336.png" /></p>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/14/20201027131945336400d96a5f30c06d0.png" /></p>
 <p>注：图标红色标记的即是auth_basic配置的参数值。</p>
 <p>此时，需输入用户名和密码访问资源，若点击"取消"，则会提示访问受限：</p>
-<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/20201027131956672.png" /></p>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/14/20201027131956672.png" /></p>
 <p>输入正确的用户名和密码，可以正确访问目标资源：</p>
-<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/20201027132008350.png" /></p>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/14/20201027132008350.png" /></p>
 <h2 id="_3">基本身份认证模块 目录检索示例</h2>
 <p>参照<a href="https://blog.csdn.net/securitit/article/details/109154694">Nginx 目录浏览模块 中文乱码 访问认证 ngx_http_autoindex_module</a>，进行配置，Nginx可以进行目录检索，针对不同的目录，设置不同的权限，实现资源访问控制。</p>
 <p>访问时，进行身份认证：</p>
-<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/2020102713202360.png" /></p>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/14/2020102713202360.png" /></p>
 <p>身份认证成功后，可以访问对应的目录及资源：</p>
-<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/20201027132032290.png" /></p>
-<p><img alt="" src="https://cdn.jsdelivr.net/gh/caoyongit/figurebed/JavaArchitect/20201027132042185.png" /></p>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/14/20201027132032290.png" /></p>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/14/20201027132042185.png" /></p>
 <p>此时，对于目录的分层、分类、权限分离就显得很重要了。</p>
 <h2 id="_4">总结</h2>
 <p>应用系统中，对于目录的访问权限设置同样重要，但是一般不会使用"HTTP基本身份认证"这种方式。首先，面对大众用户，其表现形式显得很不友好，与现代Web UI的富表现技术相比，过于单薄。再者，使用密码文件的方式管理权限，过于笨重，当待管理的权限体量过大时，会造成很大的不变。</p>
