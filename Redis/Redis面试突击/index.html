@@ -8,19 +8,19 @@
       
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.8">
     
     
       
-        <title>2.手写模拟Spring底层原理 - Java Architect</title>
+        <title>Redis面试突击 - Java Architect</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.20d9efc8.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.815d1a91.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.815d1a91.min.css">
         
       
       
@@ -37,7 +37,7 @@
       
     
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -65,6 +65,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#redis" class="md-skip">
+          跳转至
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -75,7 +80,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="../../.." title="Java Architect" class="md-header__button md-logo" aria-label="Java Architect" data-md-component="logo">
+    <a href="../.." title="Java Architect" class="md-header__button md-logo" aria-label="Java Architect" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -94,7 +99,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              2.手写模拟Spring底层原理
+              Redis面试突击
             
           </span>
         </div>
@@ -183,7 +188,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="Java Architect" class="md-nav__button md-logo" aria-label="Java Architect" data-md-component="logo">
+    <a href="../.." title="Java Architect" class="md-nav__button md-logo" aria-label="Java Architect" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -200,14 +205,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
       
       
       
@@ -228,14 +231,12 @@
               
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" >
       
       
       
@@ -258,8 +259,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../Spring%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/" class="md-nav__link">
-        Spring源码编译教程
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/00Spring%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/" class="md-nav__link">
+        0.Spring源码编译教程
       </a>
     </li>
   
@@ -272,7 +273,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/01Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="md-nav__link">
         1.Spring核心知识点
       </a>
     </li>
@@ -284,19 +285,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/02%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="md-nav__link">
         2.手写模拟Spring底层原理
       </a>
-      
     </li>
   
 
@@ -308,7 +301,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/03Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/" class="md-nav__link">
         3.Spring之底层架构核心概念解析
       </a>
     </li>
@@ -322,7 +315,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/04Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
         4.Spring之Bean生命周期源码解析上
       </a>
     </li>
@@ -336,7 +329,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/05Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
         5.Spring之Bean生命周期源码解析下
       </a>
     </li>
@@ -350,7 +343,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/06Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
         6.Spring依赖注入源码解析上.md
       </a>
     </li>
@@ -364,8 +357,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/07Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
         7.Spring依赖注入源码解析下.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/08Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E6%BA%90%E7%A0%81/" class="md-nav__link">
+        8.Spring循环依赖源码
       </a>
     </li>
   
@@ -419,7 +426,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Nginx/01Nginx%E5%AE%89%E8%A3%85/" class="md-nav__link">
+      <a href="../../Nginx/01Nginx%E5%AE%89%E8%A3%85/" class="md-nav__link">
         01Nginx安装
       </a>
     </li>
@@ -433,7 +440,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Nginx/02Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+      <a href="../../Nginx/02Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
         02Nginx配置文件解读
       </a>
     </li>
@@ -447,7 +454,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Nginx/03Nginx%E4%BB%A3%E7%90%86/" class="md-nav__link">
+      <a href="../../Nginx/03Nginx%E4%BB%A3%E7%90%86/" class="md-nav__link">
         03Nginx代理
       </a>
     </li>
@@ -461,7 +468,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Nginx/04Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="md-nav__link">
+      <a href="../../Nginx/04Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="md-nav__link">
         04Nginx负载均衡
       </a>
     </li>
@@ -475,7 +482,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Nginx/05Nginx%E9%99%90%E6%B5%81%E7%86%94%E6%96%AD/" class="md-nav__link">
+      <a href="../../Nginx/05Nginx%E9%99%90%E6%B5%81%E7%86%94%E6%96%AD/" class="md-nav__link">
         05Nginx限流熔断
       </a>
     </li>
@@ -489,7 +496,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Nginx/06Nginx%E5%AE%9E%E7%8E%B0%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/" class="md-nav__link">
+      <a href="../../Nginx/06Nginx%E5%AE%9E%E7%8E%B0%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/" class="md-nav__link">
         06Nginx实现动静分离
       </a>
     </li>
@@ -503,7 +510,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Nginx/07Nginx%E8%B0%83%E4%BC%98/" class="md-nav__link">
+      <a href="../../Nginx/07Nginx%E8%B0%83%E4%BC%98/" class="md-nav__link">
         07Nginx调优
       </a>
     </li>
@@ -517,7 +524,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Nginx/08Nginx%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="md-nav__link">
+      <a href="../../Nginx/08Nginx%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="md-nav__link">
         08Nginx镜像服务器
       </a>
     </li>
@@ -531,7 +538,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Nginx/09Nginx%E7%83%AD%E5%A4%87%E9%83%A8%E7%BD%B2/" class="md-nav__link">
+      <a href="../../Nginx/09Nginx%E7%83%AD%E5%A4%87%E9%83%A8%E7%BD%B2/" class="md-nav__link">
         09Nginx热备部署
       </a>
     </li>
@@ -545,9 +552,159 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Nginx/10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+      <a href="../../Nginx/10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/" class="md-nav__link">
         10Nginx安全认证
       </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Redis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Redis" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Redis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Redis面试突击
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Redis面试突击
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#redis" class="md-nav__link">
+    Redis是单线程还是多线程
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis_1" class="md-nav__link">
+    Redis单线程为什么还能这么快
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis_2" class="md-nav__link">
+    Redis底层数据是如何用跳表来存储的
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis-key" class="md-nav__link">
+    Redis Key过期了为什么内存没释放
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis-keyredis" class="md-nav__link">
+    Redis Key没设置过期时间为什么被Redis主动删除了
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rediskeylrulfu" class="md-nav__link">
+    Redis淘汰Key的算法LRU与LFU区别
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keyredis" class="md-nav__link">
+    删除Key的命令会阻塞Redis吗
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis_3" class="md-nav__link">
+    Redis主从、哨兵、集群架构优缺点比较
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redishash" class="md-nav__link">
+    Redis集群数据hash分片算法是怎么回事
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redisbug" class="md-nav__link">
+    Redis执行命令竟然有死循环阻塞Bug
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -577,6 +734,84 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#redis" class="md-nav__link">
+    Redis是单线程还是多线程
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis_1" class="md-nav__link">
+    Redis单线程为什么还能这么快
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis_2" class="md-nav__link">
+    Redis底层数据是如何用跳表来存储的
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis-key" class="md-nav__link">
+    Redis Key过期了为什么内存没释放
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis-keyredis" class="md-nav__link">
+    Redis Key没设置过期时间为什么被Redis主动删除了
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rediskeylrulfu" class="md-nav__link">
+    Redis淘汰Key的算法LRU与LFU区别
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keyredis" class="md-nav__link">
+    删除Key的命令会阻塞Redis吗
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis_3" class="md-nav__link">
+    Redis主从、哨兵、集群架构优缺点比较
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redishash" class="md-nav__link">
+    Redis集群数据hash分片算法是怎么回事
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redisbug" class="md-nav__link">
+    Redis执行命令竟然有死循环阻塞Bug
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -590,18 +825,34 @@
                   
 
 
-  <h1>2.手写模拟Spring底层原理</h1>
+  <h1>Redis面试突击</h1>
 
-<p>因为是手写模拟Spring代码，所以没有特殊的笔记，请直接看视频，建议同学们抽空自己也写一个Spring出来，加深理解。</p>
-<p>git clone地址：<a href="https://gitee.com/archguide/zhouyu-spring.git">https://gitee.com/archguide/zhouyu-spring.git</a></p>
-<p>课程内容：</p>
-<ol>
-<li>通过手写模拟，了解Spring的底层源码启动过程</li>
-<li>通过手写模拟，了解BeanDefinition、BeanPostProcessor的概念</li>
-<li>通过手写模拟，了解Spring解析配置类等底层源码工作流程</li>
-<li>通过手写模拟，了解依赖注入，Aware回调等底层源码工作流程</li>
-<li>通过手写模拟，了解Spring AOP的底层源码工作流程</li>
-</ol>
+<h3 id="redis">Redis是单线程还是多线程</h3>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_CChWu3VLJ1.png" /></p>
+<h3 id="redis_1">Redis单线程为什么还能这么快</h3>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_CeZ6EMD44b.png" /></p>
+<h3 id="redis_2">Redis底层数据是如何用跳表来存储的</h3>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_yOJihtEpxI.png" /></p>
+<h3 id="redis-key">Redis Key过期了为什么内存没释放</h3>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_8bcILgVpFo.png" /></p>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_9LvpvJYDUn.png" /></p>
+<h3 id="redis-keyredis">Redis Key没设置过期时间为什么被Redis主动删除了</h3>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_fjI9I0E4pi.png" /></p>
+<h3 id="rediskeylrulfu">Redis淘汰Key的算法LRU与LFU区别</h3>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_T6E1O2Vd13.png" /></p>
+<h3 id="keyredis">删除Key的命令会阻塞Redis吗</h3>
+<p>删除单个字符串类型的key，时间复杂度为o(1)</p>
+<p>删除单个列表、集合、有序集合或哈希表类型的key，时间复杂度为O(M)，M为以上数据结构内的元素数据</p>
+<h3 id="redis_3">Redis主从、哨兵、集群架构优缺点比较</h3>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_P39oTskdrB.png" /></p>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_BHXrwAqluo.png" /></p>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_NlhUJfi32z.png" /></p>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_BE0leN9zBF.png" /></p>
+<h3 id="redishash">Redis集群数据hash分片算法是怎么回事</h3>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_QLZC0kHf63.png" /></p>
+<h3 id="redisbug">Redis执行命令竟然有死循环阻塞Bug</h3>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_btPeGtJsut.png" /></p>
+<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_riWF1kNZdE.png" /></p>
 
 
 
@@ -627,7 +878,7 @@
     <nav class="md-footer__inner md-grid" aria-label="页脚" >
       
         
-        <a href="../Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 1.Spring核心知识点" rel="prev">
+        <a href="../../Nginx/10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 10Nginx安全认证" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -636,26 +887,11 @@
               <span class="md-footer__direction">
                 上一页
               </span>
-              1.Spring核心知识点
+              10Nginx安全认证
             </div>
           </div>
         </a>
       
-      
-        
-        <a href="../Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/" class="md-footer__link md-footer__link--next" aria-label="下一页: 3.Spring之底层架构核心概念解析" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                下一页
-              </span>
-              3.Spring之底层架构核心概念解析
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
       
     </nav>
   
@@ -680,10 +916,10 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "navigation.top"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.top"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
       
     
   </body>
