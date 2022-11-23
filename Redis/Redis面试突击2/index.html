@@ -8,19 +8,19 @@
       
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.8">
     
     
       
-        <title>Java Architect</title>
+        <title>Redis面试突击2 - Java Architect</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.20d9efc8.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.815d1a91.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.815d1a91.min.css">
         
       
       
@@ -37,7 +37,7 @@
       
     
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#java" class="md-skip">
+        <a href="#luaredis" class="md-skip">
           跳转至
         </a>
       
@@ -80,7 +80,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="." title="Java Architect" class="md-header__button md-logo" aria-label="Java Architect" data-md-component="logo">
+    <a href="../.." title="Java Architect" class="md-header__button md-logo" aria-label="Java Architect" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -99,7 +99,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Redis面试突击2
             
           </span>
         </div>
@@ -188,7 +188,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Java Architect" class="md-nav__button md-logo" aria-label="Java Architect" data-md-component="logo">
+    <a href="../.." title="Java Architect" class="md-nav__button md-logo" aria-label="Java Architect" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -259,7 +259,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/00Spring%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/00Spring%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/" class="md-nav__link">
         0.Spring源码编译教程
       </a>
     </li>
@@ -273,7 +273,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/01Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/01Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="md-nav__link">
         1.Spring核心知识点
       </a>
     </li>
@@ -287,7 +287,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/02%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/02%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="md-nav__link">
         2.手写模拟Spring底层原理
       </a>
     </li>
@@ -301,7 +301,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/03Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/03Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/" class="md-nav__link">
         3.Spring之底层架构核心概念解析
       </a>
     </li>
@@ -315,7 +315,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/04Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/04Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
         4.Spring之Bean生命周期源码解析上
       </a>
     </li>
@@ -329,7 +329,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/05Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/05Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
         5.Spring之Bean生命周期源码解析下
       </a>
     </li>
@@ -343,7 +343,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/06Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/06Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
         6.Spring依赖注入源码解析上.md
       </a>
     </li>
@@ -357,7 +357,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/07Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/07Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
         7.Spring依赖注入源码解析下.md
       </a>
     </li>
@@ -371,7 +371,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/08Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E6%BA%90%E7%A0%81/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/08Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E6%BA%90%E7%A0%81/" class="md-nav__link">
         8.Spring循环依赖源码
       </a>
     </li>
@@ -385,7 +385,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/09Spring%E4%B9%8B%E6%8E%A8%E6%96%AD%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/09Spring%E4%B9%8B%E6%8E%A8%E6%96%AD%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
         9.Spring之推断构造方法源码解析
       </a>
     </li>
@@ -399,7 +399,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/10Spring%E4%B9%8B%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/10Spring%E4%B9%8B%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
         10.Spring之启动过程源码解析
       </a>
     </li>
@@ -454,7 +454,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Microservice/01%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpringBoot%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B/" class="md-nav__link">
+      <a href="../../Microservice/01%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpringBoot%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B/" class="md-nav__link">
         01手写模拟SpringBoot核心流程
       </a>
     </li>
@@ -468,7 +468,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Microservice/02SpringBoot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%BA%95%E5%B1%82%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+      <a href="../../Microservice/02SpringBoot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%BA%95%E5%B1%82%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
         02SpringBoot自动配置底层源码解析
       </a>
     </li>
@@ -516,7 +516,7 @@
   
   
     <li class="md-nav__item">
-      <a href="SpringCloudAlibaba/04%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E7%BB%84%E4%BB%B6Feign/" class="md-nav__link">
+      <a href="../../SpringCloudAlibaba/04%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E7%BB%84%E4%BB%B6Feign/" class="md-nav__link">
         04微服务调用组件Feign
       </a>
     </li>
@@ -564,7 +564,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Nginx/01Nginx%E5%AE%89%E8%A3%85/" class="md-nav__link">
+      <a href="../../Nginx/01Nginx%E5%AE%89%E8%A3%85/" class="md-nav__link">
         01Nginx安装
       </a>
     </li>
@@ -578,7 +578,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Nginx/02Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+      <a href="../../Nginx/02Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
         02Nginx配置文件解读
       </a>
     </li>
@@ -592,7 +592,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Nginx/03Nginx%E4%BB%A3%E7%90%86/" class="md-nav__link">
+      <a href="../../Nginx/03Nginx%E4%BB%A3%E7%90%86/" class="md-nav__link">
         03Nginx代理
       </a>
     </li>
@@ -606,7 +606,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Nginx/04Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="md-nav__link">
+      <a href="../../Nginx/04Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="md-nav__link">
         04Nginx负载均衡
       </a>
     </li>
@@ -620,7 +620,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Nginx/05Nginx%E9%99%90%E6%B5%81%E7%86%94%E6%96%AD/" class="md-nav__link">
+      <a href="../../Nginx/05Nginx%E9%99%90%E6%B5%81%E7%86%94%E6%96%AD/" class="md-nav__link">
         05Nginx限流熔断
       </a>
     </li>
@@ -634,7 +634,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Nginx/06Nginx%E5%AE%9E%E7%8E%B0%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/" class="md-nav__link">
+      <a href="../../Nginx/06Nginx%E5%AE%9E%E7%8E%B0%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/" class="md-nav__link">
         06Nginx实现动静分离
       </a>
     </li>
@@ -648,7 +648,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Nginx/07Nginx%E8%B0%83%E4%BC%98/" class="md-nav__link">
+      <a href="../../Nginx/07Nginx%E8%B0%83%E4%BC%98/" class="md-nav__link">
         07Nginx调优
       </a>
     </li>
@@ -662,7 +662,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Nginx/08Nginx%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="md-nav__link">
+      <a href="../../Nginx/08Nginx%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="md-nav__link">
         08Nginx镜像服务器
       </a>
     </li>
@@ -676,7 +676,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Nginx/09Nginx%E7%83%AD%E5%A4%87%E9%83%A8%E7%BD%B2/" class="md-nav__link">
+      <a href="../../Nginx/09Nginx%E7%83%AD%E5%A4%87%E9%83%A8%E7%BD%B2/" class="md-nav__link">
         09Nginx热备部署
       </a>
     </li>
@@ -690,7 +690,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Nginx/10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+      <a href="../../Nginx/10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/" class="md-nav__link">
         10Nginx安全认证
       </a>
     </li>
@@ -710,12 +710,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
       
       
       
@@ -738,7 +740,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB/" class="md-nav__link">
+      <a href="../Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB/" class="md-nav__link">
         Redis面试突击
       </a>
     </li>
@@ -750,11 +752,62 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB2/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Redis面试突击2
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Redis面试突击2
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#luaredis" class="md-nav__link">
+    Lua脚本能在Redis集群里执行吗
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis" class="md-nav__link">
+    Redis主从切换导致分布式锁丢失问题是怎么回事
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redlockredis" class="md-nav__link">
+    Redlock如何解决Redis主从切换分布式锁丢失问题
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -791,28 +844,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#java" class="md-nav__link">
-    Java源码系列
+  <a href="#luaredis" class="md-nav__link">
+    Lua脚本能在Redis集群里执行吗
   </a>
-  
-    <nav class="md-nav" aria-label="Java源码系列">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#spring" class="md-nav__link">
-    Spring
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#nginx" class="md-nav__link">
-    Nginx
+  <a href="#redis" class="md-nav__link">
+    Redis主从切换导致分布式锁丢失问题是怎么回事
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redlockredis" class="md-nav__link">
+    Redlock如何解决Redis主从切换分布式锁丢失问题
   </a>
   
 </li>
@@ -832,35 +879,13 @@
                   
 
 
-  <h1>Home</h1>
+  <h1>Redis面试突击2</h1>
 
-<h2 id="java">Java源码系列</h2>
-<h3 id="spring">Spring</h3>
-<ol>
-<li><a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/00Spring%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/">Spring源码编译教程</a></li>
-<li><a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/01Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/">Spring核心知识点</a></li>
-<li><a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/02%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">手写模拟Spring底层原理</a></li>
-<li><a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/03Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/">Spring之底层架构核心概念解析</a></li>
-<li><a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/04Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/">Spring之Bean生命周期源码解析上</a></li>
-<li><a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/05Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/">Spring之Bean生命周期源码解析下</a></li>
-<li><a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/06Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/">Spring依赖注入源码解析上</a></li>
-<li><a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/07Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/">Spring依赖注入源码解析下</a></li>
-<li><a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/08Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E6%BA%90%E7%A0%81/">Spring循环依赖源码</a></li>
-<li><a href="Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/09Spring%E4%B9%8B%E6%8E%A8%E6%96%AD%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">Spring之推断构造方法源码解析</a></li>
-</ol>
-<h2 id="nginx">Nginx</h2>
-<ul>
-<li><a href="Nginx/01Nginx%E5%AE%89%E8%A3%85/">01Nginx安装</a></li>
-<li><a href="Nginx/02Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E8%AF%BB/">02Nginx配置文件解读</a></li>
-<li><a href="Nginx/03Nginx%E4%BB%A3%E7%90%86/">03Nginx代理</a></li>
-<li><a href="Nginx/04Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">04Nginx负载均衡</a></li>
-<li><a href="Nginx/05Nginx%E9%99%90%E6%B5%81%E7%86%94%E6%96%AD/">05Nginx限流熔断</a></li>
-<li><a href="Nginx/06Nginx%E5%AE%9E%E7%8E%B0%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/">06Nginx实现动静分离</a></li>
-<li><a href="Nginx/07Nginx%E8%B0%83%E4%BC%98/">07Nginx调优</a></li>
-<li><a href="Nginx/08Nginx%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/">08Nginx镜像服务器</a></li>
-<li><a href="Nginx/09Nginx%E7%83%AD%E5%A4%87%E9%83%A8%E7%BD%B2/">09Nginx热备部署</a></li>
-<li><a href="Nginx/10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/">10Nginx安全认证</a></li>
-</ul>
+<h3 id="luaredis">Lua脚本能在Redis集群里执行吗</h3>
+<p><img alt="Picsee-20221123134022.png" src="https://img.zivplus.xyz/images/2022/11/23/Picsee-20221123134022.png" /></p>
+<h3 id="redis">Redis主从切换导致分布式锁丢失问题是怎么回事</h3>
+<p>加锁成功后主节点崩溃，导致之后选举出来的主节点无加锁标识，可以重复加锁</p>
+<h3 id="redlockredis">Redlock如何解决Redis主从切换分布式锁丢失问题</h3>
 
 
 
@@ -881,6 +906,27 @@
       </main>
       
         <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="页脚" >
+      
+        
+        <a href="../Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB/" class="md-footer__link md-footer__link--prev" aria-label="上一页: Redis面试突击" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              Redis面试突击
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -903,10 +949,10 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["content.code.annotate", "navigation.top"], "search": "assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.top"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
     
     
-      <script src="assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
       
     
   </body>

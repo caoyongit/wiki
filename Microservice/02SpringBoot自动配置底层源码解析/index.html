@@ -1,0 +1,1996 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.8">
+    
+    
+      
+        <title>02SpringBoot自动配置底层源码解析 - Java Architect</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.815d1a91.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Java Architect" class="md-header__button md-logo" aria-label="Java Architect" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Java Architect
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              02SpringBoot自动配置底层源码解析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Java Architect" class="md-nav__button md-logo" aria-label="Java Architect" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Java Architect
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Java源码系列
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Java源码系列" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Java源码系列
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_1">
+          Spring
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Spring" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Spring
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/00Spring%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/" class="md-nav__link">
+        0.Spring源码编译教程
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/01Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="md-nav__link">
+        1.Spring核心知识点
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/02%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="md-nav__link">
+        2.手写模拟Spring底层原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/03Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        3.Spring之底层架构核心概念解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/04Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+        4.Spring之Bean生命周期源码解析上
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/05Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+        5.Spring之Bean生命周期源码解析下
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/06Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+        6.Spring依赖注入源码解析上.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/07Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+        7.Spring依赖注入源码解析下.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/08Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E6%BA%90%E7%A0%81/" class="md-nav__link">
+        8.Spring循环依赖源码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/09Spring%E4%B9%8B%E6%8E%A8%E6%96%AD%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        9.Spring之推断构造方法源码解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/10Spring%E4%B9%8B%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        10.Spring之启动过程源码解析
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          微服务源码
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="微服务源码" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          微服务源码
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpringBoot%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B/" class="md-nav__link">
+        01手写模拟SpringBoot核心流程
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        02SpringBoot自动配置底层源码解析
+      </a>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Spring Cloud Alibaba
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Spring Cloud Alibaba" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Spring Cloud Alibaba
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/04%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E7%BB%84%E4%BB%B6Feign/" class="md-nav__link">
+        04微服务调用组件Feign
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Nginx
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Nginx" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Nginx
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/01Nginx%E5%AE%89%E8%A3%85/" class="md-nav__link">
+        01Nginx安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/02Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        02Nginx配置文件解读
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/03Nginx%E4%BB%A3%E7%90%86/" class="md-nav__link">
+        03Nginx代理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/04Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="md-nav__link">
+        04Nginx负载均衡
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/05Nginx%E9%99%90%E6%B5%81%E7%86%94%E6%96%AD/" class="md-nav__link">
+        05Nginx限流熔断
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/06Nginx%E5%AE%9E%E7%8E%B0%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/" class="md-nav__link">
+        06Nginx实现动静分离
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/07Nginx%E8%B0%83%E4%BC%98/" class="md-nav__link">
+        07Nginx调优
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/08Nginx%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="md-nav__link">
+        08Nginx镜像服务器
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/09Nginx%E7%83%AD%E5%A4%87%E9%83%A8%E7%BD%B2/" class="md-nav__link">
+        09Nginx热备部署
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        10Nginx安全认证
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Redis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Redis" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Redis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB/" class="md-nav__link">
+        Redis面试突击
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB2/" class="md-nav__link">
+        Redis面试突击2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>02SpringBoot自动配置底层源码解析</h1>
+
+<p>课程内容</p>
+<ol>
+<li>@EnableAutoConfiguration源码解析</li>
+<li>各种条件注解源码解析</li>
+<li>SpringBoot整合Tomcat底层源码解析</li>
+<li>SpringBoot之AOP自动配置源码解析</li>
+<li>Starter机制底层原理解析</li>
+</ol>
+<p>SpringBoot2.6.6源码地址：https://gitee.com/archguide/spring-boot-2.6.6</p>
+<p>SpringBoot2.6.6源码编译问题汇总：https://www.yuque.com/docs/share/c6770db5-6baa-4394-9636-b2a02edd04de?# </p>
+<p><strong>自动配置到底配了什么？</strong></p>
+<p>对于一个Spring项目，主要就是有两种配置：</p>
+<ol>
+<li>一种是类似端口号、数据库地址、用户名密码等</li>
+<li>一种是各种Bean，比如整合Mybatis需要配置的<strong>MapperFactoryBean</strong>，比如整合事务需要配置<strong>DataSourceTransactionManager</strong></li>
+</ol>
+<p>SpringBoot中的自动配置，更多的是配置各种Bean，因为对于第一种配置，SpringBoot也无法去配置，比如数据库地址、密码之类的，SpringBoot肯定是无法知道的，但是对于端口号这些配置，SpringBoot也是会提供一种默认值的，也相当于一种自动配置。</p>
+<p>那SpringBoot是如何自动的帮助我们来配置这些Bean的呢？并且如果某些Bean程序员自己也配置了，那SpringBoot是如何进行选择的呢？</p>
+<p><strong>自动配置类</strong></p>
+<p>SpringBoot要自动帮我们配置Bean，那要支持的就多了：</p>
+<ol>
+<li>比如Spring整合各种Servlet容器（Tomcat、Jetty）的Bean</li>
+<li>比如Spring整合各种消息队列的Bean</li>
+<li>等等</li>
+</ol>
+<p>所以SpringBoot中肯定不能把所有的Bean都定义在一个配置类中，需要分门别类，这样就针对不同的场景定义了不同的自动配置类，比如：</p>
+<ol>
+<li>ServletWebServerFactoryAutoConfiguration：配置了Servlet Web场景中所需要的一些Bean</li>
+<li>TransactionAutoConfiguration：配置了事务场景中所需要的一些Bean</li>
+<li>AopAutoConfiguration：配置了AOP场景中所需要的一些Bean</li>
+<li>RabbitAutoConfiguration：配置了Rabbitmq场景中所需要的一些Bean</li>
+<li>等等</li>
+</ol>
+<p>使用这种结构后，SpringBoot就能让程序员更为方便的来控制<strong>某个Bean或某些Bean要不要生效</strong>，如果某个自动配置类不生效，那该配置类中所定义的Bean则都不会生效。</p>
+<p>那SpringBoot中是如何控制某个自动配置类或某个Bean生不生效呢？</p>
+<p><strong>条件注解</strong></p>
+<p>SpringBoot中的条件注解有：</p>
+<ol>
+<li>ConditionalOnBean：是否存在某个某类或某个名字的Bean</li>
+<li>ConditionalOnMissingBean：是否缺失某个某类或某个名字的Bean</li>
+<li>ConditionalOnSingleCandidate：是否符合指定类型的Bean只有一个</li>
+<li>ConditionalOnClass：是否存在某个类</li>
+<li>ConditionalOnMissingClass：是否缺失某个类</li>
+<li>ConditionalOnExpression：指定的表达式返回的是true还是false</li>
+<li>ConditionalOnJava：判断Java版本</li>
+<li>ConditionalOnJndi：JNDI指定的资源是否存在</li>
+<li>ConditionalOnWebApplication：当前应用是一个Web应用</li>
+<li>ConditionalOnNotWebApplication：当前应用不是一个Web应用</li>
+<li>ConditionalOnProperty：Environment中是否存在某个属性</li>
+<li>ConditionalOnResource：指定的资源是否存在</li>
+<li>ConditionalOnWarDeployment：当前项目是不是以War包部署的方式运行</li>
+<li>ConditionalOnCloudPlatform：是不是在某个云平台上</li>
+</ol>
+<p>当然我们也可以利用@Conditional来自定义条件注解。</p>
+<p>条件注解是可以写在类上和方法上的，如果某个条件注解写在了自动配置类上，那该自动配置类会不会生效就要看当前条件能不能符合，或者条件注解写在某个@Bean修饰的方法上，那这个Bean生不生效就看当前条件符不符合。</p>
+<p>具体原理是：</p>
+<ol>
+<li>Spring在解析某个自动配置类时，会先检查该自动配置类上是否有条件注解，如果有，则进一步判断该条件注解所指定的条件当前能不能满足，如果满足了则继续解析该配置类，如果不满足则不进行解析了，也就是配置类所定义的Bean都得不到解析，也就是相当于没有这些Bean了。</li>
+<li>同理，Spring在解析某个@Bean的方法时，也会先判断方法上是否有条件注解，然后进行解析，如果不满足条件，则该Bean不会生效</li>
+</ol>
+<p>我们可以发现，SpringBoot的自动配置，实际上就是SpringBoot的源码中预先写好了一些配置类，预先定义好了一些Bean，我们在用SpringBoot时，这些配置类就已经在我们项目的依赖中了，而这些自动配置类或自动配置Bean到底生不生效，就看具体所指定的条件了。</p>
+<p><strong>Starter机制</strong></p>
+<p>那SpringBoot中的Starter和自动配置又有什么关系呢？</p>
+<p>其实首先要明白一个Starter，就是一个Maven依赖，当我们在项目的pom.xml文件中添加某个Starter依赖时，其实就是简单的添加了很多其他的依赖，比如：</p>
+<ol>
+<li>spring-boot-starter-web：引入了spring-boot-starter、spring-boot-starter-json、spring-boot-starter-tomcat等和Web开发相关的依赖包</li>
+<li>spring-boot-starter-tomcat：引入了tomcat-embed-core、tomcat-embed-el、tomcat-embed-websocket等和Tomcat相关的依赖包</li>
+<li>...</li>
+</ol>
+<p>如果硬要把Starter机制和自动配置联系起来，那就是通过@ConditionalOnClass这个条件注解，因为这个条件注解的作用就是用来判断当前应用的依赖中是否存在某个类或某些类，比如：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nd">@Configuration</span><span class="p">(</span><span class="n">proxyBeanMethods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nd">@ConditionalOnClass</span><span class="p">({</span><span class="w"> </span><span class="n">Servlet</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">Tomcat</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">UpgradeProtocol</span><span class="p">.</span><span class="na">class</span><span class="w"> </span><span class="p">})</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="nd">@ConditionalOnMissingBean</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ServletWebServerFactory</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">search</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SearchStrategy</span><span class="p">.</span><span class="na">CURRENT</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmbeddedTomcat</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="nd">@Bean</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="n">TomcatServletWebServerFactory</span><span class="w"> </span><span class="nf">tomcatServletWebServerFactory</span><span class="p">(</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">        </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">TomcatConnectorCustomizer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">connectorCustomizers</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">        </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">TomcatContextCustomizer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">contextCustomizers</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">        </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">TomcatProtocolHandlerCustomizer</span><span class="o">&lt;?&gt;&gt;</span><span class="w"> </span><span class="n">protocolHandlerCustomizers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">        </span><span class="n">TomcatServletWebServerFactory</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TomcatServletWebServerFactory</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">        </span><span class="c1">// orderedStream()调用时会去Spring容器中找到TomcatConnectorCustomizer类型的Bean，默认是没有的，程序员可以自己定义</span><span class="w"></span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">        </span><span class="n">factory</span><span class="p">.</span><span class="na">getTomcatConnectorCustomizers</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">            </span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">connectorCustomizers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">        </span><span class="n">factory</span><span class="p">.</span><span class="na">getTomcatContextCustomizers</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">            </span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">contextCustomizers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">        </span><span class="n">factory</span><span class="p">.</span><span class="na">getTomcatProtocolHandlerCustomizers</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">            </span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">protocolHandlerCustomizers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">factory</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-22" name="__codelineno-0-22"></a>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>上面代码中就用到了@ConditionalOnClass，用来判断项目中是否存在Servlet.class、Tomcat.class、UpgradeProtocol.class这三个类，如果存在就满足当前条件，如果项目中引入了spring-boot-starter-tomcat，那就有这三个类，如果没有spring-boot-starter-tomcat那就可能没有这三个类（除非你自己单独引入了Tomcat相关的依赖）。</p>
+<p>所以这就做到了，如果我们在项目中要用Tomcat，那就依赖spring-boot-starter-web就够了，因为它默认依赖了spring-boot-starter-tomcat，从而依赖了Tomcat，从而Tomcat相关的Bean能生效。</p>
+<p>而如果不想用Tomcat，那就得这么写：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a>    <span class="nt">&lt;exclusions&gt;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a>        <span class="nt">&lt;exclusion&gt;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a>            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a>            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-tomcat<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a>        <span class="nt">&lt;/exclusion&gt;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a>    <span class="nt">&lt;/exclusions&gt;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-jetty<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>得把spring-boot-starter-tomcat给排除掉，再添加上spring-boot-starter-jetty的依赖，这样Tomcat的Bean就不会生效，Jetty的Bean就能生效，从而项目中用的就是Jetty。</p>
+<p><strong>@ConditionalOnMissingBean</strong></p>
+<p>@ConditionalOnMissingBean的作用是用来判断某个Bean是否缺失，如果<strong>不存在</strong>某个Bean，那就<strong>符合该条件</strong>，理解起来比较简单，但是细细想一下就会存在一个问题，就是顺序问题，还是拿上面的代码举例：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span>
+<span class="normal"><a href="#__codelineno-2-11">11</a></span>
+<span class="normal"><a href="#__codelineno-2-12">12</a></span>
+<span class="normal"><a href="#__codelineno-2-13">13</a></span>
+<span class="normal"><a href="#__codelineno-2-14">14</a></span>
+<span class="normal"><a href="#__codelineno-2-15">15</a></span>
+<span class="normal"><a href="#__codelineno-2-16">16</a></span>
+<span class="normal"><a href="#__codelineno-2-17">17</a></span>
+<span class="normal"><a href="#__codelineno-2-18">18</a></span>
+<span class="normal"><a href="#__codelineno-2-19">19</a></span>
+<span class="normal"><a href="#__codelineno-2-20">20</a></span>
+<span class="normal"><a href="#__codelineno-2-21">21</a></span>
+<span class="normal"><a href="#__codelineno-2-22">22</a></span>
+<span class="normal"><a href="#__codelineno-2-23">23</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nd">@Configuration</span><span class="p">(</span><span class="n">proxyBeanMethods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nd">@ConditionalOnClass</span><span class="p">({</span><span class="w"> </span><span class="n">Servlet</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">Tomcat</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">UpgradeProtocol</span><span class="p">.</span><span class="na">class</span><span class="w"> </span><span class="p">})</span><span class="w"></span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="nd">@ConditionalOnMissingBean</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ServletWebServerFactory</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">search</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SearchStrategy</span><span class="p">.</span><span class="na">CURRENT</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmbeddedTomcat</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">    </span><span class="nd">@Bean</span><span class="w"></span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">    </span><span class="n">TomcatServletWebServerFactory</span><span class="w"> </span><span class="nf">tomcatServletWebServerFactory</span><span class="p">(</span><span class="w"></span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">        </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">TomcatConnectorCustomizer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">connectorCustomizers</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">        </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">TomcatContextCustomizer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">contextCustomizers</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">        </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">TomcatProtocolHandlerCustomizer</span><span class="o">&lt;?&gt;&gt;</span><span class="w"> </span><span class="n">protocolHandlerCustomizers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="w">        </span><span class="n">TomcatServletWebServerFactory</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TomcatServletWebServerFactory</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-2-12" name="__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">        </span><span class="c1">// orderedStream()调用时会去Spring容器中找到TomcatConnectorCustomizer类型的Bean，默认是没有的，程序员可以自己定义</span><span class="w"></span>
+<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="w">        </span><span class="n">factory</span><span class="p">.</span><span class="na">getTomcatConnectorCustomizers</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-2-15" name="__codelineno-2-15"></a><span class="w">            </span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">connectorCustomizers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-2-16" name="__codelineno-2-16"></a><span class="w">        </span><span class="n">factory</span><span class="p">.</span><span class="na">getTomcatContextCustomizers</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="w">            </span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">contextCustomizers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-2-18" name="__codelineno-2-18"></a><span class="w">        </span><span class="n">factory</span><span class="p">.</span><span class="na">getTomcatProtocolHandlerCustomizers</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-2-19" name="__codelineno-2-19"></a><span class="w">            </span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">protocolHandlerCustomizers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-2-20" name="__codelineno-2-20"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">factory</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-2-21" name="__codelineno-2-21"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-2-22" name="__codelineno-2-22"></a>
+<a id="__codelineno-2-23" name="__codelineno-2-23"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>这个代码中就用到了@ConditionalOnMissingBean，意思是如果当前不存在ServletWebServerFactory类型的Bean，那就符合条件，结合整体代码，意思就是，：</p>
+<ol>
+<li>如果用户自己<strong>没有定义</strong>ServletWebServerFactory类型的Bean，那代码中所定义的Bean就会<strong>生效</strong>，</li>
+<li>如果用户自己定义了ServletWebServerFactory类型的Bean，那代码中定义的Bean就不生效</li>
+</ol>
+<p>所以这个注解是非常重要的，SpringBoot利用这个注解来决定到底用用户自己的Bean，还是用SpringBoot自动配置的。</p>
+<p>关键问题在于，不管是自动配置类中定义的Bean，还是用户定义的Bean，都是需要解析的，而且是有一个顺序的。</p>
+<p>如果是：</p>
+<ol>
+<li>先解析的SpringBoot自动配置类，比如上面的EmbeddedTomcat类</li>
+<li>再解析程序员定义的Bean</li>
+</ol>
+<p>那@ConditionalOnMissingBean的判断结果是有问题的，因为是先解析的EmbeddedTomcat，在解析的时候是没有发现程序员所定义的Bean的，就会认为符合@ConditionalOnMissingBean的条件，而实际上程序员是定义了的，只是还没有解析到，所以这就需要SpringBoot把这个顺序控制好，控制为：</p>
+<ol>
+<li>先解析用户的定义的Bean，也就是解析用户定义的配置类（包含了扫描和@Bean的解析）</li>
+<li>再解析SpringBoot中的自动配置类</li>
+</ol>
+<p>不管是用户定义的配置类还是自动配置类，都是配置类（简单理解就是加了@Configuration注解）。SpringBoot启动时，最核心的也就是创建一个Spring容器，而创建Spring容器的过程中会注解做几件事情：</p>
+<ol>
+<li>把SpringApplication.run(MyApplication.class)传入进来的MyApplication类做为配置类进行解析</li>
+<li>由于MyApplication类上定义了@SpringBootApplication，相当于定义了@SpringBootConfiguration、@EnableAutoConfiguration、@ComponentScan注解</li>
+<li>
+<p>所以SpringBoot会进一步解析这些注解</p>
+</li>
+<li>
+<ol>
+<li>@EnableAutoConfiguration：通过@import注解导入AutoConfigurationImportSelector这个配置类，因为它实现了DeferredImportSelector接口，所以Spring会在把其他配置类都解析完之后才解析AutoConfigurationImportSelector（Spring Framework中的知识）</li>
+</ol>
+</li>
+<li>@ComponentScan：扫描，扫描时会扫描到用户所定义的配置类，并解析用户的配置类，注意：扫描是扫描不到SpringBoot的自动配置的类，因为扫描的包路径不匹配，SpringBoot的包都是org.springframework.boot.xxxx，用户都是自己的包路径。</li>
+</ol>
+<p>通过上述过程我们发现，Spring会在最后才来解析AutoConfigurationImportSelector这个配置类，而这个类的作用就是用来解析SpringBoot的自动配置类，那既然无法扫描到SpringBoot中的自动配置类，那怎么知道SpringBoot中有哪些自动配置类呢，这就需要spring.factories文件，默认情况下，SpringBoot会提供一个spring.factories文件，并把所有自动配置类的名字记录在这个文件中，到时候启动过程中解析这个文件就知道有哪些自动配置类了，并且这件事也是发生在解析完用户的配置类之后的。</p>
+<p><strong>自动配置开启原理</strong></p>
+<p>我们在使用SpringBoot时，通常使用的是@SpringBootApplication这个注解，比如：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span>
+<span class="normal"><a href="#__codelineno-3-5">5</a></span>
+<span class="normal"><a href="#__codelineno-3-6">6</a></span>
+<span class="normal"><a href="#__codelineno-3-7">7</a></span>
+<span class="normal"><a href="#__codelineno-3-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nd">@SpringBootApplication</span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyApplication</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">MyApplication</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div></p>
+<p>而这个注解的定义为：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nd">@Target</span><span class="p">(</span><span class="n">ElementType</span><span class="p">.</span><span class="na">TYPE</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nd">@Retention</span><span class="p">(</span><span class="n">RetentionPolicy</span><span class="p">.</span><span class="na">RUNTIME</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="nd">@Documented</span><span class="w"></span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nd">@Inherited</span><span class="w"></span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="nd">@SpringBootConfiguration</span><span class="w"></span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="nd">@EnableAutoConfiguration</span><span class="w"></span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="nd">@ComponentScan</span><span class="p">(</span><span class="n">excludeFilters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nd">@Filter</span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FilterType</span><span class="p">.</span><span class="na">CUSTOM</span><span class="p">,</span><span class="w"> </span><span class="n">classes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TypeExcludeFilter</span><span class="p">.</span><span class="na">class</span><span class="p">),</span><span class="w"></span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="nd">@Filter</span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FilterType</span><span class="p">.</span><span class="na">CUSTOM</span><span class="p">,</span><span class="w"> </span><span class="n">classes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AutoConfigurationExcludeFilter</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"> </span><span class="p">})</span><span class="w"></span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="kd">public</span><span class="w"> </span><span class="nd">@interface</span><span class="w"> </span><span class="n">SpringBootApplication</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="c1">// ...</span><span class="w"></span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>可以发现这个注解上有另外三个注解：</p>
+<ol>
+<li>@SpringBootConfiguration</li>
+<li>@EnableAutoConfiguration</li>
+<li>@ComponentScan</li>
+</ol>
+<p>所以我们可以认为@SpringBootApplication是一个三合一注解，也就是我们也可以这么用：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nd">@SpringBootConfiguration</span><span class="w"></span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="nd">@EnableAutoConfiguration</span><span class="w"></span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="nd">@ComponentScan</span><span class="w"></span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyApplication</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">MyApplication</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>如果我们这么用就能自己控制要不要用@EnableAutoConfiguration这个注解，如果用就表示开启自动配置，如果不用就表示不开启自动配置，那开启和不开启自动配置到底该怎么理解呢？</p>
+<p>我们前面分析过，SpringBoot的自动配置就是SpringBoot帮助程序员配置一些Bean，从而让程序员在用SpringBoot时可以少去配置很多Bean，所以如果我们开启了自动配置，那最终Spring容器中就有SpringBoot帮我们配置的Bean，如果没有开启自动配置，那Spring容器中就没有这些Bean，就需要程序员去配置。</p>
+<p>那我们来看看@EnableAutoConfiguration这个注解是如何工作的？先看源码定义：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span>
+<span class="normal"><a href="#__codelineno-6-4">4</a></span>
+<span class="normal"><a href="#__codelineno-6-5">5</a></span>
+<span class="normal"><a href="#__codelineno-6-6">6</a></span>
+<span class="normal"><a href="#__codelineno-6-7">7</a></span>
+<span class="normal"><a href="#__codelineno-6-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nd">@Target</span><span class="p">(</span><span class="n">ElementType</span><span class="p">.</span><span class="na">TYPE</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="nd">@Retention</span><span class="p">(</span><span class="n">RetentionPolicy</span><span class="p">.</span><span class="na">RUNTIME</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="nd">@Documented</span><span class="w"></span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="nd">@Inherited</span><span class="w"></span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="nd">@AutoConfigurationPackage</span><span class="w"></span>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="nd">@Import</span><span class="p">(</span><span class="n">AutoConfigurationImportSelector</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="kd">public</span><span class="w"> </span><span class="nd">@interface</span><span class="w"> </span><span class="n">EnableAutoConfiguration</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>其中非常核心的就是：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="nd">@Import</span><span class="p">(</span><span class="n">AutoConfigurationImportSelector</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+而AutoConfigurationImportSelector实现了DeferredImportSelector这个接口，Spring容器在启动时，会在解析完其他所有程序员定义的配置类之后，来调用AutoConfigurationImportSelector中的selectImports方法，然后把该方法返回的类名对应的类作为配置类进行解析。</p>
+<p>该方法会利用SpringFactoriesLoader找到所有的META-INF/spring.factories文件中key为EnableAutoConfiguration.class的value值，也就是众多自动配置类的类名。</p>
+<p>拿到这些类名后会进行去重，去重的代码为：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">LinkedHashSet</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">list</span><span class="p">))</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+去重完之后，就会看是否存在某些自动配置类需要排除，我们可以通过@EnableAutoConfiguration注解的exclude属性，或者spring.autoconfigure.exclude配置来指定一些自动配置类的名字，然后把它们从自动配置类集合中排除掉。</p>
+<p>然后会继续利用ConfigurationClassFilter对自动配置类进行进一步筛选，ConfigurationClassFilter会利用AutoConfigurationMetadata进行筛选，而AutoConfigurationMetadata对象对应的是"META-INF/spring-autoconfigure-metadata.properties"文件中的内容，这是一种加快SpringBoot启动速度的机制，默认是开启了的（不过要通过maven或gradle的方式引入springboot的依赖来使用才能看到效果，因为这个文件的内容是在SpringBoot源码工程编译的时候自动生成出来的，当然我们也可以手动创建这个文件，以及这个文件的内容），自动生成的这个文件内容样例：</p>
+<p>内容格式为：<strong>自动配置类名.条件注解=条件</strong></p>
+<p>有了这个文件的内容，SpringBoot会在通过spring.facotries文件找到所有的自动配置类后，会把这个文件中的内容读出来，然后利用AutoConfigurationImportFilter对所有的自动配置类进行条件匹配，这里的条件判断，只会判断所需要的类是否存在，如果需要的类，或者需要的Bean对应的类，都不存在，那么肯定不符合条件了，对于像@ConditionalOnMissingBean这样的条件，在这一步是不会去判断的，最后条件匹配成功的自动配置类就会记录下来，并最终返回给Spring容器，继续进行其他条件的匹配。</p>
+<p>所以通过这个机制，使得Spring并不需要解析所有的自动配置类，从而提高了效率。</p>
+<p>当然在这个过滤的过程中，如果日志级别等于trace级别，那么会把所有条件不匹配的自动配置类记录到日志中，如果日志框架配置了打印到控制台，那就会打印到控制台，比如：</p>
+<p>在SpringBoot中，还有一个更加强大的统计自动配置类匹配结果的功能，就是可以配置debug=true，只要开启了这个配置，那么Spring在解析每一个自动配置类时，就会将是否匹配的结果进行记录，比如开启了debug=true，我们可以在控制台看到：</p>
+<p>可以看到这个匹配结果分别记录了：</p>
+<ol>
+<li>哪些自动配置类的条件是匹配的</li>
+<li>哪些自动配置类的条件是不匹配的，并且具体原因也会打印出来，比如是哪个类不存在</li>
+<li>哪些自动配置类是无条件的</li>
+</ol>
+<p>这个功能的实现，是Spring解析具体的自动配置类上的各种条件注解的时候统计的，每解析一个条件注解，就会把结果记录在ConditionEvaluationReport对象中，当Spring容器启动完成后，会发布一个ContextRefreshedEvent事件，而SpringBoot提供了一个ConditionEvaluationReportLoggingListener会处理这个事件，接收到这个事件后就会把统计结果进行打印。</p>
+<p>自动配置类解析的大体流程为：</p>
+<ol>
+<li>读取spring.factories中的所有自动配置类</li>
+<li>看是否配置了需要排除的自动配置类，进行排除</li>
+<li>然后利用spring-autoconfigure-metadata.properties文件来过滤掉一些自动配置类（条件中指定的类不存在的自动配置类）</li>
+<li>解析过滤后自动配置类，判断自动配置类所有的条件注解，条件全部符合才会真正去解析自动配置类上的其他内容，比如@Bean（也会进行条件判断）</li>
+</ol>
+<p><strong>Spring Boot整合Tomcat底层原理</strong></p>
+<p>通过前面我们会SpringBoot的自动配置机制、Starter机制、启动过程的底层分析，我们拿一个实际的业务案例来串讲一下，那就是SpringBoot和Tomcat的整合。</p>
+<p>我们知道，只要我们的项目添加的starter为：spring-boot-starter-web，那么我们启动项目时，SpringBoot就会自动启动一个Tomcat。</p>
+<p>那么这是怎么做到的呢？</p>
+<p>首先我们可以发现，在spring-boot-starter-web这个starter中，其实简介的引入了spring-boot-starter-tomcat这个starter，这个spring-boot-starter-tomcat又引入了tomcat-embed-core依赖，所以只要我们项目中依赖了spring-boot-starter-web就相当于依赖了Tomcat。</p>
+<p>然后在SpringBoot众多的自动配置类中，有一个自动配置类叫做ServletWebServerFactoryAutoConfiguration，定义为：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-9-10">10</a></span>
+<span class="normal"><a href="#__codelineno-9-11">11</a></span>
+<span class="normal"><a href="#__codelineno-9-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="nd">@Configuration</span><span class="p">(</span><span class="n">proxyBeanMethods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="nd">@AutoConfigureOrder</span><span class="p">(</span><span class="n">Ordered</span><span class="p">.</span><span class="na">HIGHEST_PRECEDENCE</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="nd">@ConditionalOnClass</span><span class="p">(</span><span class="n">ServletRequest</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="nd">@ConditionalOnWebApplication</span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Type</span><span class="p">.</span><span class="na">SERVLET</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="nd">@EnableConfigurationProperties</span><span class="p">(</span><span class="n">ServerProperties</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="nd">@Import</span><span class="p">({</span><span class="w"> </span><span class="n">ServletWebServerFactoryAutoConfiguration</span><span class="p">.</span><span class="na">BeanPostProcessorsRegistrar</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="n">ServletWebServerFactoryConfiguration</span><span class="p">.</span><span class="na">EmbeddedTomcat</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="n">ServletWebServerFactoryConfiguration</span><span class="p">.</span><span class="na">EmbeddedJetty</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="n">ServletWebServerFactoryConfiguration</span><span class="p">.</span><span class="na">EmbeddedUndertow</span><span class="p">.</span><span class="na">class</span><span class="w"> </span><span class="p">})</span><span class="w"></span>
+<a id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ServletWebServerFactoryAutoConfiguration</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="c1">// ...</span><span class="w"></span>
+<a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>首先看这个自动配置类所需要的条件：</p>
+<ol>
+<li>@ConditionalOnClass(ServletRequest.class)：表示项目依赖中要有ServletRequest类（server api）</li>
+<li>@ConditionalOnWebApplication(type = Type.SERVLET)：表示项目应用类型得是SpringMVC（讲启动过程的时候就知道如何判断一个SpringBoot应用的类型了）</li>
+</ol>
+<p>在上面提到的spring-boot-starter-web中，其实还间接的引入了spring-web、spring-webmvc等依赖，这就使得第二个条件满足，而对于第一个条件的ServletRequest类，虽然它是Servlet规范中的类，但是在我们所依赖的tomcat-embed-core这个jar包中是存在这个类的，这是因为Tomcat在自己的源码中把Servlet规范中的一些代码也包含进去了，比如：</p>
+<p>这就使得ServletWebServerFactoryAutoConfiguration这个自动配置的两个条件都符合，那么Spring就能去解析它，一解析它就发现这个自动配置类Import进来了三个类：</p>
+<ol>
+<li>ServletWebServerFactoryConfiguration.EmbeddedTomcat.class</li>
+<li>ServletWebServerFactoryConfiguration.EmbeddedJetty.class</li>
+<li>ServletWebServerFactoryConfiguration.EmbeddedUndertow.class</li>
+</ol>
+<p>很明显，Import进来的这三个类应该是差不多，我们看EmbeddedTomcat这个类：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-10-10">10</a></span>
+<span class="normal"><a href="#__codelineno-10-11">11</a></span>
+<span class="normal"><a href="#__codelineno-10-12">12</a></span>
+<span class="normal"><a href="#__codelineno-10-13">13</a></span>
+<span class="normal"><a href="#__codelineno-10-14">14</a></span>
+<span class="normal"><a href="#__codelineno-10-15">15</a></span>
+<span class="normal"><a href="#__codelineno-10-16">16</a></span>
+<span class="normal"><a href="#__codelineno-10-17">17</a></span>
+<span class="normal"><a href="#__codelineno-10-18">18</a></span>
+<span class="normal"><a href="#__codelineno-10-19">19</a></span>
+<span class="normal"><a href="#__codelineno-10-20">20</a></span>
+<span class="normal"><a href="#__codelineno-10-21">21</a></span>
+<span class="normal"><a href="#__codelineno-10-22">22</a></span>
+<span class="normal"><a href="#__codelineno-10-23">23</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="nd">@Configuration</span><span class="p">(</span><span class="n">proxyBeanMethods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="nd">@ConditionalOnClass</span><span class="p">({</span><span class="w"> </span><span class="n">Servlet</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">Tomcat</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">UpgradeProtocol</span><span class="p">.</span><span class="na">class</span><span class="w"> </span><span class="p">})</span><span class="w"></span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="nd">@ConditionalOnMissingBean</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ServletWebServerFactory</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">search</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SearchStrategy</span><span class="p">.</span><span class="na">CURRENT</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmbeddedTomcat</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-10-5" name="__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w">    </span><span class="nd">@Bean</span><span class="w"></span>
+<a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="w">    </span><span class="n">TomcatServletWebServerFactory</span><span class="w"> </span><span class="nf">tomcatServletWebServerFactory</span><span class="p">(</span><span class="w"></span>
+<a id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">        </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">TomcatConnectorCustomizer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">connectorCustomizers</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="w">        </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">TomcatContextCustomizer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">contextCustomizers</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="w">        </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">TomcatProtocolHandlerCustomizer</span><span class="o">&lt;?&gt;&gt;</span><span class="w"> </span><span class="n">protocolHandlerCustomizers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="w">        </span><span class="n">TomcatServletWebServerFactory</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TomcatServletWebServerFactory</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-10-12" name="__codelineno-10-12"></a>
+<a id="__codelineno-10-13" name="__codelineno-10-13"></a><span class="w">        </span><span class="c1">// orderedStream()调用时会去Spring容器中找到TomcatConnectorCustomizer类型的Bean，默认是没有的，程序员可以自己定义</span><span class="w"></span>
+<a id="__codelineno-10-14" name="__codelineno-10-14"></a><span class="w">        </span><span class="n">factory</span><span class="p">.</span><span class="na">getTomcatConnectorCustomizers</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-10-15" name="__codelineno-10-15"></a><span class="w">        </span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">connectorCustomizers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-10-16" name="__codelineno-10-16"></a><span class="w">        </span><span class="n">factory</span><span class="p">.</span><span class="na">getTomcatContextCustomizers</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-10-17" name="__codelineno-10-17"></a><span class="w">        </span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">contextCustomizers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-10-18" name="__codelineno-10-18"></a><span class="w">        </span><span class="n">factory</span><span class="p">.</span><span class="na">getTomcatProtocolHandlerCustomizers</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-10-19" name="__codelineno-10-19"></a><span class="w">        </span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">protocolHandlerCustomizers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-10-20" name="__codelineno-10-20"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">factory</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-10-21" name="__codelineno-10-21"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-10-22" name="__codelineno-10-22"></a>
+<a id="__codelineno-10-23" name="__codelineno-10-23"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>可以发现这个类是一个配置类，所以Spring也会来解析它，不过它也有两个条件：</p>
+<ol>
+<li>@ConditionalOnClass({ Servlet.class, Tomcat.class, UpgradeProtocol.class })：项目依赖中要有Servlet.class、Tomcat.class、UpgradeProtocol.class这三个类，这个条件比较容易理解，项目依赖中有Tomcat的类，那这个条件就符合。</li>
+<li>@ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)，项目中没有ServletWebServerFactory类型的Bean，因为这个配置类的内部就是定义了一个TomcatServletWebServerFactory类型的Bean，TomcatServletWebServerFactory实现了ServletWebServerFactory接口，所以这个条件注解的意思就是，如果程序员自己没有定义ServletWebServerFactory类型的Bean，那么就符合条件，不然，如果程序员自己定义了ServletWebServerFactory类型的Bean，那么条件就不符合，也就导致SpringBoot给我们定义的TomcatServletWebServerFactory这个Bean就不会生效，最终生效的就是程序员自己定义的。</li>
+</ol>
+<p>所以，通常只要我们项目依赖中有Tomcat依赖，那就符合条件，那最终Spring容器中就会有TomcatServletWebServerFactory这个Bean。</p>
+<p>对于另外的EmbeddedJetty和EmbeddedUndertow，也差不多，都是判断项目依赖中是否有Jetty和Undertow的依赖，如果有，那么对应在Spring容器中就会存在JettyServletWebServerFactory类型的Bean、或者存在UndertowServletWebServerFactory类型的Bean。</p>
+<p>总结一下：</p>
+<ol>
+<li>有Tomcat依赖，就有TomcatServletWebServerFactory这个Bean</li>
+<li>有Jetty依赖，就有JettyServletWebServerFactory这个Bean</li>
+<li>有Undertow依赖，就有UndertowServletWebServerFactory这个Bean</li>
+</ol>
+<p>那么SpringBoot给我们配置的这几个Bean到底有什么用呢？</p>
+<p>我们前面说到，TomcatServletWebServerFactory实现了ServletWebServerFactory这个接口，这个接口的定义为：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span>
+<span class="normal"><a href="#__codelineno-11-2">2</a></span>
+<span class="normal"><a href="#__codelineno-11-3">3</a></span>
+<span class="normal"><a href="#__codelineno-11-4">4</a></span>
+<span class="normal"><a href="#__codelineno-11-5">5</a></span>
+<span class="normal"><a href="#__codelineno-11-6">6</a></span>
+<span class="normal"><a href="#__codelineno-11-7">7</a></span>
+<span class="normal"><a href="#__codelineno-11-8">8</a></span>
+<span class="normal"><a href="#__codelineno-11-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ServletWebServerFactory</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="w">    </span><span class="n">WebServer</span><span class="w"> </span><span class="nf">getWebServer</span><span class="p">(</span><span class="n">ServletContextInitializer</span><span class="p">...</span><span class="w"> </span><span class="n">initializers</span><span class="p">);</span><span class="w"> </span>
+<a id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-11-4" name="__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">WebServer</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<a id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">start</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">WebServerException</span><span class="p">;</span><span class="w"> </span>
+<a id="__codelineno-11-7" name="__codelineno-11-7"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">stop</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">WebServerException</span><span class="p">;</span><span class="w"> </span>
+<a id="__codelineno-11-8" name="__codelineno-11-8"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="nf">getPort</span><span class="p">();</span><span class="w"> </span>
+<a id="__codelineno-11-9" name="__codelineno-11-9"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+我们发现ServletWebServerFactory其实就是用来获得WebServer对象的，而WebServer拥有启动、停止、获取端口等方法，那么很自然，我们就发现WebServer其实指的就是Tomcat、Jetty、Undertow，而TomcatServletWebServerFactory就是用来生成Tomcat所对应的WebServer对象，具体一点就是TomcatWebServer对象，并且在生成TomcatWebServer对象时会把Tomcat给启动起来，在源码中，调用TomcatServletWebServerFactory对象的getWebServer()方法时就会启动Tomcat。</p>
+<p>我们再来看TomcatServletWebServerFactory这个Bean的定义：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-12-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-12-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-12-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-12-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-12-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-12-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-12-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-12-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-12-10">10</a></span>
+<span class="normal"><a href="#__codelineno-12-11">11</a></span>
+<span class="normal"><a href="#__codelineno-12-12">12</a></span>
+<span class="normal"><a href="#__codelineno-12-13">13</a></span>
+<span class="normal"><a href="#__codelineno-12-14">14</a></span>
+<span class="normal"><a href="#__codelineno-12-15">15</a></span>
+<span class="normal"><a href="#__codelineno-12-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="nd">@Bean</span><span class="w"></span>
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="n">TomcatServletWebServerFactory</span><span class="w"> </span><span class="nf">tomcatServletWebServerFactory</span><span class="p">(</span><span class="w"></span>
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">    </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">TomcatConnectorCustomizer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">connectorCustomizers</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">    </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">TomcatContextCustomizer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">contextCustomizers</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="w">    </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">TomcatProtocolHandlerCustomizer</span><span class="o">&lt;?&gt;&gt;</span><span class="w"> </span><span class="n">protocolHandlerCustomizers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="w">        </span><span class="n">TomcatServletWebServerFactory</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TomcatServletWebServerFactory</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-12-7" name="__codelineno-12-7"></a>
+<a id="__codelineno-12-8" name="__codelineno-12-8"></a><span class="w">        </span><span class="c1">// orderedStream()调用时会去Spring容器中找到TomcatConnectorCustomizer类型的Bean，默认是没有的，程序员可以自己定义</span><span class="w"></span>
+<a id="__codelineno-12-9" name="__codelineno-12-9"></a><span class="w">        </span><span class="n">factory</span><span class="p">.</span><span class="na">getTomcatConnectorCustomizers</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-12-10" name="__codelineno-12-10"></a><span class="w">        </span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">connectorCustomizers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-12-11" name="__codelineno-12-11"></a><span class="w">        </span><span class="n">factory</span><span class="p">.</span><span class="na">getTomcatContextCustomizers</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-12-12" name="__codelineno-12-12"></a><span class="w">        </span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">contextCustomizers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-12-13" name="__codelineno-12-13"></a><span class="w">        </span><span class="n">factory</span><span class="p">.</span><span class="na">getTomcatProtocolHandlerCustomizers</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-12-14" name="__codelineno-12-14"></a><span class="w">        </span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">protocolHandlerCustomizers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-12-15" name="__codelineno-12-15"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">factory</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-12-16" name="__codelineno-12-16"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>要构造这个Bean，Spring会从Spring容器中获取到TomcatConnectorCustomizer、TomcatContextCustomizer、TomcatProtocolHandlerCustomizer这三个类型的Bean，然后把它们添加到TomcatServletWebServerFactory对象中去，很明显这三种Bean是用来配置Tomcat的，比如：</p>
+<ol>
+<li>TomcatConnectorCustomizer：是用来配置Tomcat中的Connector组件的</li>
+<li>TomcatContextCustomizer：是用来配置Tomcat中的Context组件的</li>
+<li>TomcatProtocolHandlerCustomizer：是用来配置Tomcat中的ProtocolHandler组件的</li>
+</ol>
+<p>也就是我们可以通过定义TomcatConnectorCustomizer类型的Bean，来对Tomcat进行配置，比如：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-13-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-13-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-13-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-13-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-13-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-13-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-13-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-13-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-13-10">10</a></span>
+<span class="normal"><a href="#__codelineno-13-11">11</a></span>
+<span class="normal"><a href="#__codelineno-13-12">12</a></span>
+<span class="normal"><a href="#__codelineno-13-13">13</a></span>
+<span class="normal"><a href="#__codelineno-13-14">14</a></span>
+<span class="normal"><a href="#__codelineno-13-15">15</a></span>
+<span class="normal"><a href="#__codelineno-13-16">16</a></span>
+<span class="normal"><a href="#__codelineno-13-17">17</a></span>
+<span class="normal"><a href="#__codelineno-13-18">18</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="nd">@SpringBootApplication</span><span class="w"></span>
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyApplication</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-13-3" name="__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="nd">@Bean</span><span class="w"></span>
+<a id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="kd">public</span><span class="w"> </span><span class="n">TomcatConnectorCustomizer</span><span class="w"> </span><span class="nf">tomcatConnectorCustomizer</span><span class="p">(){</span><span class="w"></span>
+<a id="__codelineno-13-6" name="__codelineno-13-6"></a><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TomcatConnectorCustomizer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-13-7" name="__codelineno-13-7"></a><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-13-8" name="__codelineno-13-8"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">customize</span><span class="p">(</span><span class="n">Connector</span><span class="w"> </span><span class="n">connector</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-13-9" name="__codelineno-13-9"></a><span class="n">connector</span><span class="p">.</span><span class="na">setPort</span><span class="p">(</span><span class="mi">8888</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-13-10" name="__codelineno-13-10"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-13-11" name="__codelineno-13-11"></a><span class="p">};</span><span class="w"></span>
+<a id="__codelineno-13-12" name="__codelineno-13-12"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-13-13" name="__codelineno-13-13"></a>
+<a id="__codelineno-13-14" name="__codelineno-13-14"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-13-15" name="__codelineno-13-15"></a><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">MyApplication</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-13-16" name="__codelineno-13-16"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-13-17" name="__codelineno-13-17"></a>
+<a id="__codelineno-13-18" name="__codelineno-13-18"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div></p>
+<p>这样Tomcat就会绑定8888这个端口。</p>
+<p>有了TomcatServletWebServerFactory这个Bean之后，在SpringBoot的启动过程中，会执行ServletWebServerApplicationContext的onRefresh()方法，而这个方法会调用createWebServer()方法，而这个方法中最为重要的两行代码为：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
+<span class="normal"><a href="#__codelineno-14-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="n">ServletWebServerFactory</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getWebServerFactory</span><span class="p">();</span><span class="w"> </span>
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="k">this</span><span class="p">.</span><span class="na">webServer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="na">getWebServer</span><span class="p">(</span><span class="n">getSelfInitializer</span><span class="p">());</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+很明显，getWebServerFactory()负责获取具体的ServletWebServerFactory对象，要么是TomcatServletWebServerFactory对象，要么是JettyServletWebServerFactory对象，要么是UndertowServletWebServerFactory对象，注意只能获取到一个，然后调用该对象的getWebServer方法，启动对应的Tomcat、或者Jetty、或者Undertow。</p>
+<p>getWebServerFactory方法中的逻辑比较简单，获取Spring容器中的ServletWebServerFactory类型的Bean对象，如果没有获取到则抛异常，如果找到多个也抛异常，也就是在Spring容器中只能有一个ServletWebServerFactory类型的Bean对象。</p>
+<p>拿到TomcatServletWebServerFactory对象后，就调用它的getWebServer方法，而在这个方法中就会生成一个Tomcat对象，并且利用前面的TomcatConnectorCustomizer等等会Tomcat对象进行配置，最后启动Tomcat。</p>
+<p>这样在启动应用时就完成了Tomcat的启动，到此我们通过这个案例也看到了具体的Starter机制、自动配置的具体使用。</p>
+<p>不过额外有一点要提一下，我们前面提到了我们可以利用TomcatConnectorCustomizer对Tomca中的Connector组件进行配置，我们可能会想到默认情况下，SpringBoot是不是就是提供了一个TomcatConnectorCustomizer的Bean，然后给Connector配置了8080端口，或者从Environment对象中获取server.port配置，并设置到Connector中去呢？</p>
+<p>并不是，因为如果SpringBoot这么实现，那么默认就得提供三个ConnectorCustomizer的Bean，一个TomcatConnectorCustomizer、一个JettyConnectorCustomizer、一个UndertowConnectorCustomizer，这是比较不恰当的，我们知道默认情况下，不管我们是用Tomcat，还是Jetty，还是Undertow，它们启动时绑定的都是8080端口，也就是说SpringBoot并不会根据不同的WebServer设置不同的端口，也就是说SpringBoot只会给WebServer设置端口，而不会区分WebServer的不同实现。</p>
+<p>所以在自动配置类ServletWebServerFactoryAutoConfiguration中，会定义一个ServletWebServerFactoryCustomizer类型的Bean，定义为：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
+<span class="normal"><a href="#__codelineno-15-2">2</a></span>
+<span class="normal"><a href="#__codelineno-15-3">3</a></span>
+<span class="normal"><a href="#__codelineno-15-4">4</a></span>
+<span class="normal"><a href="#__codelineno-15-5">5</a></span>
+<span class="normal"><a href="#__codelineno-15-6">6</a></span>
+<span class="normal"><a href="#__codelineno-15-7">7</a></span>
+<span class="normal"><a href="#__codelineno-15-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="nd">@Bean</span><span class="w"></span>
+<a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ServletWebServerFactoryCustomizer</span><span class="w"> </span><span class="nf">servletWebServerFactoryCustomizer</span><span class="p">(</span><span class="n">ServerProperties</span><span class="w"> </span><span class="n">serverProperties</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="w">   </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">WebListenerRegistrar</span><span class="o">&gt;</span><span class="w"> </span><span class="n">webListenerRegistrars</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="w">   </span><span class="n">ObjectProvider</span><span class="o">&lt;</span><span class="n">CookieSameSiteSupplier</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cookieSameSiteSuppliers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ServletWebServerFactoryCustomizer</span><span class="p">(</span><span class="n">serverProperties</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="w"> </span><span class="n">webListenerRegistrars</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()),</span><span class="w"></span>
+<a id="__codelineno-15-7" name="__codelineno-15-7"></a><span class="w"> </span><span class="n">cookieSameSiteSuppliers</span><span class="p">.</span><span class="na">orderedStream</span><span class="p">().</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-15-8" name="__codelineno-15-8"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>这个Bean会接收一个ServerProperties的Bean，ServerProperties的Bean对应的就是properties文件中前缀为server的配置，我们可以利用ServerProperties对象的getPort方法获取到我们所配置的server.port的值。</p>
+<p>而ServletWebServerFactoryCustomizer是针对一个ServletWebServerFactory的自定义器，也就是用来配置TomcatServletWebServerFactory这个Bean的，到时候ServletWebServerFactoryCustomizer就会利用ServerProperties对象来对TomcatServletWebServerFactory对象进行设置。</p>
+<p>在ServletWebServerFactoryAutoConfiguration这个自动配置上，除开Import了EmbeddedTomcat、EmbeddedJetty、EmbeddedUndertow这三个配置类，还Import了一个ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar.class，这个BeanPostProcessorsRegistrar会向Spring容器中注册一个WebServerFactoryCustomizerBeanPostProcessor类型的Bean。</p>
+<p>WebServerFactoryCustomizerBeanPostProcessor是一个BeanPosrtProcessor，它专门用来处理类型为WebServerFactory的Bean对象，而我们的TomcatServletWebServerFactory、JettyServletWebServerFactory、UndertowServletWebServerFactory也都实现了这个接口，所以不管当前项目依赖的情况，只要在Spring在创建比如TomcatServletWebServerFactory这个Bean时，WebServerFactoryCustomizerBeanPostProcessor就会对它进行处理，处理的逻辑为：</p>
+<ol>
+<li>从Spring容器中拿到WebServerFactoryCustomizer类型的Bean，也就是前面说的ServletWebServerFactoryCustomizer对象</li>
+<li>然后调用ServletWebServerFactoryCustomizer对象的customize方法，把TomcatServletWebServerFactory对象传入进去</li>
+<li>customize方法中就会从ServerProperties对象获取各种配置，然后设置给TomcatServletWebServerFactory对象</li>
+</ol>
+<p>比如：</p>
+<p>这样当TomcatServletWebServerFactory这个Bean对象创建完成后，它里面的很多属性，比如port，就已经是程序员所配置的值了，后续执行getWebServer方法时，就直接获取自己的属性，比如port属性，设置给Tomcat，然后再利用TomcatConnectorCustomizer等会下进行处理，最后启动Tomcat。</p>
+<p>到此，SpringBoot整合Tomcat的核心原理就分析完了，主要涉及的东西有：</p>
+<ol>
+<li>spring-boot-starter-web：会自动引入Tomcat、SpringMVC的依赖</li>
+<li>ServletWebServerFactoryAutoConfiguration：自动配置类</li>
+<li>ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar：用来注册WebServerFactoryCustomizerBeanPostProcessor</li>
+<li>ServletWebServerFactoryConfiguration.EmbeddedTomcat：配置TomcatServletWebServerFactory</li>
+<li>ServletWebServerFactoryConfiguration.EmbeddedJetty：配置JettyServletWebServerFactory</li>
+<li>ServletWebServerFactoryConfiguration.EmbeddedUndertow：配置UndertowServletWebServerFactory</li>
+<li>ServletWebServerFactoryCustomizer：用来配置ServletWebServerFactory</li>
+<li>WebServerFactoryCustomizerBeanPostProcessor：是一个BeanPostProcessor，利用ServletWebServerFactoryCustomizer来配置ServletWebServerFactory</li>
+<li>ServletWebServerApplicationContext中的onRefresh()方法：负责启动Tomcat</li>
+</ol>
+<p>SpringBoot中的底层原理实现中，条件注解时非常重要的，因为条件注解直接决定了一个Bean在什么条件下才会生效，前面已经整理过了SpringBoot中有哪些条件注解，这里就不再重复，本节我们来看看非常核心的两个条件注解@ConditionalOnClass和@ConditionalOnBean的底层是如何实现的。</p>
+<p><strong>自定义条件注解</strong></p>
+<p>SpringBoot中众多的条件注解，都是基于Spring中的@Conditional来实现的，所以我们先来用一下@Conditional注解。</p>
+<p>先来看下@Conditional注解的定义：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-16-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-16-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-16-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-16-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-16-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-16-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-16-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-16-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-16-10">10</a></span>
+<span class="normal"><a href="#__codelineno-16-11">11</a></span>
+<span class="normal"><a href="#__codelineno-16-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="nd">@Target</span><span class="p">({</span><span class="n">ElementType</span><span class="p">.</span><span class="na">TYPE</span><span class="p">,</span><span class="w"> </span><span class="n">ElementType</span><span class="p">.</span><span class="na">METHOD</span><span class="p">})</span><span class="w"></span>
+<a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="nd">@Retention</span><span class="p">(</span><span class="n">RetentionPolicy</span><span class="p">.</span><span class="na">RUNTIME</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="nd">@Documented</span><span class="w"></span>
+<a id="__codelineno-16-4" name="__codelineno-16-4"></a><span class="kd">public</span><span class="w"> </span><span class="nd">@interface</span><span class="w"> </span><span class="n">Conditional</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-16-5" name="__codelineno-16-5"></a>
+<a id="__codelineno-16-6" name="__codelineno-16-6"></a><span class="w">    </span><span class="cm">/**</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7"></a><span class="cm">    * All {@link Condition} classes that must {@linkplain Condition#matches match}</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8"></a><span class="cm">    * in order for the component to be registered.</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9"></a><span class="cm">    */</span><span class="w"></span>
+<a id="__codelineno-16-10" name="__codelineno-16-10"></a><span class="w">    </span><span class="n">Class</span><span class="o">&lt;?</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Condition</span><span class="o">&gt;[]</span><span class="w"> </span><span class="nf">value</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-16-11" name="__codelineno-16-11"></a>
+<a id="__codelineno-16-12" name="__codelineno-16-12"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>根据定义我们在用@Conditional注解时，需要指定一个或多个Condition的实现类，所以我们先来提供一个实现类：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span>
+<span class="normal"><a href="#__codelineno-17-2">2</a></span>
+<span class="normal"><a href="#__codelineno-17-3">3</a></span>
+<span class="normal"><a href="#__codelineno-17-4">4</a></span>
+<span class="normal"><a href="#__codelineno-17-5">5</a></span>
+<span class="normal"><a href="#__codelineno-17-6">6</a></span>
+<span class="normal"><a href="#__codelineno-17-7">7</a></span>
+<span class="normal"><a href="#__codelineno-17-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ZhouyuCondition</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Condition</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-17-2" name="__codelineno-17-2"></a>
+<a id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="w">    </span><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-17-4" name="__codelineno-17-4"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">matches</span><span class="p">(</span><span class="n">ConditionContext</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">AnnotatedTypeMetadata</span><span class="w"> </span><span class="n">metadata</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-17-5" name="__codelineno-17-5"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-17-6" name="__codelineno-17-6"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-17-7" name="__codelineno-17-7"></a>
+<a id="__codelineno-17-8" name="__codelineno-17-8"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>很明显，我们可以在matches方法中来定义条件逻辑：</p>
+<ol>
+<li>ConditionContext：表示条件上下文，可以通过ConditionContext获取到当前的类加载器、BeanFactory、Environment环境变量对象</li>
+<li>AnnotatedTypeMetadata：表示当前正在进行条件判断的Bean所对应的类信息，或方法信息（比如@Bean定义的一个Bean），可以通过AnnotatedTypeMetadata获取到当前类或方法相关的信息，从而就可以拿到条件注解的信息，当然如果一个Bean上使用了多个条件注解，那么在解析过程中都可以获取到，同时也能获取Bean上定义的其他注解信息</li>
+</ol>
+<p>了解这些，我们就来看看@ConditionalOnClass是如何工作的</p>
+<p><strong>@ConditionalOnClass的底层工作原理</strong></p>
+<p>先来看一个案例：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span>
+<span class="normal"><a href="#__codelineno-18-2">2</a></span>
+<span class="normal"><a href="#__codelineno-18-3">3</a></span>
+<span class="normal"><a href="#__codelineno-18-4">4</a></span>
+<span class="normal"><a href="#__codelineno-18-5">5</a></span>
+<span class="normal"><a href="#__codelineno-18-6">6</a></span>
+<span class="normal"><a href="#__codelineno-18-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="nd">@Configuration</span><span class="w"></span>
+<a id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="nd">@ConditionalOnClass</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;com.zhouyu.Jetty&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-18-3" name="__codelineno-18-3"></a><span class="nd">@ConditionalOnMissingClass</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;com.zhouyu.Tomcat&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ZhouyuConfiguration</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-18-5" name="__codelineno-18-5"></a>
+<a id="__codelineno-18-6" name="__codelineno-18-6"></a>
+<a id="__codelineno-18-7" name="__codelineno-18-7"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>我们在ZhouyuConfiguration这个类上使用了两个条件注解：</p>
+<ol>
+<li>@ConditionalOnClass(name = "com.zhouyu.Jetty")：条件是项目依赖中<strong>存在</strong>"com.zhouyu.Jetty"这个类，则表示符合条件</li>
+<li>@ConditionalOnMissingClass(value = "com.zhouyu.Tomcat")：条件是项目依赖中<strong>不存在</strong>"com.zhouyu.Tomcat"这个类，则表示符合条件</li>
+</ol>
+<p>这两个注解对应的都是<strong>@Conditional(OnClassCondition.class)</strong>，那在OnClassCondition类中是如何对这两个注解进行区分的呢？</p>
+<p>Spring在解析到ZhouyuConfiguration这个配置时，发现该类上用到了条件注解就会进行条件解析，相关源码如下：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-19-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-19-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-19-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-19-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-19-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-19-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-19-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-19-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-19-10">10</a></span>
+<span class="normal"><a href="#__codelineno-19-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Condition</span><span class="w"> </span><span class="n">condition</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">conditions</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-19-2" name="__codelineno-19-2"></a><span class="w">    </span><span class="n">ConfigurationPhase</span><span class="w"> </span><span class="n">requiredPhase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-19-3" name="__codelineno-19-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">condition</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">ConfigurationCondition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-19-4" name="__codelineno-19-4"></a><span class="w">        </span><span class="n">requiredPhase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="n">ConfigurationCondition</span><span class="p">)</span><span class="w"> </span><span class="n">condition</span><span class="p">).</span><span class="na">getConfigurationPhase</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-19-5" name="__codelineno-19-5"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-19-6" name="__codelineno-19-6"></a>
+<a id="__codelineno-19-7" name="__codelineno-19-7"></a><span class="w">    </span><span class="c1">// 重点在这</span><span class="w"></span>
+<a id="__codelineno-19-8" name="__codelineno-19-8"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">requiredPhase</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">requiredPhase</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">phase</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">condition</span><span class="p">.</span><span class="na">matches</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">context</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-19-9" name="__codelineno-19-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-19-10" name="__codelineno-19-10"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-19-11" name="__codelineno-19-11"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>conditions中保存了两个OnClassCondition对象，这段代码会依次调用OnClassCondition对象的matches方法进行条件匹配，一旦某一个条件不匹配就不会进行下一个条件的判断了，这里return的是true，但是这段代码所在的方法叫做shouldSkip，所以true表示忽略。</p>
+<p>我们继续看OnClassCondition的matches()方法的实现。</p>
+<p>OnClassCondition类继承了FilteringSpringBootCondition，FilteringSpringBootCondition类又继承了SpringBootCondition，而SpringBootCondition实现了Condition接口，matches()方法也是在SpringBootCondition这个类中实现的：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-20-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-20-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-20-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-20-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-20-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-20-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-20-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-20-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-20-10">10</a></span>
+<span class="normal"><a href="#__codelineno-20-11">11</a></span>
+<span class="normal"><a href="#__codelineno-20-12">12</a></span>
+<span class="normal"><a href="#__codelineno-20-13">13</a></span>
+<span class="normal"><a href="#__codelineno-20-14">14</a></span>
+<span class="normal"><a href="#__codelineno-20-15">15</a></span>
+<span class="normal"><a href="#__codelineno-20-16">16</a></span>
+<span class="normal"><a href="#__codelineno-20-17">17</a></span>
+<span class="normal"><a href="#__codelineno-20-18">18</a></span>
+<span class="normal"><a href="#__codelineno-20-19">19</a></span>
+<span class="normal"><a href="#__codelineno-20-20">20</a></span>
+<span class="normal"><a href="#__codelineno-20-21">21</a></span>
+<span class="normal"><a href="#__codelineno-20-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">matches</span><span class="p">(</span><span class="n">ConditionContext</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">AnnotatedTypeMetadata</span><span class="w"> </span><span class="n">metadata</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="w">    </span><span class="c1">// 获取当前解析的类名或方法名</span><span class="w"></span>
+<a id="__codelineno-20-4" name="__codelineno-20-4"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">classOrMethodName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getClassOrMethodName</span><span class="p">(</span><span class="n">metadata</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-20-5" name="__codelineno-20-5"></a><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-20-6" name="__codelineno-20-6"></a><span class="w">        </span><span class="c1">// 进行具体的条件匹配，ConditionOutcome表示匹配结果</span><span class="w"></span>
+<a id="__codelineno-20-7" name="__codelineno-20-7"></a><span class="w">        </span><span class="n">ConditionOutcome</span><span class="w"> </span><span class="n">outcome</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getMatchOutcome</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-20-8" name="__codelineno-20-8"></a>
+<a id="__codelineno-20-9" name="__codelineno-20-9"></a><span class="w">        </span><span class="c1">// 日志记录匹配结果</span><span class="w"></span>
+<a id="__codelineno-20-10" name="__codelineno-20-10"></a><span class="w">        </span><span class="n">logOutcome</span><span class="p">(</span><span class="n">classOrMethodName</span><span class="p">,</span><span class="w"> </span><span class="n">outcome</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-20-11" name="__codelineno-20-11"></a><span class="w">        </span><span class="n">recordEvaluation</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">classOrMethodName</span><span class="p">,</span><span class="w"> </span><span class="n">outcome</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-20-12" name="__codelineno-20-12"></a>
+<a id="__codelineno-20-13" name="__codelineno-20-13"></a><span class="w">        </span><span class="c1">// 返回true或false</span><span class="w"></span>
+<a id="__codelineno-20-14" name="__codelineno-20-14"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">outcome</span><span class="p">.</span><span class="na">isMatch</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-20-15" name="__codelineno-20-15"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-20-16" name="__codelineno-20-16"></a><span class="w">    </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">NoClassDefFoundError</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-20-17" name="__codelineno-20-17"></a><span class="w">        </span><span class="c1">// ...</span><span class="w"></span>
+<a id="__codelineno-20-18" name="__codelineno-20-18"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-20-19" name="__codelineno-20-19"></a><span class="w">    </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">RuntimeException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-20-20" name="__codelineno-20-20"></a><span class="w">        </span><span class="c1">// ...</span><span class="w"></span>
+<a id="__codelineno-20-21" name="__codelineno-20-21"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-20-22" name="__codelineno-20-22"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>所以具体的条件匹配逻辑在getMatchOutcome方法中，而SpringBootCondition类中的getMatchOutcome方法是一个抽象方法，具体的实现逻辑就在子类OnClassCondition中：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-21-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-21-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-21-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-21-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-21-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-21-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-21-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-21-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-21-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-21-10">10</a></span>
+<span class="normal"><a href="#__codelineno-21-11">11</a></span>
+<span class="normal"><a href="#__codelineno-21-12">12</a></span>
+<span class="normal"><a href="#__codelineno-21-13">13</a></span>
+<span class="normal"><a href="#__codelineno-21-14">14</a></span>
+<span class="normal"><a href="#__codelineno-21-15">15</a></span>
+<span class="normal"><a href="#__codelineno-21-16">16</a></span>
+<span class="normal"><a href="#__codelineno-21-17">17</a></span>
+<span class="normal"><a href="#__codelineno-21-18">18</a></span>
+<span class="normal"><a href="#__codelineno-21-19">19</a></span>
+<span class="normal"><a href="#__codelineno-21-20">20</a></span>
+<span class="normal"><a href="#__codelineno-21-21">21</a></span>
+<span class="normal"><a href="#__codelineno-21-22">22</a></span>
+<span class="normal"><a href="#__codelineno-21-23">23</a></span>
+<span class="normal"><a href="#__codelineno-21-24">24</a></span>
+<span class="normal"><a href="#__codelineno-21-25">25</a></span>
+<span class="normal"><a href="#__codelineno-21-26">26</a></span>
+<span class="normal"><a href="#__codelineno-21-27">27</a></span>
+<span class="normal"><a href="#__codelineno-21-28">28</a></span>
+<span class="normal"><a href="#__codelineno-21-29">29</a></span>
+<span class="normal"><a href="#__codelineno-21-30">30</a></span>
+<span class="normal"><a href="#__codelineno-21-31">31</a></span>
+<span class="normal"><a href="#__codelineno-21-32">32</a></span>
+<span class="normal"><a href="#__codelineno-21-33">33</a></span>
+<span class="normal"><a href="#__codelineno-21-34">34</a></span>
+<span class="normal"><a href="#__codelineno-21-35">35</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1"></a><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-21-2" name="__codelineno-21-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ConditionOutcome</span><span class="w"> </span><span class="nf">getMatchOutcome</span><span class="p">(</span><span class="n">ConditionContext</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">AnnotatedTypeMetadata</span><span class="w"> </span><span class="n">metadata</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-21-3" name="__codelineno-21-3"></a><span class="w">    </span><span class="n">ClassLoader</span><span class="w"> </span><span class="n">classLoader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="na">getClassLoader</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-21-4" name="__codelineno-21-4"></a><span class="w">    </span><span class="n">ConditionMessage</span><span class="w"> </span><span class="n">matchMessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ConditionMessage</span><span class="p">.</span><span class="na">empty</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-21-5" name="__codelineno-21-5"></a>
+<a id="__codelineno-21-6" name="__codelineno-21-6"></a><span class="w">    </span><span class="c1">// 拿到ConditionalOnClass注解中的value值，也就是要判断是否存在的类名</span><span class="w"></span>
+<a id="__codelineno-21-7" name="__codelineno-21-7"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">onClasses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getCandidates</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">ConditionalOnClass</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-21-8" name="__codelineno-21-8"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">onClasses</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-21-9" name="__codelineno-21-9"></a><span class="w">        </span><span class="c1">// 判断onClasses中不存在的类</span><span class="w"></span>
+<a id="__codelineno-21-10" name="__codelineno-21-10"></a><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">missing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">onClasses</span><span class="p">,</span><span class="w"> </span><span class="n">ClassNameFilter</span><span class="p">.</span><span class="na">MISSING</span><span class="p">,</span><span class="w"> </span><span class="n">classLoader</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-21-11" name="__codelineno-21-11"></a><span class="w">        </span><span class="c1">// 如果有缺失的类，那就表示不匹配</span><span class="w"></span>
+<a id="__codelineno-21-12" name="__codelineno-21-12"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">missing</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-21-13" name="__codelineno-21-13"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">ConditionOutcome</span><span class="p">.</span><span class="na">noMatch</span><span class="p">(</span><span class="n">ConditionMessage</span><span class="p">.</span><span class="na">forCondition</span><span class="p">(</span><span class="n">ConditionalOnClass</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-21-14" name="__codelineno-21-14"></a><span class="w">            </span><span class="p">.</span><span class="na">didNotFind</span><span class="p">(</span><span class="s">&quot;required class&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;required classes&quot;</span><span class="p">).</span><span class="na">items</span><span class="p">(</span><span class="n">Style</span><span class="p">.</span><span class="na">QUOTE</span><span class="p">,</span><span class="w"> </span><span class="n">missing</span><span class="p">));</span><span class="w"></span>
+<a id="__codelineno-21-15" name="__codelineno-21-15"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-21-16" name="__codelineno-21-16"></a><span class="w">        </span><span class="c1">// 否则就表示匹配</span><span class="w"></span>
+<a id="__codelineno-21-17" name="__codelineno-21-17"></a><span class="w">        </span><span class="n">matchMessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">matchMessage</span><span class="p">.</span><span class="na">andCondition</span><span class="p">(</span><span class="n">ConditionalOnClass</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-21-18" name="__codelineno-21-18"></a><span class="w">        </span><span class="p">.</span><span class="na">found</span><span class="p">(</span><span class="s">&quot;required class&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;required classes&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-21-19" name="__codelineno-21-19"></a><span class="w">        </span><span class="p">.</span><span class="na">items</span><span class="p">(</span><span class="n">Style</span><span class="p">.</span><span class="na">QUOTE</span><span class="p">,</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">onClasses</span><span class="p">,</span><span class="w"> </span><span class="n">ClassNameFilter</span><span class="p">.</span><span class="na">PRESENT</span><span class="p">,</span><span class="w"> </span><span class="n">classLoader</span><span class="p">));</span><span class="w"></span>
+<a id="__codelineno-21-20" name="__codelineno-21-20"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-21-21" name="__codelineno-21-21"></a>
+<a id="__codelineno-21-22" name="__codelineno-21-22"></a><span class="w">    </span><span class="c1">// 和上面类似，只不过是判断onMissingClasses是不是全部缺失，如果是则表示匹配</span><span class="w"></span>
+<a id="__codelineno-21-23" name="__codelineno-21-23"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">onMissingClasses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getCandidates</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">ConditionalOnMissingClass</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-21-24" name="__codelineno-21-24"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">onMissingClasses</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-21-25" name="__codelineno-21-25"></a><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">present</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">onMissingClasses</span><span class="p">,</span><span class="w"> </span><span class="n">ClassNameFilter</span><span class="p">.</span><span class="na">PRESENT</span><span class="p">,</span><span class="w"> </span><span class="n">classLoader</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-21-26" name="__codelineno-21-26"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">present</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-21-27" name="__codelineno-21-27"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">ConditionOutcome</span><span class="p">.</span><span class="na">noMatch</span><span class="p">(</span><span class="n">ConditionMessage</span><span class="p">.</span><span class="na">forCondition</span><span class="p">(</span><span class="n">ConditionalOnMissingClass</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-21-28" name="__codelineno-21-28"></a><span class="w">            </span><span class="p">.</span><span class="na">found</span><span class="p">(</span><span class="s">&quot;unwanted class&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;unwanted classes&quot;</span><span class="p">).</span><span class="na">items</span><span class="p">(</span><span class="n">Style</span><span class="p">.</span><span class="na">QUOTE</span><span class="p">,</span><span class="w"> </span><span class="n">present</span><span class="p">));</span><span class="w"></span>
+<a id="__codelineno-21-29" name="__codelineno-21-29"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-21-30" name="__codelineno-21-30"></a><span class="w">        </span><span class="n">matchMessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">matchMessage</span><span class="p">.</span><span class="na">andCondition</span><span class="p">(</span><span class="n">ConditionalOnMissingClass</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-21-31" name="__codelineno-21-31"></a><span class="w">        </span><span class="p">.</span><span class="na">didNotFind</span><span class="p">(</span><span class="s">&quot;unwanted class&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;unwanted classes&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-21-32" name="__codelineno-21-32"></a><span class="w">        </span><span class="p">.</span><span class="na">items</span><span class="p">(</span><span class="n">Style</span><span class="p">.</span><span class="na">QUOTE</span><span class="p">,</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">onMissingClasses</span><span class="p">,</span><span class="w"> </span><span class="n">ClassNameFilter</span><span class="p">.</span><span class="na">MISSING</span><span class="p">,</span><span class="w"> </span><span class="n">classLoader</span><span class="p">));</span><span class="w"></span>
+<a id="__codelineno-21-33" name="__codelineno-21-33"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-21-34" name="__codelineno-21-34"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ConditionOutcome</span><span class="p">.</span><span class="na">match</span><span class="p">(</span><span class="n">matchMessage</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-21-35" name="__codelineno-21-35"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>在getMatchOutcome方法中的逻辑为：</p>
+<ol>
+<li>如果类或方法上有@ConditionalOnClass注解，则获取@ConditionalOnClass注解中的value属性，也就是要判断是否<strong>存在的类名</strong></li>
+<li>利用ClassNameFilter.MISSING来判断这些类是否缺失，把缺失的类的类名存入missing集合</li>
+<li>如果missing不为空，则表示有类缺失，则表示不匹配，并利用ConditionMessage记录哪些类是缺失的，直接return，表示条件不匹配</li>
+<li>否则，则表示条件匹配，继续执行代码</li>
+<li>如果类或方法上有ConditionalOnMissingClass注解，则获取ConditionalOnMissingClass注解中的value属性，也就是要判断是否<strong>缺失的类名</strong></li>
+<li>利用ClassNameFilter.PRESENT来判断这些类是否存在，把存在的类的类名存入present集合</li>
+<li>如果present不为空，则表示有类存在，则表示不匹配，并利用ConditionMessage记录哪些类是存在的，直接return，表示条件不匹配</li>
+<li>否则，则表示条件匹配，继续执行代码</li>
+<li>return，表示条件匹配</li>
+</ol>
+<p>因为ConditionalOnClass注解和ConditionalOnMissingClass注解的逻辑是比较类似的，所以在源码中都是在OnClassCondition这个类中实现的，假如一个类上即有@ConditionalOnClass，也有@ConditionalOnMissingClass，比如以下代码：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-22-1">1</a></span>
+<span class="normal"><a href="#__codelineno-22-2">2</a></span>
+<span class="normal"><a href="#__codelineno-22-3">3</a></span>
+<span class="normal"><a href="#__codelineno-22-4">4</a></span>
+<span class="normal"><a href="#__codelineno-22-5">5</a></span>
+<span class="normal"><a href="#__codelineno-22-6">6</a></span>
+<span class="normal"><a href="#__codelineno-22-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1"></a><span class="nd">@Configuration</span><span class="w"></span>
+<a id="__codelineno-22-2" name="__codelineno-22-2"></a><span class="nd">@ConditionalOnClass</span><span class="p">(</span><span class="n">Tomcat</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-22-3" name="__codelineno-22-3"></a><span class="nd">@ConditionalOnMissingClass</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;com.zhouyu.Tomcat&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-22-4" name="__codelineno-22-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ZhouyuConfiguration</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-22-5" name="__codelineno-22-5"></a>
+<a id="__codelineno-22-6" name="__codelineno-22-6"></a>
+<a id="__codelineno-22-7" name="__codelineno-22-7"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<ol>
+<li>如果@ConditionalOnClass条件匹配、@ConditionalOnMissingClass条件也匹配，那么getMatchOutcome方法会执行两次</li>
+<li>如果@ConditionalOnClass条件不匹配，那么getMatchOutcome方法会执行一次</li>
+<li>如果@ConditionalOnClass条件匹配、@ConditionalOnMissingClass条件不匹配，那么getMatchOutcome方法也只会执行一次，因为在getMatchOutcome方法处理了这种情况</li>
+</ol>
+<p>上面提到的ClassNameFilter.MISSING和ClassNameFilter.PRESENT也比较简单，代码如下：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-23-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-23-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-23-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-23-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-23-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-23-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-23-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-23-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-23-10">10</a></span>
+<span class="normal"><a href="#__codelineno-23-11">11</a></span>
+<span class="normal"><a href="#__codelineno-23-12">12</a></span>
+<span class="normal"><a href="#__codelineno-23-13">13</a></span>
+<span class="normal"><a href="#__codelineno-23-14">14</a></span>
+<span class="normal"><a href="#__codelineno-23-15">15</a></span>
+<span class="normal"><a href="#__codelineno-23-16">16</a></span>
+<span class="normal"><a href="#__codelineno-23-17">17</a></span>
+<span class="normal"><a href="#__codelineno-23-18">18</a></span>
+<span class="normal"><a href="#__codelineno-23-19">19</a></span>
+<span class="normal"><a href="#__codelineno-23-20">20</a></span>
+<span class="normal"><a href="#__codelineno-23-21">21</a></span>
+<span class="normal"><a href="#__codelineno-23-22">22</a></span>
+<span class="normal"><a href="#__codelineno-23-23">23</a></span>
+<span class="normal"><a href="#__codelineno-23-24">24</a></span>
+<span class="normal"><a href="#__codelineno-23-25">25</a></span>
+<span class="normal"><a href="#__codelineno-23-26">26</a></span>
+<span class="normal"><a href="#__codelineno-23-27">27</a></span>
+<span class="normal"><a href="#__codelineno-23-28">28</a></span>
+<span class="normal"><a href="#__codelineno-23-29">29</a></span>
+<span class="normal"><a href="#__codelineno-23-30">30</a></span>
+<span class="normal"><a href="#__codelineno-23-31">31</a></span>
+<span class="normal"><a href="#__codelineno-23-32">32</a></span>
+<span class="normal"><a href="#__codelineno-23-33">33</a></span>
+<span class="normal"><a href="#__codelineno-23-34">34</a></span>
+<span class="normal"><a href="#__codelineno-23-35">35</a></span>
+<span class="normal"><a href="#__codelineno-23-36">36</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="kd">protected</span><span class="w"> </span><span class="kd">enum</span><span class="w"> </span><span class="n">ClassNameFilter</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-23-2" name="__codelineno-23-2"></a>
+<a id="__codelineno-23-3" name="__codelineno-23-3"></a><span class="w">    </span><span class="n">PRESENT</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-23-4" name="__codelineno-23-4"></a>
+<a id="__codelineno-23-5" name="__codelineno-23-5"></a><span class="w">        </span><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-23-6" name="__codelineno-23-6"></a><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">matches</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">className</span><span class="p">,</span><span class="w"> </span><span class="n">ClassLoader</span><span class="w"> </span><span class="n">classLoader</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-23-7" name="__codelineno-23-7"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">isPresent</span><span class="p">(</span><span class="n">className</span><span class="p">,</span><span class="w"> </span><span class="n">classLoader</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-23-8" name="__codelineno-23-8"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-23-9" name="__codelineno-23-9"></a>
+<a id="__codelineno-23-10" name="__codelineno-23-10"></a><span class="w">    </span><span class="p">},</span><span class="w"></span>
+<a id="__codelineno-23-11" name="__codelineno-23-11"></a>
+<a id="__codelineno-23-12" name="__codelineno-23-12"></a><span class="w">    </span><span class="n">MISSING</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-23-13" name="__codelineno-23-13"></a>
+<a id="__codelineno-23-14" name="__codelineno-23-14"></a><span class="w">        </span><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-23-15" name="__codelineno-23-15"></a><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">matches</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">className</span><span class="p">,</span><span class="w"> </span><span class="n">ClassLoader</span><span class="w"> </span><span class="n">classLoader</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-23-16" name="__codelineno-23-16"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">!</span><span class="n">isPresent</span><span class="p">(</span><span class="n">className</span><span class="p">,</span><span class="w"> </span><span class="n">classLoader</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-23-17" name="__codelineno-23-17"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-23-18" name="__codelineno-23-18"></a>
+<a id="__codelineno-23-19" name="__codelineno-23-19"></a><span class="w">    </span><span class="p">};</span><span class="w"></span>
+<a id="__codelineno-23-20" name="__codelineno-23-20"></a>
+<a id="__codelineno-23-21" name="__codelineno-23-21"></a><span class="w">    </span><span class="kd">abstract</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">matches</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">className</span><span class="p">,</span><span class="w"> </span><span class="n">ClassLoader</span><span class="w"> </span><span class="n">classLoader</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-23-22" name="__codelineno-23-22"></a>
+<a id="__codelineno-23-23" name="__codelineno-23-23"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isPresent</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">className</span><span class="p">,</span><span class="w"> </span><span class="n">ClassLoader</span><span class="w"> </span><span class="n">classLoader</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-23-24" name="__codelineno-23-24"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">classLoader</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-23-25" name="__codelineno-23-25"></a><span class="w">            </span><span class="n">classLoader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ClassUtils</span><span class="p">.</span><span class="na">getDefaultClassLoader</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-23-26" name="__codelineno-23-26"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-23-27" name="__codelineno-23-27"></a><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-23-28" name="__codelineno-23-28"></a><span class="w">            </span><span class="n">resolve</span><span class="p">(</span><span class="n">className</span><span class="p">,</span><span class="w"> </span><span class="n">classLoader</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-23-29" name="__codelineno-23-29"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-23-30" name="__codelineno-23-30"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-23-31" name="__codelineno-23-31"></a><span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-23-32" name="__codelineno-23-32"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-23-33" name="__codelineno-23-33"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-23-34" name="__codelineno-23-34"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-23-35" name="__codelineno-23-35"></a>
+<a id="__codelineno-23-36" name="__codelineno-23-36"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>主要就是用类加载器，来判断类是否存在。</p>
+<p><strong>@ConditionalOnBean的底层工作原理</strong></p>
+<p>@ConditionalOnBean和@ConditionalOnClass的底层实现应该是差不多的，一个是判断Bean存不存在，一个是判断类存不存在，事实上也确实差不多。</p>
+<p>首先@ConditionalOnBean和@ConditionalOnMissingBean对应的都是OnBeanCondition类，OnBeanCondition类也是继承了SpringBootCondition，所以SpringBootCondition类中的getMatchOutcome方法才是匹配逻辑：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-24-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-24-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-24-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-24-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-24-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-24-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-24-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-24-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-24-10">10</a></span>
+<span class="normal"><a href="#__codelineno-24-11">11</a></span>
+<span class="normal"><a href="#__codelineno-24-12">12</a></span>
+<span class="normal"><a href="#__codelineno-24-13">13</a></span>
+<span class="normal"><a href="#__codelineno-24-14">14</a></span>
+<span class="normal"><a href="#__codelineno-24-15">15</a></span>
+<span class="normal"><a href="#__codelineno-24-16">16</a></span>
+<span class="normal"><a href="#__codelineno-24-17">17</a></span>
+<span class="normal"><a href="#__codelineno-24-18">18</a></span>
+<span class="normal"><a href="#__codelineno-24-19">19</a></span>
+<span class="normal"><a href="#__codelineno-24-20">20</a></span>
+<span class="normal"><a href="#__codelineno-24-21">21</a></span>
+<span class="normal"><a href="#__codelineno-24-22">22</a></span>
+<span class="normal"><a href="#__codelineno-24-23">23</a></span>
+<span class="normal"><a href="#__codelineno-24-24">24</a></span>
+<span class="normal"><a href="#__codelineno-24-25">25</a></span>
+<span class="normal"><a href="#__codelineno-24-26">26</a></span>
+<span class="normal"><a href="#__codelineno-24-27">27</a></span>
+<span class="normal"><a href="#__codelineno-24-28">28</a></span>
+<span class="normal"><a href="#__codelineno-24-29">29</a></span>
+<span class="normal"><a href="#__codelineno-24-30">30</a></span>
+<span class="normal"><a href="#__codelineno-24-31">31</a></span>
+<span class="normal"><a href="#__codelineno-24-32">32</a></span>
+<span class="normal"><a href="#__codelineno-24-33">33</a></span>
+<span class="normal"><a href="#__codelineno-24-34">34</a></span>
+<span class="normal"><a href="#__codelineno-24-35">35</a></span>
+<span class="normal"><a href="#__codelineno-24-36">36</a></span>
+<span class="normal"><a href="#__codelineno-24-37">37</a></span>
+<span class="normal"><a href="#__codelineno-24-38">38</a></span>
+<span class="normal"><a href="#__codelineno-24-39">39</a></span>
+<span class="normal"><a href="#__codelineno-24-40">40</a></span>
+<span class="normal"><a href="#__codelineno-24-41">41</a></span>
+<span class="normal"><a href="#__codelineno-24-42">42</a></span>
+<span class="normal"><a href="#__codelineno-24-43">43</a></span>
+<span class="normal"><a href="#__codelineno-24-44">44</a></span>
+<span class="normal"><a href="#__codelineno-24-45">45</a></span>
+<span class="normal"><a href="#__codelineno-24-46">46</a></span>
+<span class="normal"><a href="#__codelineno-24-47">47</a></span>
+<span class="normal"><a href="#__codelineno-24-48">48</a></span>
+<span class="normal"><a href="#__codelineno-24-49">49</a></span>
+<span class="normal"><a href="#__codelineno-24-50">50</a></span>
+<span class="normal"><a href="#__codelineno-24-51">51</a></span>
+<span class="normal"><a href="#__codelineno-24-52">52</a></span>
+<span class="normal"><a href="#__codelineno-24-53">53</a></span>
+<span class="normal"><a href="#__codelineno-24-54">54</a></span>
+<span class="normal"><a href="#__codelineno-24-55">55</a></span>
+<span class="normal"><a href="#__codelineno-24-56">56</a></span>
+<span class="normal"><a href="#__codelineno-24-57">57</a></span>
+<span class="normal"><a href="#__codelineno-24-58">58</a></span>
+<span class="normal"><a href="#__codelineno-24-59">59</a></span>
+<span class="normal"><a href="#__codelineno-24-60">60</a></span>
+<span class="normal"><a href="#__codelineno-24-61">61</a></span>
+<span class="normal"><a href="#__codelineno-24-62">62</a></span>
+<span class="normal"><a href="#__codelineno-24-63">63</a></span>
+<span class="normal"><a href="#__codelineno-24-64">64</a></span>
+<span class="normal"><a href="#__codelineno-24-65">65</a></span>
+<span class="normal"><a href="#__codelineno-24-66">66</a></span>
+<span class="normal"><a href="#__codelineno-24-67">67</a></span>
+<span class="normal"><a href="#__codelineno-24-68">68</a></span>
+<span class="normal"><a href="#__codelineno-24-69">69</a></span>
+<span class="normal"><a href="#__codelineno-24-70">70</a></span>
+<span class="normal"><a href="#__codelineno-24-71">71</a></span>
+<span class="normal"><a href="#__codelineno-24-72">72</a></span>
+<span class="normal"><a href="#__codelineno-24-73">73</a></span>
+<span class="normal"><a href="#__codelineno-24-74">74</a></span>
+<span class="normal"><a href="#__codelineno-24-75">75</a></span>
+<span class="normal"><a href="#__codelineno-24-76">76</a></span>
+<span class="normal"><a href="#__codelineno-24-77">77</a></span>
+<span class="normal"><a href="#__codelineno-24-78">78</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-24-2" name="__codelineno-24-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ConditionOutcome</span><span class="w"> </span><span class="nf">getMatchOutcome</span><span class="p">(</span><span class="n">ConditionContext</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">AnnotatedTypeMetadata</span><span class="w"> </span><span class="n">metadata</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-3" name="__codelineno-24-3"></a><span class="w">    </span><span class="n">ConditionMessage</span><span class="w"> </span><span class="n">matchMessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ConditionMessage</span><span class="p">.</span><span class="na">empty</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-24-4" name="__codelineno-24-4"></a><span class="w">    </span><span class="n">MergedAnnotations</span><span class="w"> </span><span class="n">annotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">metadata</span><span class="p">.</span><span class="na">getAnnotations</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-24-5" name="__codelineno-24-5"></a>
+<a id="__codelineno-24-6" name="__codelineno-24-6"></a><span class="w">    </span><span class="c1">// 如果存在ConditionalOnBean注解</span><span class="w"></span>
+<a id="__codelineno-24-7" name="__codelineno-24-7"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">annotations</span><span class="p">.</span><span class="na">isPresent</span><span class="p">(</span><span class="n">ConditionalOnBean</span><span class="p">.</span><span class="na">class</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-8" name="__codelineno-24-8"></a><span class="w">        </span><span class="n">Spec</span><span class="o">&lt;</span><span class="n">ConditionalOnBean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Spec</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">annotations</span><span class="p">,</span><span class="w"> </span><span class="n">ConditionalOnBean</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-24-9" name="__codelineno-24-9"></a><span class="w">        </span><span class="n">MatchResult</span><span class="w"> </span><span class="n">matchResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getMatchingBeans</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-24-10" name="__codelineno-24-10"></a>
+<a id="__codelineno-24-11" name="__codelineno-24-11"></a><span class="w">        </span><span class="c1">// 如果某个Bean不存在</span><span class="w"></span>
+<a id="__codelineno-24-12" name="__codelineno-24-12"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">matchResult</span><span class="p">.</span><span class="na">isAllMatched</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-13" name="__codelineno-24-13"></a><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createOnBeanNoMatchReason</span><span class="p">(</span><span class="n">matchResult</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-24-14" name="__codelineno-24-14"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">ConditionOutcome</span><span class="p">.</span><span class="na">noMatch</span><span class="p">(</span><span class="n">spec</span><span class="p">.</span><span class="na">message</span><span class="p">().</span><span class="na">because</span><span class="p">(</span><span class="n">reason</span><span class="p">));</span><span class="w"></span>
+<a id="__codelineno-24-15" name="__codelineno-24-15"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-24-16" name="__codelineno-24-16"></a>
+<a id="__codelineno-24-17" name="__codelineno-24-17"></a><span class="w">        </span><span class="c1">// 所有Bean都存在</span><span class="w"></span>
+<a id="__codelineno-24-18" name="__codelineno-24-18"></a><span class="w">        </span><span class="n">matchMessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spec</span><span class="p">.</span><span class="na">message</span><span class="p">(</span><span class="n">matchMessage</span><span class="p">).</span><span class="na">found</span><span class="p">(</span><span class="s">&quot;bean&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;beans&quot;</span><span class="p">).</span><span class="na">items</span><span class="p">(</span><span class="n">Style</span><span class="p">.</span><span class="na">QUOTE</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-24-19" name="__codelineno-24-19"></a><span class="w">           </span><span class="n">matchResult</span><span class="p">.</span><span class="na">getNamesOfAllMatches</span><span class="p">());</span><span class="w"></span>
+<a id="__codelineno-24-20" name="__codelineno-24-20"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-24-21" name="__codelineno-24-21"></a>
+<a id="__codelineno-24-22" name="__codelineno-24-22"></a><span class="w">    </span><span class="c1">// 如果存在ConditionalOnSingleCandidate注解</span><span class="w"></span>
+<a id="__codelineno-24-23" name="__codelineno-24-23"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="na">isAnnotated</span><span class="p">(</span><span class="n">ConditionalOnSingleCandidate</span><span class="p">.</span><span class="na">class</span><span class="p">.</span><span class="na">getName</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-24" name="__codelineno-24-24"></a><span class="w">        </span><span class="n">Spec</span><span class="o">&lt;</span><span class="n">ConditionalOnSingleCandidate</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SingleCandidateSpec</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">annotations</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-24-25" name="__codelineno-24-25"></a><span class="w">        </span><span class="n">MatchResult</span><span class="w"> </span><span class="n">matchResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getMatchingBeans</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-24-26" name="__codelineno-24-26"></a>
+<a id="__codelineno-24-27" name="__codelineno-24-27"></a><span class="w">        </span><span class="c1">// Bean不存在</span><span class="w"></span>
+<a id="__codelineno-24-28" name="__codelineno-24-28"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">matchResult</span><span class="p">.</span><span class="na">isAllMatched</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-29" name="__codelineno-24-29"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">ConditionOutcome</span><span class="p">.</span><span class="na">noMatch</span><span class="p">(</span><span class="n">spec</span><span class="p">.</span><span class="na">message</span><span class="p">().</span><span class="na">didNotFind</span><span class="p">(</span><span class="s">&quot;any beans&quot;</span><span class="p">).</span><span class="na">atAll</span><span class="p">());</span><span class="w"></span>
+<a id="__codelineno-24-30" name="__codelineno-24-30"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-24-31" name="__codelineno-24-31"></a>
+<a id="__codelineno-24-32" name="__codelineno-24-32"></a><span class="w">        </span><span class="c1">// Bean存在</span><span class="w"></span>
+<a id="__codelineno-24-33" name="__codelineno-24-33"></a><span class="w">        </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">allBeans</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">matchResult</span><span class="p">.</span><span class="na">getNamesOfAllMatches</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-24-34" name="__codelineno-24-34"></a>
+<a id="__codelineno-24-35" name="__codelineno-24-35"></a><span class="w">        </span><span class="c1">// 如果只有一个</span><span class="w"></span>
+<a id="__codelineno-24-36" name="__codelineno-24-36"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">allBeans</span><span class="p">.</span><span class="na">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-37" name="__codelineno-24-37"></a><span class="w">            </span><span class="n">matchMessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spec</span><span class="p">.</span><span class="na">message</span><span class="p">(</span><span class="n">matchMessage</span><span class="p">).</span><span class="na">found</span><span class="p">(</span><span class="s">&quot;a single bean&quot;</span><span class="p">).</span><span class="na">items</span><span class="p">(</span><span class="n">Style</span><span class="p">.</span><span class="na">QUOTE</span><span class="p">,</span><span class="w"> </span><span class="n">allBeans</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-24-38" name="__codelineno-24-38"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-24-39" name="__codelineno-24-39"></a><span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-40" name="__codelineno-24-40"></a><span class="w">            </span><span class="c1">// 如果有多个</span><span class="w"></span>
+<a id="__codelineno-24-41" name="__codelineno-24-41"></a><span class="w">            </span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">primaryBeans</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getPrimaryBeans</span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="na">getBeanFactory</span><span class="p">(),</span><span class="w"> </span><span class="n">allBeans</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-24-42" name="__codelineno-24-42"></a><span class="w">            </span><span class="n">spec</span><span class="p">.</span><span class="na">getStrategy</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SearchStrategy</span><span class="p">.</span><span class="na">ALL</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-24-43" name="__codelineno-24-43"></a>
+<a id="__codelineno-24-44" name="__codelineno-24-44"></a><span class="w">            </span><span class="c1">// 没有主Bean，那就不匹配</span><span class="w"></span>
+<a id="__codelineno-24-45" name="__codelineno-24-45"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">primaryBeans</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-46" name="__codelineno-24-46"></a><span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">ConditionOutcome</span><span class="p">.</span><span class="na">noMatch</span><span class="p">(</span><span class="w"></span>
+<a id="__codelineno-24-47" name="__codelineno-24-47"></a><span class="w">                </span><span class="n">spec</span><span class="p">.</span><span class="na">message</span><span class="p">().</span><span class="na">didNotFind</span><span class="p">(</span><span class="s">&quot;a primary bean from beans&quot;</span><span class="p">).</span><span class="na">items</span><span class="p">(</span><span class="n">Style</span><span class="p">.</span><span class="na">QUOTE</span><span class="p">,</span><span class="w"> </span><span class="n">allBeans</span><span class="p">));</span><span class="w"></span>
+<a id="__codelineno-24-48" name="__codelineno-24-48"></a><span class="w">            </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-24-49" name="__codelineno-24-49"></a><span class="w">            </span><span class="c1">// 有多个主Bean，那就不匹配</span><span class="w"></span>
+<a id="__codelineno-24-50" name="__codelineno-24-50"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">primaryBeans</span><span class="p">.</span><span class="na">size</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-51" name="__codelineno-24-51"></a><span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">ConditionOutcome</span><span class="w"></span>
+<a id="__codelineno-24-52" name="__codelineno-24-52"></a><span class="w">                </span><span class="p">.</span><span class="na">noMatch</span><span class="p">(</span><span class="n">spec</span><span class="p">.</span><span class="na">message</span><span class="p">().</span><span class="na">found</span><span class="p">(</span><span class="s">&quot;multiple primary beans&quot;</span><span class="p">).</span><span class="na">items</span><span class="p">(</span><span class="n">Style</span><span class="p">.</span><span class="na">QUOTE</span><span class="p">,</span><span class="w"> </span><span class="n">primaryBeans</span><span class="p">));</span><span class="w"></span>
+<a id="__codelineno-24-53" name="__codelineno-24-53"></a><span class="w">            </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-24-54" name="__codelineno-24-54"></a>
+<a id="__codelineno-24-55" name="__codelineno-24-55"></a><span class="w">            </span><span class="c1">// 只有一个主Bean</span><span class="w"></span>
+<a id="__codelineno-24-56" name="__codelineno-24-56"></a><span class="w">            </span><span class="n">matchMessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spec</span><span class="p">.</span><span class="na">message</span><span class="p">(</span><span class="n">matchMessage</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-24-57" name="__codelineno-24-57"></a><span class="w">            </span><span class="p">.</span><span class="na">found</span><span class="p">(</span><span class="s">&quot;a single primary bean &#39;&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">primaryBeans</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;&#39; from beans&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-24-58" name="__codelineno-24-58"></a><span class="w">            </span><span class="p">.</span><span class="na">items</span><span class="p">(</span><span class="n">Style</span><span class="p">.</span><span class="na">QUOTE</span><span class="p">,</span><span class="w"> </span><span class="n">allBeans</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-24-59" name="__codelineno-24-59"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-24-60" name="__codelineno-24-60"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-24-61" name="__codelineno-24-61"></a>
+<a id="__codelineno-24-62" name="__codelineno-24-62"></a><span class="w">    </span><span class="c1">// 存在ConditionalOnMissingBean注解</span><span class="w"></span>
+<a id="__codelineno-24-63" name="__codelineno-24-63"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="na">isAnnotated</span><span class="p">(</span><span class="n">ConditionalOnMissingBean</span><span class="p">.</span><span class="na">class</span><span class="p">.</span><span class="na">getName</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-64" name="__codelineno-24-64"></a><span class="w">        </span><span class="n">Spec</span><span class="o">&lt;</span><span class="n">ConditionalOnMissingBean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Spec</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">annotations</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-24-65" name="__codelineno-24-65"></a><span class="w">         </span><span class="n">ConditionalOnMissingBean</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-24-66" name="__codelineno-24-66"></a><span class="w">        </span><span class="n">MatchResult</span><span class="w"> </span><span class="n">matchResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getMatchingBeans</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">spec</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-24-67" name="__codelineno-24-67"></a>
+<a id="__codelineno-24-68" name="__codelineno-24-68"></a><span class="w">        </span><span class="c1">//有任意一个Bean存在，那就条件不匹配</span><span class="w"></span>
+<a id="__codelineno-24-69" name="__codelineno-24-69"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">matchResult</span><span class="p">.</span><span class="na">isAnyMatched</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-70" name="__codelineno-24-70"></a><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createOnMissingBeanNoMatchReason</span><span class="p">(</span><span class="n">matchResult</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-24-71" name="__codelineno-24-71"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">ConditionOutcome</span><span class="p">.</span><span class="na">noMatch</span><span class="p">(</span><span class="n">spec</span><span class="p">.</span><span class="na">message</span><span class="p">().</span><span class="na">because</span><span class="p">(</span><span class="n">reason</span><span class="p">));</span><span class="w"></span>
+<a id="__codelineno-24-72" name="__codelineno-24-72"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-24-73" name="__codelineno-24-73"></a>
+<a id="__codelineno-24-74" name="__codelineno-24-74"></a><span class="w">        </span><span class="c1">// 都不存在在，则匹配</span><span class="w"></span>
+<a id="__codelineno-24-75" name="__codelineno-24-75"></a><span class="w">        </span><span class="n">matchMessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spec</span><span class="p">.</span><span class="na">message</span><span class="p">(</span><span class="n">matchMessage</span><span class="p">).</span><span class="na">didNotFind</span><span class="p">(</span><span class="s">&quot;any beans&quot;</span><span class="p">).</span><span class="na">atAll</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-24-76" name="__codelineno-24-76"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-24-77" name="__codelineno-24-77"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ConditionOutcome</span><span class="p">.</span><span class="na">match</span><span class="p">(</span><span class="n">matchMessage</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-24-78" name="__codelineno-24-78"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>逻辑流程为：</p>
+<ol>
+<li>当前在解析的类或方法上，是否有@ConditionalOnBean注解，如果有则生成对应的Spec对象，该对象中包含了用户指定的，要判断的是否存在的Bean的类型</li>
+<li>调用getMatchingBeans方法进行条件判断，MatchResult为条件判断结果</li>
+<li>只要判断出来某一个Bean不存在，则return，表示条件不匹配</li>
+<li>只要所有Bean都存在，则继续执行下面代码</li>
+<li>当前在解析的类或方法上，是否有@ConditionalOnSingleCandidate注解，如果有则生成对应的SingleCandidateSpec对象，该对象中包含了用户指定的，要判断的是否存在的Bean的类型（只能指定一个类型），并且该类型的Bean只能有一个</li>
+<li>调用getMatchingBeans方法进行条件判断，MatchResult为条件判断结果</li>
+<li>指定类型的Bean如果不存在，则return，表示条件不匹配</li>
+<li>如果指定类型的Bean存在，但是存在多个，那就看是否存在主Bean（加了@primary注解的Bean），并且只能有一个主Bean，如果没有，则return，表示条件不匹配</li>
+<li>如果只有一个主Bean，则表示条件匹配，继续执行下面代码</li>
+<li>当前在解析的类或方法上，是否有@ConditionalOnMissingBean注解，如果有则生成对应的Spec对象，该对象中包含了用户指定的，要判断的是否缺失的Bean的类型</li>
+<li>调用getMatchingBeans方法进行条件判断，MatchResult为条件判断结果</li>
+<li>只要有任意一个Bean存在，则return，表示条件不匹配</li>
+<li>都存在，则表示条件匹配</li>
+<li>结束</li>
+</ol>
+<p>getMatchingBeans方法中会利用BeanFactory去获取指定类型的Bean，如果没有指定类型的Bean，则会将该类型记录在MatchResult对象的unmatchedTypes集合中，如果有该类型的Bean，则会把该Bean的beanName记录在MatchResult对象的matchedNames集合中，所以MatchResult对象中记录了，哪些类没有对应的Bean，哪些类有对应的Bean。</p>
+<p>@ConditionalOnClass和@ConditionalOnBean，这两个条件注解的工作原理就分析到这，总结以下流程就是：</p>
+<ol>
+<li>Spring在解析某个配置类，或某个Bean定义时</li>
+<li>如果发现它们上面用到了条件注解，就会取出所有的条件的条件注解，并生成对应的条件对象，比如OnBeanCondition对象、OnClassCondition对象</li>
+<li>从而依次调用条件对象的matches方法，进行条件匹配，看是否符合条件</li>
+<li>而条件匹配逻辑中，会拿到@ConditionalOnClass和@ConditionalOnBean等条件注解的信息，比如要判断哪些类存在、哪些Bean存在</li>
+<li>然后利用ClassLaoder、BeanFactory来进行判断</li>
+<li>最后只有所有条件注解的条件都匹配，那么当前配置类或Bean定义才算符合条件</li>
+</ol>
+<p>源码会有点难，还希望大家耐点性子，多看多调试源码。</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            回到页面顶部
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="页脚" >
+      
+        
+        <a href="../01%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpringBoot%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 01手写模拟SpringBoot核心流程" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              01手写模拟SpringBoot核心流程
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../SpringCloudAlibaba/04%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E7%BB%84%E4%BB%B6Feign/" class="md-footer__link md-footer__link--next" aria-label="下一页: 04微服务调用组件Feign" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              04微服务调用组件Feign
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.top"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      
+    
+  </body>
+</html>
