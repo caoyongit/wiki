@@ -1,0 +1,1778 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.8">
+    
+    
+      
+        <title>09微服务链路追踪SkyWalking - Java Architect</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.815d1a91.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Java Architect" class="md-header__button md-logo" aria-label="Java Architect" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Java Architect
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              09微服务链路追踪SkyWalking
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Java Architect" class="md-nav__button md-logo" aria-label="Java Architect" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Java Architect
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Java源码系列
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Java源码系列" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Java源码系列
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_1">
+          Spring
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Spring" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Spring
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/00Spring%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/" class="md-nav__link">
+        0.Spring源码编译教程
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/01Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="md-nav__link">
+        1.Spring核心知识点
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/02%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="md-nav__link">
+        2.手写模拟Spring底层原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/03Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        3.Spring之底层架构核心概念解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/04Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+        4.Spring之Bean生命周期源码解析上
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/05Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+        5.Spring之Bean生命周期源码解析下
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/06Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+        6.Spring依赖注入源码解析上.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/07Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+        7.Spring依赖注入源码解析下.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/08Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E6%BA%90%E7%A0%81/" class="md-nav__link">
+        8.Spring循环依赖源码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/09Spring%E4%B9%8B%E6%8E%A8%E6%96%AD%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        9.Spring之推断构造方法源码解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/10Spring%E4%B9%8B%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        10.Spring之启动过程源码解析
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          微服务源码
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="微服务源码" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          微服务源码
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Microservice/01%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpringBoot%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B/" class="md-nav__link">
+        01手写模拟SpringBoot核心流程
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Microservice/02SpringBoot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%BA%95%E5%B1%82%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        02SpringBoot自动配置底层源码解析
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Spring Cloud Alibaba
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Spring Cloud Alibaba" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Spring Cloud Alibaba
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E7%BB%84%E4%BB%B6Feign/" class="md-nav__link">
+        04微服务调用组件Feign
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06Alibaba%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%84%E4%BB%B6Sentinel/" class="md-nav__link">
+        06微服务调用组件Feign
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08Spring%20Cloud%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3Gateway%E7%BB%84%E4%BB%B6/" class="md-nav__link">
+        08Spring Cloud微服务网关Gateway组件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          09微服务链路追踪SkyWalking
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        09微服务链路追踪SkyWalking
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    链路追踪介绍
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1skywalking" class="md-nav__link">
+    1、skywalking是什么
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2skywalking" class="md-nav__link">
+    2、skyWalking 环境搭建部署
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-skywalking" class="md-nav__link">
+    3、 SkyWalking 接入微服务
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4skywalking" class="md-nav__link">
+    4、Skywalking持久化跟踪数据
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5skywalking" class="md-nav__link">
+    5、自定义SkyWalking链路追踪
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6skywalking" class="md-nav__link">
+    6、Skywalking集成日志框架
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7skywalking" class="md-nav__link">
+    7、SkyWalking 告警功能
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8skywalking" class="md-nav__link">
+    8、Skywalking高可用
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Nginx
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Nginx" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Nginx
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/01Nginx%E5%AE%89%E8%A3%85/" class="md-nav__link">
+        01Nginx安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/02Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        02Nginx配置文件解读
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/03Nginx%E4%BB%A3%E7%90%86/" class="md-nav__link">
+        03Nginx代理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/04Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="md-nav__link">
+        04Nginx负载均衡
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/05Nginx%E9%99%90%E6%B5%81%E7%86%94%E6%96%AD/" class="md-nav__link">
+        05Nginx限流熔断
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/06Nginx%E5%AE%9E%E7%8E%B0%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/" class="md-nav__link">
+        06Nginx实现动静分离
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/07Nginx%E8%B0%83%E4%BC%98/" class="md-nav__link">
+        07Nginx调优
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/08Nginx%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="md-nav__link">
+        08Nginx镜像服务器
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/09Nginx%E7%83%AD%E5%A4%87%E9%83%A8%E7%BD%B2/" class="md-nav__link">
+        09Nginx热备部署
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        10Nginx安全认证
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Redis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Redis" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Redis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB/" class="md-nav__link">
+        Redis面试突击
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB2/" class="md-nav__link">
+        Redis面试突击2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    链路追踪介绍
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1skywalking" class="md-nav__link">
+    1、skywalking是什么
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2skywalking" class="md-nav__link">
+    2、skyWalking 环境搭建部署
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-skywalking" class="md-nav__link">
+    3、 SkyWalking 接入微服务
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4skywalking" class="md-nav__link">
+    4、Skywalking持久化跟踪数据
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5skywalking" class="md-nav__link">
+    5、自定义SkyWalking链路追踪
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6skywalking" class="md-nav__link">
+    6、Skywalking集成日志框架
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7skywalking" class="md-nav__link">
+    7、SkyWalking 告警功能
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8skywalking" class="md-nav__link">
+    8、Skywalking高可用
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>09微服务链路追踪SkyWalking</h1>
+
+<h4 id="_1"><strong>链路追踪介绍</strong></h4>
+<p>对于一个大型的几十个、几百个微服务构成的微服务架构系统，通常会遇到下面一些问题，比如：</p>
+<ol>
+<li>如何串联整个调用链路，快速定位问题？</li>
+<li>如何缕清各个微服务之间的依赖关系？</li>
+<li>如何进行各个微服务接口的性能分折？</li>
+<li>如何跟踪整个业务流程的调用处理顺序？</li>
+</ol>
+<p>​    <img alt="202211021023.gif" src="https://img.zivplus.xyz/images/2022/12/02/202211021023.gif" /></p>
+<h4 id="1skywalking"><strong>1、skywalking是什么</strong></h4>
+<p>skywalking是一个<strong>国产</strong>开源框架，2015年由<strong>吴晟</strong>开源 ， 2017年加入Apache孵化器。skywalking是分布式系统的应用程序<strong>性能监视工具</strong>，专为微服务、云原生架构和基于容器（Docker、K8s、Mesos）架构而设计。它是一款优秀的 <strong>APM</strong>（Application Performance Management）工具，包括了分布式追踪、性能指标分析、应用和服务依赖分析等。</p>
+<p>官网：<a href="http://skywalking.apache.org/">http://skywalking.apache.org/</a></p>
+<p>下载：<a href="http://skywalking.apache.org/downloads/">http://skywalking.apache.org/downloads/</a></p>
+<p>Github：<a href="https://github.com/apache/skywalking">https://github.com/apache/skywalking</a></p>
+<p>文档： <a href="https://skywalking.apache.org/docs/main/v8.4.0/readme/">https://skywalking.apache.org/docs/main/v8.4.0/readme/</a></p>
+<p>中文文档： <a href="https://skyapm.github.io/document-cn-translation-of-skywalking/">https://skyapm.github.io/document-cn-translation-of-skywalking/</a></p>
+<p><strong>1.2 链路追踪框架对比</strong></p>
+<ol>
+<li>Zipkin是Twitter开源的调用链分析工具，目前基于springcloud sleuth得到了广泛的使用，特点是轻量，使用部署简单。</li>
+<li>Pinpoint是韩国人开源的基于字节码注入的调用链分析，以及应用监控分析工具。特点是支持多种插件，UI功能强大，接入端无代码侵入。</li>
+<li>SkyWalking是本土开源的基于字节码注入的调用链分析，以及应用监控分析工具。特点是支持多种插件，UI功能较强，接入端无代码侵入。目前已加入Apache孵化器。</li>
+<li>CAT是大众点评开源的基于编码和配置的调用链分析，应用监控分析，日志采集，监控报警等一系列的监控平台工具。</li>
+</ol>
+<p>​    <img alt="iShot_2022-12-02_10.43.41.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.43.41.png" /></p>
+<p><strong>1.3 性能对比</strong></p>
+<p>模拟了三种并发用户：500，750，1000。使用jmeter测试，每个线程发送30个请求，设置思考时间为10ms。使用的采样率为1，即100%，这边与生产可能有差别。pinpoint默认的采样率为20，即50%，通过设置agent的配置文件改为100%。zipkin默认也是1。组合起来，一共有12种。下面看下汇总表：</p>
+<p>​    <img alt="iShot_2022-12-02_10.44.11.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.44.11.png" /></p>
+<p>从上表可以看出，在三种链路监控组件中，<strong>skywalking的探针对吞吐量的影响最小，zipkin的吞吐量居中。pinpoint的探针对吞吐量的影响较为明显</strong>，在500并发用户时，测试服务的吞吐量从1385降低到774，影响很大。然后再看下CPU和memory的影响，在内部服务器进行的压测，对CPU和memory的影响都差不多在10%之内。</p>
+<p><strong>1.4 Skywalking主要功能特性</strong></p>
+<p>1、多种监控手段，可以通过语言探针和service mesh获得监控的数据；</p>
+<p>2、支持多种语言自动探针，包括 Java，.NET Core 和 Node.JS；</p>
+<p>3、轻量高效，无需大数据平台和大量的服务器资源；</p>
+<p>4、模块化，UI、存储、集群管理都有多种机制可选；</p>
+<p>5、支持告警；</p>
+<p>6、优秀的可视化解决方案；</p>
+<h4 id="2skywalking">2、skyWalking 环境搭建部署</h4>
+<p>​    <img alt="iShot_2022-12-02_10.44.28.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.44.28.png" /></p>
+<ul>
+<li>skywalking agent和业务系统绑定在一起，负责收集各种监控数据</li>
+<li>Skywalking oapservice是负责处理监控数据的，比如接受skywalking agent的监控数据，并存储在数据库中;接受skywalking webapp的前端请求，从数据库查询数据，并返回数据给前端。Skywalking oapservice通常以集群的形式存在。</li>
+<li>skywalking webapp，前端界面，用于展示数据。</li>
+<li>用于存储监控数据的数据库，比如mysql、elasticsearch等。</li>
+</ul>
+<p><strong>2.1 下载 SkyWalking</strong> </p>
+<p>下载：<a href="http://skywalking.apache.org/downloads/">http://skywalking.apache.org/downloads/</a></p>
+<p>​    <img alt="iShot_2022-12-02_10.46.30.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.46.30.png" /></p>
+<p>目录结构</p>
+<p>​    <img alt="iShot_2022-12-02_10.46.48.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.46.48.png" /></p>
+<p><strong>2.2 搭建SkyWalking OAP 服务</strong></p>
+<p>启动脚本bin/startup.sh</p>
+<p>​    <img alt="iShot_2022-12-02_10.47.06.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.47.06.png" /></p>
+<p>日志信息存储在logs目录</p>
+<p>​    <img alt="iShot_2022-12-02_10.47.16.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.47.16.png" /></p>
+<p>启动成功后会启动两个服务，一个是skywalking-oap-server，一个是skywalking-web-ui  ： 8868</p>
+<p>skywalking-oap-server服务启动后会暴露11800 和 12800 两个端口，分别为收集监控数据的端口11800和接受前端请求的端口12800，修改端口可以修改config/applicaiton.yml</p>
+<p>​    <img alt="iShot_2022-12-02_10.47.38.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.47.38.png" /></p>
+<p>skywalking-web-ui服务会占用 8080 端口， 修改端口可以修改webapp/webapp.yml</p>
+<p>​    <img alt="iShot_2022-12-02_10.47.51.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.47.51.png" /></p>
+<p>server.port：SkyWalking UI服务端口，默认是8080；</p>
+<p>collector.ribbon.listOfServers：SkyWalking OAP服务地址数组，SkyWalking UI界面的数据是通过请求SkyWalking OAP服务来获得；</p>
+<p>访问：<a href="http://192.168.3.14:8080/">http://192.168.3.100:8080/</a></p>
+<p>​    <img alt="iShot_2022-12-02_10.48.19.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.48.19.png" /></p>
+<p>页面的右下角可以中英文切换，可以切换选择要展示的时间区间的跟踪数据。</p>
+<p><strong>2.3 SkyWalking中三个概念</strong></p>
+<p><strong>服务(Service) ：</strong>表示对请求提供相同行为的一系列或一组工作负载，在使用Agent时，可以定义服务的名字；</p>
+<p><strong>服务实例(Service Instance) ：</strong>上述的一组工作负载中的每一个工作负载称为一个实例， 一个服务实例实际就是操作系统上的一个真实进程；</p>
+<p><strong>端点(Endpoint) ：</strong>对于特定服务所接收的请求路径, 如HTTP的URI路径和gRPC服务的类名 + 方法签名；</p>
+<p>​    <img alt="iShot_2022-12-02_10.48.33.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.48.33.png" /></p>
+<h4 id="3-skywalking">3、 SkyWalking 接入微服务</h4>
+<p><strong>3.1 linux环境—通过jar包方式接入</strong></p>
+<p>准备一个springboot程序，打成可执行jar包，写一个shell脚本，在启动项目的Shell脚本上，通过 -javaagent 参数进行配置SkyWalking Agent来跟踪微服务；</p>
+<p>startup.sh脚本：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span>
+<span class="normal"><a href="#__codelineno-0-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="ch">#!/bin/sh</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="c1"># SkyWalking Agent配置</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="nb">export</span> <span class="nv">SW_AGENT_NAME</span><span class="o">=</span>springboot-skywalking-demo <span class="c1">#Agent名字,一般使用`spring.application.name`</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="nb">export</span> <span class="nv">SW_AGENT_COLLECTOR_BACKEND_SERVICES</span><span class="o">=</span><span class="m">127</span>.0.0.1:11800 <span class="c1">#配置 Collector 地址。</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nb">export</span> <span class="nv">SW_AGENT_SPAN_LIMIT</span><span class="o">=</span><span class="m">2000</span> <span class="c1">#配置链路的最大Span数量，默认为 300。</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="nb">export</span> <span class="nv">JAVA_AGENT</span><span class="o">=</span>-javaagent:/usr/local/soft/apache-skywalking-apm-bin-es7/agent/skywalking-agent.jar
+</code></pre></div></td></tr></table></div>
+<p>​          </p>
+<p>启动日志</p>
+<p>​    <img alt="iShot_2022-12-02_10.49.22.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.49.22.png" /></p>
+<p>等同于</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>java -javaagent:/usr/local/soft/apache-skywalking-apm-bin-es7/agent/skywalking-agent.jar 
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>-DSW_AGENT_COLLECTOR_BACKEND_SERVICES<span class="o">=</span><span class="m">127</span>.0.0.1:11800 
+</code></pre></div></td></tr></table></div>
+<p>参数名对应agent/config/agent.config配置文件中的属性。</p>
+<p>属性对应的源码：org.apache.skywalking.apm.agent.core.conf.Config.java</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># The service name in UI </span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>agent.service_name<span class="o">=</span><span class="si">${</span><span class="nv">SW_AGENT_NAME</span><span class="p">:</span><span class="nv">Your_ApplicationName</span><span class="si">}</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="c1"># Backend service addresses.        </span>
+</code></pre></div></td></tr></table></div>
+<p>我们也可以使用skywalking.+配置文件中的配置名作为系统配置项来进行覆盖。 javaagent参数配置方式优先级更高</p>
+<p>测试：  访问你的微服务 </p>
+<p>​    <img alt="iShot_2022-12-02_10.50.37.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.50.37.png" /></p>
+<p><strong>3.2 windos环境—在IDEA中使用Skywalking</strong></p>
+<p>在运行的程序配置jvm参数，如下图所示：</p>
+<p>​    <img alt="iShot_2022-12-02_10.50.55.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.50.55.png" /></p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span>
+<span class="normal"><a href="#__codelineno-3-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1"># skywalking-agent.jar的本地磁盘的路径</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a>-javaagent:D:<span class="se">\a</span>pache<span class="se">\a</span>pache-skywalking-apm-es7-8.4.0<span class="se">\a</span>pache-skywalking-apm-bin-es7<span class="se">\a</span>gent<span class="se">\s</span>kywalking-agent.jar
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="c1"># 在skywalking上显示的服务名</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a>-DSW_AGENT_NAME<span class="o">=</span>springboot-skywalking-demo
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="c1"># skywalking的collector服务的IP及端口</span>
+</code></pre></div></td></tr></table></div>
+<p>-DSW_AGENT_COLLECTOR_BACKEND_SERVICES   可以指定远程地址， 但是-javaagent必须绑定你本机物理路径的skywalking-agent.jar</p>
+<p><strong>3.3 Skywalking跨多个微服务跟踪</strong></p>
+<p>Skywalking跨多个微服务跟踪，只需要每个微服务启动时添加javaagent参数即可。</p>
+<p>测试：</p>
+<p>启动微服务mall-gateway，mall-order，mall-user ，配置skywalking的jvm参数</p>
+<p>http://localhost:8888/user/findOrderByUserId/1</p>
+<p>​    <img alt="iShot_2022-12-02_10.51.47.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.51.47.png" /></p>
+<p><strong>注意：此处存在bug，跟踪链路不显示gateway</strong></p>
+<p>拷贝agent/optional-plugins目录下的gateway插件到agent/plugins目录</p>
+<p><img alt="iShot_2022-12-02_10.52.25.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.52.25.png" /></p>
+<p>​    </p>
+<h4 id="4skywalking">4、Skywalking持久化跟踪数据</h4>
+<p>默认使用的H2数据库存储</p>
+<p>config/application.yml</p>
+<p>​    <img alt="iShot_2022-12-02_10.52.59.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.52.59.png" /></p>
+<p><strong>4.1 基于mysql持久化:</strong></p>
+<ol>
+<li>修改config目录下的application.yml，使用mysql作为持久化存储的仓库</li>
+</ol>
+<p>​    <img alt="iShot_2022-12-02_10.53.14.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.53.14.png" /></p>
+<ol>
+<li>修改mysql连接配置</li>
+</ol>
+<p>​    <img alt="iShot_2022-12-02_10.53.21.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.53.21.png" /></p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">storage</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span><span class="c1">#选择使用mysql   默认使用h2，不会持久化，重启skyWalking之前的数据会丢失</span><span class="w"></span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${SW_STORAGE:mysql}</span><span class="w"></span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">  </span><span class="c1">#使用mysql作为持久化存储的仓库</span><span class="w"></span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">  </span><span class="nt">mysql</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">      </span><span class="c1">#数据库连接地址</span><span class="w"></span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">      </span><span class="nt">jdbcUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${SW_JDBC_URL:&quot;jdbc:mysql://1ocalhost:3306/swtest&quot;}</span><span class="w"></span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">      </span><span class="c1">#用户名</span><span class="w"></span>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">      </span><span class="nt">dataSource.user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${SW_DATA_SOURCE_USER:root}</span><span class="w"></span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">      </span><span class="c1">#密码</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>注意：需要添加mysql数据驱动包，因为在lib目录下是没有mysql数据驱动包的，所以修改完配置启动是会报错，启动失败的。</p>
+<p><img alt="iShot_2022-12-02_10.53.48.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.53.48.png" /></p>
+<ol>
+<li>添加mysql数据驱动包到oap-libs目录下</li>
+</ol>
+<p><img alt="iShot_2022-12-02_10.53.57.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.53.57.png" /></p>
+<ol>
+<li>启动Skywalking</li>
+</ol>
+<p>​    <img alt="iShot_2022-12-02_10.54.072193a6352c69ee42.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.54.072193a6352c69ee42.png" /></p>
+<p>查看swtest数据库，可以看到生成了很多表。</p>
+<p>​    <img alt="iShot_2022-12-02_10.54.17db7344d72f427ad5.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.54.17db7344d72f427ad5.png" /></p>
+<p>说明启动成功了，打开配置对应的地址<a href="http://192.168.3.14:8080/">http://192.168.3.100:8080/</a>，可以看到skywalking的web界面。</p>
+<p>​    <img alt="iShot_2022-12-02_10.54.28d5d4c2a2b19f2350.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.54.28d5d4c2a2b19f2350.png" /></p>
+<p>测试：重启skywalking，验证跟踪数据会不会丢失</p>
+<h4 id="5skywalking">5、自定义SkyWalking链路追踪</h4>
+<p>如果我们希望对项目中的业务方法，实现链路追踪，方便我们排查问题，可以使用如下的代码</p>
+<p>引入依赖</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span>
+<span class="normal"><a href="#__codelineno-5-4">4</a></span>
+<span class="normal"><a href="#__codelineno-5-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="cm">&lt;!-- SkyWalking 工具类 --&gt;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a>    <span class="nt">&lt;groupId&gt;</span>org.apache.skywalking<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a>    <span class="nt">&lt;artifactId&gt;</span>apm-toolkit-trace<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a>  <span class="nt">&lt;version&gt;</span>8.4.0<span class="nt">&lt;/version&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>5.1 @Trace将方法加入追踪链路</strong></p>
+<p>如果一个业务方法想在ui界面的跟踪链路上显示出来，只需要在业务方法上加上@Trace注解即可</p>
+<p>​    <img alt="iShot_2022-12-02_10.55.28b91b8022e8309cd9.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.55.28b91b8022e8309cd9.png" /></p>
+<p><strong>测试：</strong></p>
+<p>​    <img alt="iShot_2022-12-02_10.55.3654cb0793d4a4e2b8.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.55.3654cb0793d4a4e2b8.png" /></p>
+<p><strong>5.2 加入@Tags或@Tag</strong></p>
+<p>我们还可以为追踪链路增加其他额外的信息，比如记录参数和返回信息。实现方式：在方法上增加@Tag或者@Tags。</p>
+<p>@Tag 注解中   key  = 方法名   ； value =   returnedObj    返回值   arg[0] 参数</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-6-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-6-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-6-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-6-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-6-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-6-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-6-10">10</a></span>
+<span class="normal"><a href="#__codelineno-6-11">11</a></span>
+<span class="normal"><a href="#__codelineno-6-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nd">@Trace</span><span class="w"></span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="nd">@Tag</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;returnedObj&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">list</span><span class="p">(){</span><span class="w"></span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">userMapper</span><span class="p">.</span><span class="na">list</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="nd">@Trace</span><span class="w"></span>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="nd">@Tags</span><span class="p">({</span><span class="nd">@Tag</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;param&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;arg[0]&quot;</span><span class="p">),</span><span class="w"></span>
+<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="w">        </span><span class="nd">@Tag</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;returnedObj&quot;</span><span class="p">)})</span><span class="w"></span>
+<a id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="kd">public</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">id</span><span class="p">){</span><span class="w"></span>
+<a id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">userMapper</span><span class="p">.</span><span class="na">getById</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>​    <img alt="iShot_2022-12-02_10.56.22e271ca77cf04e73a.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.56.22e271ca77cf04e73a.png" /></p>
+<p>​    </p>
+<p><strong>性能分析</strong></p>
+<p>skywalking的性能分析，在根据服务名称、端点名称，以及相应的规则建立了任务列表后，在调用了此任务列表的端点后。skywalking会自动记录，剖析当前端口，生成剖析结果，具体流程如图：</p>
+<p>​       <img alt="iShot_2022-12-02_10.57.1500a88640b558837d.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.57.1500a88640b558837d.png" /></p>
+<h4 id="6skywalking">6、Skywalking集成日志框架</h4>
+<p><a href="https://github.com/apache/skywalking/blob/v8.5.0/docs/en/setup/service-agent/java-agent/Application-toolkit-logback-1.x.md">logback官方配置</a></p>
+<p><a href="https://skywalking.apache.org/docs/main/v8.5.0/en/setup/service-agent/java-agent/application-toolkit-log4j-1.x/">log4j官方配置</a></p>
+<p><a href="https://skywalking.apache.org/docs/main/v8.5.0/en/setup/service-agent/java-agent/application-toolkit-log4j-2.x">log4j2j官方配置</a></p>
+<p>引入依赖</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span>
+<span class="normal"><a href="#__codelineno-7-3">3</a></span>
+<span class="normal"><a href="#__codelineno-7-4">4</a></span>
+<span class="normal"><a href="#__codelineno-7-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="cm">&lt;!-- apm-toolkit-logback-1.x --&gt;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a>    <span class="nt">&lt;groupId&gt;</span>org.apache.skywalking<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a>    <span class="nt">&lt;artifactId&gt;</span>apm-toolkit-logback-1.x<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a>  <span class="nt">&lt;version&gt;</span>8.5.0<span class="nt">&lt;/version&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>添加logback-spring.xml文件，并配置 %tid 占位符</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span>
+<span class="normal"><a href="#__codelineno-8-11">11</a></span>
+<span class="normal"><a href="#__codelineno-8-12">12</a></span>
+<span class="normal"><a href="#__codelineno-8-13">13</a></span>
+<span class="normal"><a href="#__codelineno-8-14">14</a></span>
+<span class="normal"><a href="#__codelineno-8-15">15</a></span>
+<span class="normal"><a href="#__codelineno-8-16">16</a></span>
+<span class="normal"><a href="#__codelineno-8-17">17</a></span>
+<span class="normal"><a href="#__codelineno-8-18">18</a></span>
+<span class="normal"><a href="#__codelineno-8-19">19</a></span>
+<span class="normal"><a href="#__codelineno-8-20">20</a></span>
+<span class="normal"><a href="#__codelineno-8-21">21</a></span>
+<span class="normal"><a href="#__codelineno-8-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="nt">&lt;configuration&gt;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a>    <span class="cm">&lt;!-- 引入 Spring Boot 默认的 logback XML 配置文件  --&gt;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a>    <span class="nt">&lt;include</span> <span class="na">resource=</span><span class="s">&quot;org/springframework/boot/logging/logback/defaults.xml&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7"></a>    <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;console&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.ConsoleAppender&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8"></a>        <span class="cm">&lt;!-- 日志的格式化 --&gt;</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9"></a>        <span class="nt">&lt;encoder</span>  <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.encoder.LayoutWrappingEncoder&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10"></a>            <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">&quot;org.apache.skywalking.apm.toolkit.log.logback.v1.x.TraceIdPatternLogbackLayout&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11"></a>                <span class="nt">&lt;Pattern&gt;</span>${CONSOLE_LOG_PATTERN}<span class="nt">&lt;/Pattern&gt;</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12"></a>            <span class="nt">&lt;/layout&gt;</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13"></a>        <span class="nt">&lt;/encoder&gt;</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14"></a>
+<a id="__codelineno-8-15" name="__codelineno-8-15"></a>    <span class="nt">&lt;/appender&gt;</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16"></a>
+<a id="__codelineno-8-17" name="__codelineno-8-17"></a>    <span class="cm">&lt;!-- 设置 Appender --&gt;</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18"></a>    <span class="nt">&lt;root</span> <span class="na">level=</span><span class="s">&quot;INFO&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19"></a>        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;console&quot;</span><span class="nt">/&gt;</span> 
+<a id="__codelineno-8-20" name="__codelineno-8-20"></a>    <span class="nt">&lt;/root&gt;</span> 
+<a id="__codelineno-8-21" name="__codelineno-8-21"></a>
+<a id="__codelineno-8-22" name="__codelineno-8-22"></a><span class="nt">&lt;/configuration&gt;</span> 
+</code></pre></div></td></tr></table></div>
+<p>测试</p>
+<p>​    <img alt="iShot_2022-12-02_10.58.459089805145e955e4.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.58.459089805145e955e4.png" /></p>
+<p><strong>Skywalking通过grpc上报日志</strong> <strong>（需要v8.4.0+）</strong></p>
+<p>gRPC报告程序可以将收集到的日志转发到SkyWalking OAP服务器上</p>
+<p>logback-spring.xml中添加</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-9-10">10</a></span>
+<span class="normal"><a href="#__codelineno-9-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a> <span class="cm">&lt;!-- v8.4.0提供 --&gt;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a>    <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;grpc-log&quot;</span> <span class="na">class=</span><span class="s">&quot;org.apache.skywalking.apm.toolkit.log.logback.v1.x.log.GRPCLogClientAppender&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a>        <span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.encoder.LayoutWrappingEncoder&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a>            <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">&quot;org.apache.skywalking.apm.toolkit.log.logback.v1.x.mdc.TraceIdMDCPatternLogbackLayout&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a>                <span class="nt">&lt;Pattern&gt;</span>%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{tid}] [%thread] %-5level %logger{36} -%msg%n<span class="nt">&lt;/Pattern&gt;</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a>            <span class="nt">&lt;/layout&gt;</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a>        <span class="nt">&lt;/encoder&gt;</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8"></a>    <span class="nt">&lt;/appender&gt;</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a>
+<a id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="nt">&lt;root</span> <span class="na">level=</span><span class="s">&quot;info&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11"></a>  <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;grpc-log&quot;</span> <span class="nt">/&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>​    <img alt="iShot_2022-12-02_10.59.2336e870302de569e8.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_10.59.2336e870302de569e8.png" /></p>
+<p>打开agent/config/agent.config配置文件，添加如下配置信息：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>plugin.toolkit.log.grpc.reporter.server_host<span class="o">=</span><span class="si">${</span><span class="nv">SW_GRPC_LOG_SERVER_HOST</span><span class="p">:</span><span class="nv">192</span><span class="p">.168.3.100</span><span class="si">}</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a>plugin.toolkit.log.grpc.reporter.server_port<span class="o">=</span><span class="si">${</span><span class="nv">SW_GRPC_LOG_SERVER_PORT</span><span class="p">:</span><span class="nv">11800</span><span class="si">}</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a>plugin.toolkit.log.grpc.reporter.max_message_size<span class="o">=</span><span class="si">${</span><span class="nv">SW_GRPC_LOG_MAX_MESSAGE_SIZE</span><span class="p">:</span><span class="nv">10485760</span><span class="si">}</span>
+</code></pre></div></td></tr></table></div>
+<p>以上配置是默认配置信息,agent与oap在本地的可以不配</p>
+<table>
+<thead>
+<tr>
+<th>配置名</th>
+<th>解释</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>plugin.toolkit.log.transmit_formatted</td>
+<td>是否以格式化或未格式化的格式传输记录的数据</td>
+<td>true</td>
+</tr>
+<tr>
+<td>plugin.toolkit.log.grpc.reporter.server_host</td>
+<td>指定要向其报告日志数据的grpc服务器的主机</td>
+<td>127.0.0.1</td>
+</tr>
+<tr>
+<td>plugin.toolkit.log.grpc.reporter.server_port</td>
+<td>指定要向其报告日志数据的grpc服务器的端口</td>
+<td>11800</td>
+</tr>
+<tr>
+<td>plugin.toolkit.log.grpc.reporter.max_message_size</td>
+<td>指定grpc客户端要报告的日志数据的最大大小</td>
+<td>10485760</td>
+</tr>
+<tr>
+<td>plugin.toolkit.log.grpc.reporter.upstream_timeout</td>
+<td>客户端向上游发送数据时将超时多长时间。单位是秒</td>
+<td>30</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://skywalking.apache.org/docs/main/v8.4.0/en/setup/service-agent/java-agent/readme/#table-of-agent-configuration-properties">agent配置信息大全</a></p>
+<p>Skywalking UI效果</p>
+<p>​    <img alt="iShot_2022-12-02_11.00.26e44878e3f9a506e9.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_11.00.26e44878e3f9a506e9.png" /></p>
+<p>此处日期格式存在问题</p>
+<p><a href="https://github.com/apache/skywalking-rocketbot-ui/pull/428">https://github.com/apache/skywalking-rocketbot-ui/pull/428</a></p>
+<p>​    <img alt="iShot_2022-12-02_11.00.3571109827b32fe45e.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_11.00.3571109827b32fe45e.png" /></p>
+<h4 id="7skywalking">7、SkyWalking 告警功能</h4>
+<p>SkyWalking 告警功能是在6.x版本新增的，其核心由一组规则驱动，这些规则定义在config/alarm-settings.yml文件中。 告警规则的定义分为两部分：</p>
+<ol>
+<li><a href="https://github.com/apache/skywalking/blob/v8.5.0/docs/en/setup/backend/backend-alarm.md">告警规则</a>：它们定义了应该如何触发度量警报，应该考虑什么条件。</li>
+<li><a href="https://github.com/apache/skywalking/blob/v8.5.0/docs/en/setup/backend/backend-alarm.md">Webhook（网络钩子）</a>：定义当警告触发时，哪些服务终端需要被告知</li>
+</ol>
+<hr />
+<p><strong>告警规则</strong></p>
+<p>SkyWalking 的发行版都会默认提供config/alarm-settings.yml文件，里面预先定义了一些常用的告警规则。如下：</p>
+<ol>
+<li>过去 3 分钟内服务平均响应时间超过 1 秒。</li>
+<li>过去 2 分钟服务成功率低于80%。</li>
+<li>过去 3 分钟内服务响应时间超过 1s 的百分比</li>
+<li>服务实例在过去 2 分钟内平均响应时间超过 1s，并且实例名称与正则表达式匹配。</li>
+<li>过去 2 分钟内端点平均响应时间超过 1 秒。</li>
+<li>过去 2 分钟内数据库访问平均响应时间超过 1 秒。</li>
+<li>过去 2 分钟内端点关系平均响应时间超过 1 秒。</li>
+</ol>
+<p>这些预定义的告警规则，打开config/alarm-settings.yml文件即可看到</p>
+<p>告警规则配置项的说明：</p>
+<ul>
+<li><strong>Rule name：</strong>规则名称，也是在告警信息中显示的唯一名称。必须以_rule结尾，前缀可自定义</li>
+<li><strong>Metrics name：</strong>度量名称，取值为oal脚本中的度量名，目前只支持long、double和int类型。详见<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fgithub.com%2Fapache%2Fskywalking%2Fblob%2Fmaster%2Fdocs%2Fen%2Fguides%2Fbackend-oal-scripts.md">Official OAL script</a></li>
+<li><strong>Include names：</strong>该规则作用于哪些实体名称，比如服务名，终端名（可选，默认为全部）</li>
+<li><strong>Exclude names：</strong>该规则作不用于哪些实体名称，比如服务名，终端名（可选，默认为空）</li>
+<li><strong>Threshold：</strong>阈值</li>
+<li><strong>OP：</strong> 操作符，目前支持 &gt;、&lt;、=</li>
+<li><strong>Period：</strong>多久告警规则需要被核实一下。这是一个时间窗口，与后端部署环境时间相匹配</li>
+<li><strong>Count：</strong>在一个Period窗口中，如果values超过Threshold值（按op），达到Count值，需要发送警报</li>
+<li><strong>Silence period：</strong>在时间N中触发报警后，在TN -&gt; TN + period这个阶段不告警。 默认情况下，它和Period一样，这意味着相同的告警（在同一个Metrics name拥有相同的Id）在同一个Period内只会触发一次</li>
+<li><strong>message：</strong>告警消息</li>
+</ul>
+<hr />
+<p><strong>Webhook（网络钩子）</strong></p>
+<p>Webhook可以简单理解为是一种Web层面的回调机制，通常由一些事件触发，与代码中的事件回调类似，只不过是Web层面的。由于是Web层面的，所以当事件发生时，回调的不再是代码中的方法或函数，而是服务接口。例如，在告警这个场景，告警就是一个事件。当该事件发生时，SkyWalking就会主动去调用一个配置好的接口，该接口就是所谓的Webhook。</p>
+<p>SkyWalking的告警消息会通过 HTTP 请求进行发送，请求方法为 POST，Content-Type 为 application/json，其JSON 数据实基于List进行序列化的。JSON数据示例：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-11-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-11-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-11-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-11-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-11-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-11-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-11-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-11-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-11-10">10</a></span>
+<span class="normal"><a href="#__codelineno-11-11">11</a></span>
+<span class="normal"><a href="#__codelineno-11-12">12</a></span>
+<span class="normal"><a href="#__codelineno-11-13">13</a></span>
+<span class="normal"><a href="#__codelineno-11-14">14</a></span>
+<span class="normal"><a href="#__codelineno-11-15">15</a></span>
+<span class="normal"><a href="#__codelineno-11-16">16</a></span>
+<span class="normal"><a href="#__codelineno-11-17">17</a></span>
+<span class="normal"><a href="#__codelineno-11-18">18</a></span>
+<span class="normal"><a href="#__codelineno-11-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="p">[{</span><span class="w"></span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="w">    </span><span class="nt">&quot;scopeId&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span>
+<a id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="w">    </span><span class="nt">&quot;scope&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SERVICE&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;serviceA&quot;</span><span class="p">,</span><span class="w"> </span>
+<a id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="w">    </span><span class="nt">&quot;id0&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;12&quot;</span><span class="p">,</span><span class="w">  </span>
+<a id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="w">    </span><span class="nt">&quot;id1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w">  </span>
+<a id="__codelineno-11-7" name="__codelineno-11-7"></a><span class="w">    </span><span class="nt">&quot;ruleName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;service_resp_time_rule&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-11-8" name="__codelineno-11-8"></a><span class="w">    </span><span class="nt">&quot;alarmMessage&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;alarmMessage xxxx&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-11-9" name="__codelineno-11-9"></a><span class="w">    </span><span class="nt">&quot;startTime&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1560524171000</span><span class="w"></span>
+<a id="__codelineno-11-10" name="__codelineno-11-10"></a><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-11" name="__codelineno-11-11"></a><span class="w">    </span><span class="nt">&quot;scopeId&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-11-12" name="__codelineno-11-12"></a><span class="w">    </span><span class="nt">&quot;scope&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SERVICE&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-11-13" name="__codelineno-11-13"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;serviceB&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-11-14" name="__codelineno-11-14"></a><span class="w">    </span><span class="nt">&quot;id0&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;23&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-11-15" name="__codelineno-11-15"></a><span class="w">    </span><span class="nt">&quot;id1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-11-16" name="__codelineno-11-16"></a><span class="w">    </span><span class="nt">&quot;ruleName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;service_resp_time_rule&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-11-17" name="__codelineno-11-17"></a><span class="w">    </span><span class="nt">&quot;alarmMessage&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;alarmMessage yyy&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-11-18" name="__codelineno-11-18"></a><span class="w">    </span><span class="nt">&quot;startTime&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1560524171000</span><span class="w"></span>
+<a id="__codelineno-11-19" name="__codelineno-11-19"></a><span class="p">}]</span><span class="w">    </span>
+</code></pre></div></td></tr></table></div>
+<p>字段说明：</p>
+<ul>
+<li><strong>scopeId、scope：</strong>所有可用的 Scope 详见 org.apache.skywalking.oap.server.core.source.DefaultScopeDefine</li>
+<li><strong>name：</strong>目标 Scope 的实体名称</li>
+<li><strong>id0：</strong>Scope 实体的 ID</li>
+<li><strong>id1：</strong>保留字段，目前暂未使用</li>
+<li><strong>ruleName：</strong>告警规则名称</li>
+<li><strong>alarmMessage：</strong>告警消息内容</li>
+<li><strong>startTime：</strong>告警时间，格式为时间戳</li>
+</ul>
+<hr />
+<p><strong>邮件告警功能实践</strong></p>
+<p>根据以上两个小节的介绍，可以得知：SkyWalking是不支持直接向邮箱、短信等服务发送告警信息的，SkyWalking只会在发生告警时将告警信息发送至配置好的Webhook接口。</p>
+<p>但我们总不能人工盯着该接口的日志信息来得知服务是否发生了告警，因此我们需要在该接口里实现发送邮件或短信等功能，从而达到个性化的告警通知。</p>
+<p>接下来开始动手实践，这里基于Spring Boot进行实现。首先是添加依赖：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
+<span class="normal"><a href="#__codelineno-12-2">2</a></span>
+<span class="normal"><a href="#__codelineno-12-3">3</a></span>
+<span class="normal"><a href="#__codelineno-12-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a>    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a>    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-mail<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>配置邮箱服务：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-13-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-13-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-13-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-13-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-13-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-13-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-13-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-13-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-13-10">10</a></span>
+<span class="normal"><a href="#__codelineno-13-11">11</a></span>
+<span class="normal"><a href="#__codelineno-13-12">12</a></span>
+<span class="normal"><a href="#__codelineno-13-13">13</a></span>
+<span class="normal"><a href="#__codelineno-13-14">14</a></span>
+<span class="normal"><a href="#__codelineno-13-15">15</a></span>
+<span class="normal"><a href="#__codelineno-13-16">16</a></span>
+<span class="normal"><a href="#__codelineno-13-17">17</a></span>
+<span class="normal"><a href="#__codelineno-13-18">18</a></span>
+<span class="normal"><a href="#__codelineno-13-19">19</a></span>
+<span class="normal"><a href="#__codelineno-13-20">20</a></span>
+<span class="normal"><a href="#__codelineno-13-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="nt">server</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9134</span><span class="w"></span>
+<a id="__codelineno-13-3" name="__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="c1">#邮箱配置</span><span class="w"></span>
+<a id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-13-6" name="__codelineno-13-6"></a><span class="w">  </span><span class="nt">mail</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-13-7" name="__codelineno-13-7"></a><span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">smtp.163.com</span><span class="w"></span>
+<a id="__codelineno-13-8" name="__codelineno-13-8"></a><span class="w">    </span><span class="c1">#发送者邮箱账号</span><span class="w"></span>
+<a id="__codelineno-13-9" name="__codelineno-13-9"></a><span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">你的邮箱@163.com</span><span class="w"></span>
+<a id="__codelineno-13-10" name="__codelineno-13-10"></a><span class="w">    </span><span class="c1">#发送者密钥</span><span class="w"></span>
+<a id="__codelineno-13-11" name="__codelineno-13-11"></a><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">你的邮箱服务密钥</span><span class="w"></span>
+<a id="__codelineno-13-12" name="__codelineno-13-12"></a><span class="w">    </span><span class="nt">default-encoding</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">utf-8</span><span class="w"></span>
+<a id="__codelineno-13-13" name="__codelineno-13-13"></a><span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">465</span><span class="w">   </span><span class="c1">#端口号465或587</span><span class="w"></span>
+<a id="__codelineno-13-14" name="__codelineno-13-14"></a><span class="w">    </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">smtp</span><span class="w"></span>
+<a id="__codelineno-13-15" name="__codelineno-13-15"></a><span class="w">    </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-13-16" name="__codelineno-13-16"></a><span class="w">      </span><span class="nt">mail</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-13-17" name="__codelineno-13-17"></a><span class="w">        </span><span class="nt">debug</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-13-18" name="__codelineno-13-18"></a><span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<a id="__codelineno-13-19" name="__codelineno-13-19"></a><span class="w">        </span><span class="nt">smtp</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-13-20" name="__codelineno-13-20"></a><span class="w">          </span><span class="nt">socketFactory</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-13-21" name="__codelineno-13-21"></a><span class="w">            </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">javax.net.ssl.SSLSocketFactory</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>根据SkyWalking发送的JSON数据定义一个DTO，用于接口接收数据：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code>            ```java
+            @Data
+            public class SwAlarmDTO {
+
+                private Integer scopeId;
+                private String scope;
+                private String name;
+                private Integer id0;
+                private Integer id1;
+                private String ruleName;
+                private String alarmMessage;
+                private Long startTime;
+            }
+            ```
+</code></pre></div></td></tr></table></div>
+<p>接着定义一个接口，实现接收SkyWalking的告警通知，并将数据发送至邮箱：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-15-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-15-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-15-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-15-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-15-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-15-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-15-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-15-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-15-10">10</a></span>
+<span class="normal"><a href="#__codelineno-15-11">11</a></span>
+<span class="normal"><a href="#__codelineno-15-12">12</a></span>
+<span class="normal"><a href="#__codelineno-15-13">13</a></span>
+<span class="normal"><a href="#__codelineno-15-14">14</a></span>
+<span class="normal"><a href="#__codelineno-15-15">15</a></span>
+<span class="normal"><a href="#__codelineno-15-16">16</a></span>
+<span class="normal"><a href="#__codelineno-15-17">17</a></span>
+<span class="normal"><a href="#__codelineno-15-18">18</a></span>
+<span class="normal"><a href="#__codelineno-15-19">19</a></span>
+<span class="normal"><a href="#__codelineno-15-20">20</a></span>
+<span class="normal"><a href="#__codelineno-15-21">21</a></span>
+<span class="normal"><a href="#__codelineno-15-22">22</a></span>
+<span class="normal"><a href="#__codelineno-15-23">23</a></span>
+<span class="normal"><a href="#__codelineno-15-24">24</a></span>
+<span class="normal"><a href="#__codelineno-15-25">25</a></span>
+<span class="normal"><a href="#__codelineno-15-26">26</a></span>
+<span class="normal"><a href="#__codelineno-15-27">27</a></span>
+<span class="normal"><a href="#__codelineno-15-28">28</a></span>
+<span class="normal"><a href="#__codelineno-15-29">29</a></span>
+<span class="normal"><a href="#__codelineno-15-30">30</a></span>
+<span class="normal"><a href="#__codelineno-15-31">31</a></span>
+<span class="normal"><a href="#__codelineno-15-32">32</a></span>
+<span class="normal"><a href="#__codelineno-15-33">33</a></span>
+<span class="normal"><a href="#__codelineno-15-34">34</a></span>
+<span class="normal"><a href="#__codelineno-15-35">35</a></span>
+<span class="normal"><a href="#__codelineno-15-36">36</a></span>
+<span class="normal"><a href="#__codelineno-15-37">37</a></span>
+<span class="normal"><a href="#__codelineno-15-38">38</a></span>
+<span class="normal"><a href="#__codelineno-15-39">39</a></span>
+<span class="normal"><a href="#__codelineno-15-40">40</a></span>
+<span class="normal"><a href="#__codelineno-15-41">41</a></span>
+<span class="normal"><a href="#__codelineno-15-42">42</a></span>
+<span class="normal"><a href="#__codelineno-15-43">43</a></span>
+<span class="normal"><a href="#__codelineno-15-44">44</a></span>
+<span class="normal"><a href="#__codelineno-15-45">45</a></span>
+<span class="normal"><a href="#__codelineno-15-46">46</a></span>
+<span class="normal"><a href="#__codelineno-15-47">47</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="nd">@Slf4j</span><span class="w"></span>
+<a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="nd">@RestController</span><span class="w"></span>
+<a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="nd">@RequiredArgsConstructor</span><span class="w"></span>
+<a id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&quot;/alarm&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SwAlarmController</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-15-6" name="__codelineno-15-6"></a>
+<a id="__codelineno-15-7" name="__codelineno-15-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">JavaMailSender</span><span class="w"> </span><span class="n">sender</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-15-8" name="__codelineno-15-8"></a>
+<a id="__codelineno-15-9" name="__codelineno-15-9"></a><span class="w">    </span><span class="nd">@Value</span><span class="p">(</span><span class="s">&quot;${spring.mail.username}&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-15-10" name="__codelineno-15-10"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">from</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-15-11" name="__codelineno-15-11"></a>
+<a id="__codelineno-15-12" name="__codelineno-15-12"></a><span class="w">    </span><span class="cm">/**</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13"></a><span class="cm">     * 接收skywalking服务的告警通知并发送至邮箱</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14"></a><span class="cm">     */</span><span class="w"></span>
+<a id="__codelineno-15-15" name="__codelineno-15-15"></a><span class="w">    </span><span class="nd">@PostMapping</span><span class="p">(</span><span class="s">&quot;/receive&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-15-16" name="__codelineno-15-16"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">receive</span><span class="p">(</span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">SwAlarmDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="n">alarmList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-15-17" name="__codelineno-15-17"></a><span class="w">        </span><span class="n">SimpleMailMessage</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SimpleMailMessage</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-15-18" name="__codelineno-15-18"></a><span class="w">        </span><span class="c1">// 发送者邮箱</span><span class="w"></span>
+<a id="__codelineno-15-19" name="__codelineno-15-19"></a><span class="w">        </span><span class="n">message</span><span class="p">.</span><span class="na">setFrom</span><span class="p">(</span><span class="n">from</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-15-20" name="__codelineno-15-20"></a><span class="w">        </span><span class="c1">// 接收者邮箱</span><span class="w"></span>
+<a id="__codelineno-15-21" name="__codelineno-15-21"></a><span class="w">        </span><span class="n">message</span><span class="p">.</span><span class="na">setTo</span><span class="p">(</span><span class="n">from</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-15-22" name="__codelineno-15-22"></a><span class="w">        </span><span class="c1">// 主题</span><span class="w"></span>
+<a id="__codelineno-15-23" name="__codelineno-15-23"></a><span class="w">        </span><span class="n">message</span><span class="p">.</span><span class="na">setSubject</span><span class="p">(</span><span class="s">&quot;告警邮件&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-15-24" name="__codelineno-15-24"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getContent</span><span class="p">(</span><span class="n">alarmList</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-15-25" name="__codelineno-15-25"></a><span class="w">        </span><span class="c1">// 邮件内容</span><span class="w"></span>
+<a id="__codelineno-15-26" name="__codelineno-15-26"></a><span class="w">        </span><span class="n">message</span><span class="p">.</span><span class="na">setText</span><span class="p">(</span><span class="n">content</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-15-27" name="__codelineno-15-27"></a><span class="w">        </span><span class="n">sender</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">message</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-15-28" name="__codelineno-15-28"></a><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;告警邮件已发送...&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-15-29" name="__codelineno-15-29"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-15-30" name="__codelineno-15-30"></a>
+<a id="__codelineno-15-31" name="__codelineno-15-31"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getContent</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">SwAlarmDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="n">alarmList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-15-32" name="__codelineno-15-32"></a><span class="w">        </span><span class="n">StringBuilder</span><span class="w"> </span><span class="n">sb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">StringBuilder</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-15-33" name="__codelineno-15-33"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">SwAlarmDTO</span><span class="w"> </span><span class="n">dto</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">alarmList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-15-34" name="__codelineno-15-34"></a><span class="w">            </span><span class="n">sb</span><span class="p">.</span><span class="na">append</span><span class="p">(</span><span class="s">&quot;scopeId: &quot;</span><span class="p">).</span><span class="na">append</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">getScopeId</span><span class="p">())</span><span class="w"></span>
+<a id="__codelineno-15-35" name="__codelineno-15-35"></a><span class="w">                    </span><span class="p">.</span><span class="na">append</span><span class="p">(</span><span class="s">&quot;\nscope: &quot;</span><span class="p">).</span><span class="na">append</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">getScope</span><span class="p">())</span><span class="w"></span>
+<a id="__codelineno-15-36" name="__codelineno-15-36"></a><span class="w">                    </span><span class="p">.</span><span class="na">append</span><span class="p">(</span><span class="s">&quot;\n目标 Scope 的实体名称: &quot;</span><span class="p">).</span><span class="na">append</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">getName</span><span class="p">())</span><span class="w"></span>
+<a id="__codelineno-15-37" name="__codelineno-15-37"></a><span class="w">                    </span><span class="p">.</span><span class="na">append</span><span class="p">(</span><span class="s">&quot;\nScope 实体的 ID: &quot;</span><span class="p">).</span><span class="na">append</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">getId0</span><span class="p">())</span><span class="w"></span>
+<a id="__codelineno-15-38" name="__codelineno-15-38"></a><span class="w">                    </span><span class="p">.</span><span class="na">append</span><span class="p">(</span><span class="s">&quot;\nid1: &quot;</span><span class="p">).</span><span class="na">append</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">getId1</span><span class="p">())</span><span class="w"></span>
+<a id="__codelineno-15-39" name="__codelineno-15-39"></a><span class="w">                    </span><span class="p">.</span><span class="na">append</span><span class="p">(</span><span class="s">&quot;\n告警规则名称: &quot;</span><span class="p">).</span><span class="na">append</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">getRuleName</span><span class="p">())</span><span class="w"></span>
+<a id="__codelineno-15-40" name="__codelineno-15-40"></a><span class="w">                    </span><span class="p">.</span><span class="na">append</span><span class="p">(</span><span class="s">&quot;\n告警消息内容: &quot;</span><span class="p">).</span><span class="na">append</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">getAlarmMessage</span><span class="p">())</span><span class="w"></span>
+<a id="__codelineno-15-41" name="__codelineno-15-41"></a><span class="w">                    </span><span class="p">.</span><span class="na">append</span><span class="p">(</span><span class="s">&quot;\n告警时间: &quot;</span><span class="p">).</span><span class="na">append</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">getStartTime</span><span class="p">())</span><span class="w"></span>
+<a id="__codelineno-15-42" name="__codelineno-15-42"></a><span class="w">                    </span><span class="p">.</span><span class="na">append</span><span class="p">(</span><span class="s">&quot;\n\n---------------\n\n&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-15-43" name="__codelineno-15-43"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-15-44" name="__codelineno-15-44"></a>
+<a id="__codelineno-15-45" name="__codelineno-15-45"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">sb</span><span class="p">.</span><span class="na">toString</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-15-46" name="__codelineno-15-46"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-15-47" name="__codelineno-15-47"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>最后将该接口配置到SkyWalking中，Webhook的配置位于config/alarm-settings.yml文件的末尾，格式为http://{ip}:{port}/{uri}。如下示例：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span>
+<span class="normal"><a href="#__codelineno-16-2">2</a></span>
+<span class="normal"><a href="#__codelineno-16-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="o">[</span>root@ip-236-048 skywalking<span class="o">]</span><span class="c1"># vim config/alarm-settings.yml</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2"></a>webhooks:
+<a id="__codelineno-16-3" name="__codelineno-16-3"></a>  - http://127.0.0.1:9134/alarm/receive
+</code></pre></div></td></tr></table></div>
+<hr />
+<p><strong>测试告警功能</strong></p>
+<p>完成告警接口的开发及配置后，我们来进行一个简单的测试。这里有一条调用链路如下：</p>
+<p>​    <img alt="iShot_2022-12-02_11.03.578d004ced41c3ddc0.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_11.03.578d004ced41c3ddc0.png" /></p>
+<p>我在/producer接口中增加了一行睡2秒的代码：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span>
+<span class="normal"><a href="#__codelineno-17-2">2</a></span>
+<span class="normal"><a href="#__codelineno-17-3">3</a></span>
+<span class="normal"><a href="#__codelineno-17-4">4</a></span>
+<span class="normal"><a href="#__codelineno-17-5">5</a></span>
+<span class="normal"><a href="#__codelineno-17-6">6</a></span>
+<span class="normal"><a href="#__codelineno-17-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="nd">@Trace</span><span class="w"></span>
+<a id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="nd">@Tag</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s">&quot;getAll&quot;</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="s">&quot;returnedObj&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-17-4" name="__codelineno-17-4"></a><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">all</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">InterruptedException</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-17-5" name="__codelineno-17-5"></a><span class="w">    </span><span class="n">TimeUnit</span><span class="p">.</span><span class="na">SECONDS</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-17-6" name="__codelineno-17-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">orderMapper</span><span class="p">.</span><span class="na">selectAll</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-17-7" name="__codelineno-17-7"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>http://localhost:8072/order/all</p>
+<p>执行完测试代码，等待约两分钟后，告警接口的控制台输出了一段日志信息：</p>
+<p>​    <img alt="iShot_2022-12-02_11.04.216582306c06b39497.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_11.04.216582306c06b39497.png" /></p>
+<h4 id="8skywalking">8、Skywalking高可用</h4>
+<p>在大多数生产环境中，后端应用需要支持高吞吐量并且支持高可用来保证服务的稳定，所以你始终需要在生产环境进行集群管理。</p>
+<p>Skywalking集群是将skywalking oap作为一个服务注册到nacos上，只要skywalking oap服务没有全部宕机，保证有一个skywalking oap在运行，就能进行跟踪。</p>
+<p>搭建一个skywalking oap集群需要：</p>
+<p>（1）至少一个Nacos（也可以是nacos集群）</p>
+<p>（2）至少一个ElasticSearch/mysql（也可以是es/msql集群）</p>
+<p>（3）至少2个skywalking oap服务；</p>
+<p>（4）至少1个UI（UI也可以集群多个，用Nginx代理统一入口）</p>
+<p>1.修改config/application.yml文件</p>
+<p>使用nacos作为注册中心</p>
+<p>​    <img alt="iShot_2022-12-02_11.04.546b2850fae9564afe.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_11.04.546b2850fae9564afe.png" /></p>
+<p>修改nacos配置</p>
+<p>​    <img alt="iShot_2022-12-02_11.05.0227ac204ee1361541.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_11.05.0227ac204ee1361541.png" /></p>
+<p>可以选择性修改监听端口 </p>
+<p>​    <img alt="iShot_2022-12-02_11.05.12239f89d52545caad.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_11.05.12239f89d52545caad.png" /></p>
+<p>修改存储策略，使用elasticsearch7作为storage</p>
+<p>​    <img alt="iShot_2022-12-02_11.05.25b61a12b0bc8d178b.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_11.05.25b61a12b0bc8d178b.png" /></p>
+<ol>
+<li>配置ui服务webapp.yml文件的listOfServers，写两个地址</li>
+</ol>
+<p>​    <img alt="iShot_2022-12-02_11.05.4213b7c9ccdef486bf.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_11.05.4213b7c9ccdef486bf.png" /></p>
+<p>3.启动服务测试</p>
+<p>启动Skywalking服务，指定springboot应用的jvm参数</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a>-DSW_AGENT_COLLECTOR_BACKEND_SERVICES<span class="o">=</span><span class="m">192</span>.168.3.10:11800,192.168.3.12:11800
+</code></pre></div></td></tr></table></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            回到页面顶部
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="页脚" >
+      
+        
+        <a href="../08Spring%20Cloud%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3Gateway%E7%BB%84%E4%BB%B6/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 08Spring Cloud微服务网关Gateway组件" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              08Spring Cloud微服务网关Gateway组件
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../Nginx/01Nginx%E5%AE%89%E8%A3%85/" class="md-footer__link md-footer__link--next" aria-label="下一页: 01Nginx安装" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              01Nginx安装
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.top"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      
+    
+  </body>
+</html>

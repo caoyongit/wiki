@@ -1,0 +1,2247 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.8">
+    
+    
+      
+        <title>08Spring Cloud微服务网关Gateway组件 - Java Architect</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.815d1a91.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Java Architect" class="md-header__button md-logo" aria-label="Java Architect" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Java Architect
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              08Spring Cloud微服务网关Gateway组件
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Java Architect" class="md-nav__button md-logo" aria-label="Java Architect" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Java Architect
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Java源码系列
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Java源码系列" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Java源码系列
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_1">
+          Spring
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Spring" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Spring
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/00Spring%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/" class="md-nav__link">
+        0.Spring源码编译教程
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/01Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="md-nav__link">
+        1.Spring核心知识点
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/02%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="md-nav__link">
+        2.手写模拟Spring底层原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/03Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        3.Spring之底层架构核心概念解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/04Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+        4.Spring之Bean生命周期源码解析上
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/05Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+        5.Spring之Bean生命周期源码解析下
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/06Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+        6.Spring依赖注入源码解析上.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/07Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+        7.Spring依赖注入源码解析下.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/08Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E6%BA%90%E7%A0%81/" class="md-nav__link">
+        8.Spring循环依赖源码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/09Spring%E4%B9%8B%E6%8E%A8%E6%96%AD%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        9.Spring之推断构造方法源码解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/10Spring%E4%B9%8B%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        10.Spring之启动过程源码解析
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          微服务源码
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="微服务源码" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          微服务源码
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Microservice/01%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpringBoot%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B/" class="md-nav__link">
+        01手写模拟SpringBoot核心流程
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Microservice/02SpringBoot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%BA%95%E5%B1%82%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        02SpringBoot自动配置底层源码解析
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Spring Cloud Alibaba
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Spring Cloud Alibaba" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Spring Cloud Alibaba
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E7%BB%84%E4%BB%B6Feign/" class="md-nav__link">
+        04微服务调用组件Feign
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06Alibaba%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%84%E4%BB%B6Sentinel/" class="md-nav__link">
+        06微服务调用组件Feign
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          08Spring Cloud微服务网关Gateway组件
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        08Spring Cloud微服务网关Gateway组件
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    网关简介
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1spring-cloud-gateway" class="md-nav__link">
+    1.什么是Spring Cloud Gateway
+  </a>
+  
+    <nav class="md-nav" aria-label="1.什么是Spring Cloud Gateway">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    1.1 核心概念
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    1.2 工作原理
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2spring-cloud-gateway" class="md-nav__link">
+    2.Spring Cloud Gateway快速开始
+  </a>
+  
+    <nav class="md-nav" aria-label="2.Spring Cloud Gateway快速开始">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    2.1  环境搭建
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-route-predicate-factories" class="md-nav__link">
+    2.2 路由断言工厂（Route Predicate Factories）配置
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-gatewayfilter-factories" class="md-nav__link">
+    2.3 过滤器工厂（ GatewayFilter Factories）配置
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-global-filters" class="md-nav__link">
+    2.4 全局过滤器（Global Filters）配置
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-gatewaycors-configuration" class="md-nav__link">
+    2.5 Gateway跨域配置（CORS Configuration）
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-gatewaysentinel" class="md-nav__link">
+    2.6 gateway整合sentinel流控降级
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    2.7 网关高可用
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AASkyWalking/" class="md-nav__link">
+        09微服务链路追踪SkyWalking
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Nginx
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Nginx" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Nginx
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/01Nginx%E5%AE%89%E8%A3%85/" class="md-nav__link">
+        01Nginx安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/02Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        02Nginx配置文件解读
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/03Nginx%E4%BB%A3%E7%90%86/" class="md-nav__link">
+        03Nginx代理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/04Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="md-nav__link">
+        04Nginx负载均衡
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/05Nginx%E9%99%90%E6%B5%81%E7%86%94%E6%96%AD/" class="md-nav__link">
+        05Nginx限流熔断
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/06Nginx%E5%AE%9E%E7%8E%B0%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/" class="md-nav__link">
+        06Nginx实现动静分离
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/07Nginx%E8%B0%83%E4%BC%98/" class="md-nav__link">
+        07Nginx调优
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/08Nginx%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="md-nav__link">
+        08Nginx镜像服务器
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/09Nginx%E7%83%AD%E5%A4%87%E9%83%A8%E7%BD%B2/" class="md-nav__link">
+        09Nginx热备部署
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        10Nginx安全认证
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Redis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Redis" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Redis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB/" class="md-nav__link">
+        Redis面试突击
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB2/" class="md-nav__link">
+        Redis面试突击2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    网关简介
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1spring-cloud-gateway" class="md-nav__link">
+    1.什么是Spring Cloud Gateway
+  </a>
+  
+    <nav class="md-nav" aria-label="1.什么是Spring Cloud Gateway">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    1.1 核心概念
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    1.2 工作原理
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2spring-cloud-gateway" class="md-nav__link">
+    2.Spring Cloud Gateway快速开始
+  </a>
+  
+    <nav class="md-nav" aria-label="2.Spring Cloud Gateway快速开始">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    2.1  环境搭建
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-route-predicate-factories" class="md-nav__link">
+    2.2 路由断言工厂（Route Predicate Factories）配置
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-gatewayfilter-factories" class="md-nav__link">
+    2.3 过滤器工厂（ GatewayFilter Factories）配置
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-global-filters" class="md-nav__link">
+    2.4 全局过滤器（Global Filters）配置
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-gatewaycors-configuration" class="md-nav__link">
+    2.5 Gateway跨域配置（CORS Configuration）
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-gatewaysentinel" class="md-nav__link">
+    2.6 gateway整合sentinel流控降级
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27" class="md-nav__link">
+    2.7 网关高可用
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>08Spring Cloud微服务网关Gateway组件</h1>
+
+<h3 id="_1">网关简介</h3>
+<p>大家都都知道在微服务架构中，一个系统会被拆分为很多个微服务。那么作为客户端要如何去调用这么多的微服务呢？
+如果没有网关的存在，我们只能在客户端记录每个微服务的地址，然后分别去用。</p>
+<p><img alt="iShot_2022-11-30_22.24.37.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-11-30_22.24.37.png" /></p>
+<p><strong>这样的架构，会存在着诸多的问题：</strong></p>
+<ul>
+<li>每个业务都会需要鉴权、限流、权限校验、跨域等逻辑，如果每个业务都各自为战，自己造轮子实现一遍，会很蛋疼，完全可以抽出来，放到一个统一的地方去做。</li>
+<li>如果业务量比较简单的话，这种方式前期不会有什么问题，但随着业务越来越复杂，比如淘宝、亚马逊打开一个页面可能会涉及到数百个微服务协同工作，如果每一个微服务都分配一个域名的话，一方面客户端代码会很难维护，涉及到数百个域名，另一方面是连接数的瓶颈，想象一下你打开一个APP，通过抓包发现涉及到了数百个远程调用，这在移动端下会显得非常低效。</li>
+<li>后期如果需要对微服务进行重构的话，也会变的非常麻烦，需要客户端配合你一起进行改造，比如商品服务，随着业务变的越来越复杂，后期需要进行拆分成多个微服务，这个时候对外提供的服务也需要拆分成多个，同时需要客户端配合你进行改造，非常蛋疼。</li>
+</ul>
+<p>上面的这些问题可以借助API网关来解决。</p>
+<p><img alt="iShot_2022-11-30_22.25.55.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-11-30_22.25.55.png" /></p>
+<p><strong>所谓的API网关</strong>，就是指系统的统一入口，它封装了应用程序的内部结构，为客户端提供统一服务，一些与业务本身功能无关的公共逻辑可以在这里实现，诸如认证、鉴权、监控、路由转发等等。</p>
+<p>添加上API网关之后，系统的架构图变成了如下所示：</p>
+<p><img alt="iShot_2022-11-30_22.28.28.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-11-30_22.28.28.png" /></p>
+<p>我们也可以观察下，我们现在的整体架构图：</p>
+<p><img alt="Spring-Cloud.png" src="https://img.zivplus.xyz/images/2022/12/02/Spring-Cloud.png" /></p>
+<h3 id="1spring-cloud-gateway">1.什么是Spring Cloud Gateway</h3>
+<p>网关作为流量的入口，常用的功能包括路由转发，权限校验，限流等。</p>
+<p>Spring Cloud Gateway 是Spring Cloud官方推出的第二代网关框架，定位于取代 Netflix Zuul1.0。相比 Zuul 来说，Spring Cloud Gateway 提供更优秀的性能，更强大的有功能。</p>
+<p>Spring Cloud Gateway 是由 WebFlux + Netty + Reactor 实现的响应式的 API 网关。它不能在传统的 servlet 容器中工作，也不能构建成 war 包。</p>
+<p>Spring Cloud Gateway 旨在为微服务架构提供一种简单且有效的 API 路由的管理方式，并基于 Filter 的方式提供网关的基本功能，例如说安全认证、监控、限流等等。</p>
+<p>其他的网关组件：</p>
+<p>在SpringCloud微服务体系中，有个很重要的组件就是网关，在1.x版本中都是采用的Zuul网关；但在2.x版本中，zuul的升级一直跳票，SpringCloud最后自己研发了一个网关替代Zuul，那就是SpringCloud Gateway
+网上很多地方都说Zuul是阻塞的，Gateway是非阻塞的，这么说是不严谨的，准确的讲Zuul1.x是阻塞的，而在2.x的版本中，Zuul也是基于Netty，也是非阻塞的，如果一定要说性能，其实这个真没多大差距。</p>
+<p>而官方出过一个测试项目，创建了一个benchmark的测试项目：spring-cloud-gateway-bench，其中对比了：</p>
+<p><img alt="iShot_2022-11-30_22.31.29.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-11-30_22.31.29.png" /></p>
+<p>性能强劲：是第一代网关Zuul的1.6倍</p>
+<p>官网文档：https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#gateway-request-predicates-factories</p>
+<p><strong>Spring Cloud Gateway 功能特征</strong></p>
+<ul>
+<li>基于Spring Framework 5, Project Reactor 和 Spring Boot 2.0 进行构建；</li>
+<li>动态路由：能够匹配任何请求属性；</li>
+<li>支持路径重写;</li>
+<li>集成 Spring Cloud 服务发现功能（Nacos、Eruka）；</li>
+<li>可集成流控降级功能（Sentinel、Hystrix）；</li>
+<li>可以对路由指定易于编写的 Predicate（断言）和 Filter（过滤器）；</li>
+</ul>
+<h4 id="11">1.1 核心概念</h4>
+<ul>
+<li>路由（route) 
+  路由是网关中最基础的部分，路由信息包括一个ID、一个目的URI、一组断言工厂、一组Filter组成。如果断言为真，则说明请求的URL和配置的路由匹配。</li>
+<li>断言(predicates) 
+  Java8中的断言函数，SpringCloud Gateway中的断言函数类型是Spring5.0框架中的ServerWebExchange。断言函数允许开发者去定义匹配Http request中的任何信息，比如请求头和参数等。</li>
+<li>过滤器（Filter) 
+  SpringCloud Gateway中的filter分为Gateway FilIer和Global Filter。Filter可以对请求和响应进行处理。</li>
+</ul>
+<h4 id="12">1.2 工作原理</h4>
+<p><img alt="iShot_2022-11-30_22.36.01.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-11-30_22.36.01.png" /></p>
+<p>执行流程大体如下：</p>
+<ol>
+<li>Gateway Client向Gateway Server发送请求</li>
+<li>请求首先会被HttpWebHandlerAdapter进行提取组装成网关上下文</li>
+<li>然后网关的上下文会传递到DispatcherHandler，它负责将请求分发给RoutePredicateHandlerMapping</li>
+<li>RoutePredicateHandlerMapping负责路由查找，并根据路由断言判断路由是否可用</li>
+<li>如果过断言成功，由FilteringWebHandler创建过滤器链并调用</li>
+<li>请求会一次经过PreFilter--微服务--PostFilter的方法，最终返回响应</li>
+</ol>
+<h3 id="2spring-cloud-gateway">2.Spring Cloud Gateway快速开始</h3>
+<h4 id="21">2.1  环境搭建</h4>
+<ol>
+<li>引入依赖</li>
+</ol>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="cm">&lt;!-- gateway网关 --&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a> <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a> <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-gateway<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>注意：会和spring-webmvc的依赖冲突，需要排除spring-webmvc</p>
+<ol>
+<li>编写yml配置文件</li>
+</ol>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nt">server</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">  </span><span class="nt">application</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">api-gateway</span><span class="w"></span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="c1"># 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]</span><span class="w"></span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">product_route</span><span class="w"> </span><span class="c1"># 当前路由的标识, 要求唯一 </span><span class="w"></span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">    </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://localhost:8081</span><span class="w"> </span><span class="c1"># 请求要转发到的地址</span><span class="w"></span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"> </span><span class="c1"># 路由的优先级,数字越小级别越高</span><span class="w"></span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">    </span><span class="nt">predicates</span><span class="p">:</span><span class="w"> </span><span class="c1"># 断言(就是路由转发要满足的条件)</span><span class="w"></span>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Path=/product-serv/**</span><span class="w"> </span><span class="c1"># 当请求路径满足Path指定的规则时,才进行路由转发</span><span class="w"></span>
+<a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="w">    </span><span class="nt">filters</span><span class="p">:</span><span class="w"> </span><span class="c1"># 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改</span><span class="w"></span>
+<a id="__codelineno-1-17" name="__codelineno-1-17"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">StripPrefix=1</span><span class="w">    </span><span class="c1"># 转发之前去掉1层路径.</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>集成Nacos</p>
+<p>现在在配置文件中写死了转发路径的地址, 前面我们已经分析过地址写死带来的问题, 接下来我们从注册中心获取此地址。</p>
+<ol>
+<li><strong>引入依赖</strong></li>
+</ol>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="cm">&lt;!-- nacos服务注册与发现 --&gt;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>    <span class="nt">&lt;groupId&gt;</span>com.alibaba.cloud<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></td></tr></table></div>
+<ol>
+<li><strong>编写yml配置文件</strong></li>
+</ol>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span>
+<span class="normal"><a href="#__codelineno-3-16">16</a></span>
+<span class="normal"><a href="#__codelineno-3-17">17</a></span>
+<span class="normal"><a href="#__codelineno-3-18">18</a></span>
+<span class="normal"><a href="#__codelineno-3-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">server</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888</span><span class="w"></span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">  </span><span class="nt">application</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">api-gateway</span><span class="w"></span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">    </span><span class="nt">nacos</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">      </span><span class="nt">discovery</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">        </span><span class="nt">server-addr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1:8848</span><span class="w"></span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="w">  </span><span class="w w-Error"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">product_route</span><span class="w"></span>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="w">     </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lb://service-product</span><span class="w"> </span><span class="c1"># lb指的是从nacos中按照名称获取微服务,并遵循负载均衡策略</span><span class="w"></span>
+<a id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="w">     </span><span class="nt">predicates</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="w">       </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Path=/product-serve/**</span><span class="w"></span>
+<a id="__codelineno-3-18" name="__codelineno-3-18"></a><span class="w">         </span><span class="l l-Scalar l-Scalar-Plain">filters</span><span class="p p-Indicator">:</span><span class="w"></span>
+<a id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="w">       </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">StripPrefix=1</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>简写： 去掉关于路由的配置，自动寻找服务</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span>
+<span class="normal"><a href="#__codelineno-4-12">12</a></span>
+<span class="normal"><a href="#__codelineno-4-13">13</a></span>
+<span class="normal"><a href="#__codelineno-4-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>server:
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a>  port: 8888
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a>spring:
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a>  application:
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a>    name: api-gateway
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a>  cloud:
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a>    nacos:
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a>      discovery:
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a>        server-addr: 127.0.0.1:8848
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a>    gateway:
+<a id="__codelineno-4-12" name="__codelineno-4-12"></a>      discovery:
+<a id="__codelineno-4-13" name="__codelineno-4-13"></a>        locator:
+<a id="__codelineno-4-14" name="__codelineno-4-14"></a>          enabled: true
+</code></pre></div></td></tr></table></div>
+<ol>
+<li><strong>测试</strong></li>
+</ol>
+<p><img alt="iShot_2022-11-30_22.43.56.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-11-30_22.43.56.png" /></p>
+<p>这时候，就发现只要按照网关地址/微服务/接口的格式去访问，就可以得到成功响应。</p>
+<h4 id="22-route-predicate-factories">2.2 路由断言工厂（Route Predicate Factories）配置</h4>
+<p>https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#gateway-request-predicates-factories </p>
+<p>作用： 当请求gateway的时候，  使用断言对请求进行匹配， 如果匹配成功就路由转发， 如果匹配失败就返回404</p>
+<p>类型：内置，自定义</p>
+<p>SpringCloud Gateway包括许多内置的断言工厂，所有这些断言都与HTTP请求的不同属性匹配。具体如下：</p>
+<ul>
+<li>基于Datetime类型的断言工厂</li>
+</ul>
+<p>此类型的断言根据时间做判断，主要有三个：</p>
+<p>AfterRoutePredicateFactory： 接收一个日期参数，判断请求日期是否晚于指定日期
+  BeforeRoutePredicateFactory： 接收一个日期参数，判断请求日期是否早于指定日期
+  BetweenRoutePredicateFactory： 接收两个日期参数，判断请求日期是否在指定时间段内
+  ZonedDateTime.now()</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="l l-Scalar l-Scalar-Plain">After=2019-12-31T23:59:59.789+08:00[Asia/Shanghai]</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>基于远程地址的断言工厂  </li>
+</ul>
+<p>RemoteAddrRoutePredicateFactory：接收一个IP地址段，判断请求主机地址是否在地址段中</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="l l-Scalar l-Scalar-Plain">RemoteAddr=192.168.1.1/24</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>基于Cookie的断言工厂</li>
+</ul>
+<p>CookieRoutePredicateFactory：接收两个参数，cookie 名字和一个正则表达式。 判断请求
+  cookie是否具有给定名称且值与正则表达式匹配。</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cookie=chocolate, ch.</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>基于Header的断言工厂</li>
+</ul>
+<p>HeaderRoutePredicateFactory：接收两个参数，标题名称和正则表达式。  判断请求Header是否具有给定名称且值与正则表达式匹配。</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="l l-Scalar l-Scalar-Plain">-Header=X-Request-Id, \d+</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>基于Host的断言工厂
+  HostRoutePredicateFactory：接收一个参数，主机名模式。判断请求的Host是否满足匹配规则。</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>-Host=**.testhost.org
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>基于Method请求方法的断言工厂
+  MethodRoutePredicateFactory：接收一个参数，判断请求类型是否跟指定的类型匹配。</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>-Method=GET
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>基于Path请求路径的断言工厂
+  PathRoutePredicateFactory：接收一个参数，判断请求的URI部分是否满足路径规则。</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="l l-Scalar l-Scalar-Plain">-Path=/foo/{segment}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>基于Query请求参数的断言工厂</li>
+</ul>
+<p>QueryRoutePredicateFactory ：接收两个参数，请求param和正则表达式， 判断请求参数是否具有给定名称且值与正则表达式匹配。</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="l l-Scalar l-Scalar-Plain">-Query=baz, ba.</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>基于路由权重的断言工厂</li>
+</ul>
+<p>WeightRoutePredicateFactory：接收一个[组名,权重], 然后对于同一个组内的路由按照权重转发</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-13-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-13-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-13-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-13-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-13-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-13-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-13-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-13-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-13-10">10</a></span>
+<span class="normal"><a href="#__codelineno-13-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>routes:
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a>    -id: weight_route1 
+<a id="__codelineno-13-3" name="__codelineno-13-3"></a>     uri: host1 
+<a id="__codelineno-13-4" name="__codelineno-13-4"></a>     predicates:
+<a id="__codelineno-13-5" name="__codelineno-13-5"></a>        -Path=/product/**
+<a id="__codelineno-13-6" name="__codelineno-13-6"></a>        -Weight=group3, 1
+<a id="__codelineno-13-7" name="__codelineno-13-7"></a>    -id: weight_route2 
+<a id="__codelineno-13-8" name="__codelineno-13-8"></a>    uri: host2 
+<a id="__codelineno-13-9" name="__codelineno-13-9"></a>    predicates:
+<a id="__codelineno-13-10" name="__codelineno-13-10"></a>        -Path=/product/**
+<a id="__codelineno-13-11" name="__codelineno-13-11"></a>        -Weight= group3, 9
+</code></pre></div></td></tr></table></div>
+<p><strong>2.2.1 自定义路由断言工厂</strong></p>
+<p>自定义路由断言工厂需要继承 AbstractRoutePredicateFactory 类，重写 apply 方法的逻辑。在 apply 方法中可以通过 exchange.getRequest() 拿到 ServerHttpRequest 对象，从而可以获取到请求的参数、请求方式、请求头等信息。 </p>
+<ol>
+<li>必须spring组件 bean</li>
+<li>类必须加上RoutePredicateFactory作为结尾</li>
+<li>必须继承AbstractRoutePredicateFactory</li>
+<li>必须声明静态内部类   声明属性来接收 配置文件中对应的断言的信息</li>
+<li>需要结合shortcutFieldOrder进行绑定</li>
+<li>通过apply进行逻辑判断  true就是匹配成功   false匹配失败</li>
+</ol>
+<p><strong>注意： 命名需要以 RoutePredicateFactory 结尾</strong></p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-14-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-14-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-14-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-14-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-14-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-14-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-14-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-14-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-14-10">10</a></span>
+<span class="normal"><a href="#__codelineno-14-11">11</a></span>
+<span class="normal"><a href="#__codelineno-14-12">12</a></span>
+<span class="normal"><a href="#__codelineno-14-13">13</a></span>
+<span class="normal"><a href="#__codelineno-14-14">14</a></span>
+<span class="normal"><a href="#__codelineno-14-15">15</a></span>
+<span class="normal"><a href="#__codelineno-14-16">16</a></span>
+<span class="normal"><a href="#__codelineno-14-17">17</a></span>
+<span class="normal"><a href="#__codelineno-14-18">18</a></span>
+<span class="normal"><a href="#__codelineno-14-19">19</a></span>
+<span class="normal"><a href="#__codelineno-14-20">20</a></span>
+<span class="normal"><a href="#__codelineno-14-21">21</a></span>
+<span class="normal"><a href="#__codelineno-14-22">22</a></span>
+<span class="normal"><a href="#__codelineno-14-23">23</a></span>
+<span class="normal"><a href="#__codelineno-14-24">24</a></span>
+<span class="normal"><a href="#__codelineno-14-25">25</a></span>
+<span class="normal"><a href="#__codelineno-14-26">26</a></span>
+<span class="normal"><a href="#__codelineno-14-27">27</a></span>
+<span class="normal"><a href="#__codelineno-14-28">28</a></span>
+<span class="normal"><a href="#__codelineno-14-29">29</a></span>
+<span class="normal"><a href="#__codelineno-14-30">30</a></span>
+<span class="normal"><a href="#__codelineno-14-31">31</a></span>
+<span class="normal"><a href="#__codelineno-14-32">32</a></span>
+<span class="normal"><a href="#__codelineno-14-33">33</a></span>
+<span class="normal"><a href="#__codelineno-14-34">34</a></span>
+<span class="normal"><a href="#__codelineno-14-35">35</a></span>
+<span class="normal"><a href="#__codelineno-14-36">36</a></span>
+<span class="normal"><a href="#__codelineno-14-37">37</a></span>
+<span class="normal"><a href="#__codelineno-14-38">38</a></span>
+<span class="normal"><a href="#__codelineno-14-39">39</a></span>
+<span class="normal"><a href="#__codelineno-14-40">40</a></span>
+<span class="normal"><a href="#__codelineno-14-41">41</a></span>
+<span class="normal"><a href="#__codelineno-14-42">42</a></span>
+<span class="normal"><a href="#__codelineno-14-43">43</a></span>
+<span class="normal"><a href="#__codelineno-14-44">44</a></span>
+<span class="normal"><a href="#__codelineno-14-45">45</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="nd">@Component</span><span class="w"></span>
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="nd">@Slf4j</span><span class="w"></span>
+<a id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CheckAuthRoutePredicateFactory</span><span class="w"> </span><span class="kd">extends</span><span class="w">     </span><span class="n">AbstractRoutePredicateFactory</span><span class="o">&lt;</span><span class="n">CheckAuthRoutePredicateFactory</span><span class="p">.</span><span class="na">Config</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-14-4" name="__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5"></a><span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="nf">CheckAuthRoutePredicateFactory</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-14-6" name="__codelineno-14-6"></a><span class="w">      </span><span class="kd">super</span><span class="p">(</span><span class="n">Config</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-14-7" name="__codelineno-14-7"></a><span class="w">  </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-14-8" name="__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9"></a><span class="w">  </span><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-14-10" name="__codelineno-14-10"></a><span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="n">Predicate</span><span class="o">&lt;</span><span class="n">ServerWebExchange</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">Config</span><span class="w"> </span><span class="n">config</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-14-11" name="__codelineno-14-11"></a><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">GatewayPredicate</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-14-12" name="__codelineno-14-12"></a>
+<a id="__codelineno-14-13" name="__codelineno-14-13"></a><span class="w">          </span><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-14-14" name="__codelineno-14-14"></a><span class="w">          </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="n">ServerWebExchange</span><span class="w"> </span><span class="n">serverWebExchange</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-14-15" name="__codelineno-14-15"></a><span class="w">              </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;调用CheckAuthRoutePredicateFactory&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">config</span><span class="p">.</span><span class="na">getName</span><span class="p">());</span><span class="w"></span>
+<a id="__codelineno-14-16" name="__codelineno-14-16"></a><span class="w">              </span><span class="k">if</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="na">getName</span><span class="p">().</span><span class="na">equals</span><span class="p">(</span><span class="s">&quot;xushu&quot;</span><span class="p">)){</span><span class="w"></span>
+<a id="__codelineno-14-17" name="__codelineno-14-17"></a><span class="w">                  </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-14-18" name="__codelineno-14-18"></a><span class="w">              </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-14-19" name="__codelineno-14-19"></a><span class="w">              </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-14-20" name="__codelineno-14-20"></a><span class="w">          </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-14-21" name="__codelineno-14-21"></a><span class="w">      </span><span class="p">};</span><span class="w"></span>
+<a id="__codelineno-14-22" name="__codelineno-14-22"></a><span class="w">  </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-14-23" name="__codelineno-14-23"></a>
+<a id="__codelineno-14-24" name="__codelineno-14-24"></a><span class="w">  </span><span class="cm">/**</span>
+<a id="__codelineno-14-25" name="__codelineno-14-25"></a><span class="cm">   * 快捷配置</span>
+<a id="__codelineno-14-26" name="__codelineno-14-26"></a><span class="cm">   * @return</span>
+<a id="__codelineno-14-27" name="__codelineno-14-27"></a><span class="cm">   */</span><span class="w"></span>
+<a id="__codelineno-14-28" name="__codelineno-14-28"></a><span class="w">  </span><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-14-29" name="__codelineno-14-29"></a><span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">shortcutFieldOrder</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-14-30" name="__codelineno-14-30"></a><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">Collections</span><span class="p">.</span><span class="na">singletonList</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-14-31" name="__codelineno-14-31"></a><span class="w">  </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-14-32" name="__codelineno-14-32"></a>
+<a id="__codelineno-14-33" name="__codelineno-14-33"></a><span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Config</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-14-34" name="__codelineno-14-34"></a>
+<a id="__codelineno-14-35" name="__codelineno-14-35"></a><span class="w">      </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-14-36" name="__codelineno-14-36"></a>
+<a id="__codelineno-14-37" name="__codelineno-14-37"></a><span class="w">      </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getName</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-14-38" name="__codelineno-14-38"></a><span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-14-39" name="__codelineno-14-39"></a><span class="w">      </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-14-40" name="__codelineno-14-40"></a>
+<a id="__codelineno-14-41" name="__codelineno-14-41"></a><span class="w">      </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setName</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-14-42" name="__codelineno-14-42"></a><span class="w">          </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-14-43" name="__codelineno-14-43"></a><span class="w">      </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-14-44" name="__codelineno-14-44"></a><span class="w">  </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-14-45" name="__codelineno-14-45"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<strong>yml中配置</strong></p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-15-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-15-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-15-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-15-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-15-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-15-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-15-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-15-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-15-10">10</a></span>
+<span class="normal"><a href="#__codelineno-15-11">11</a></span>
+<span class="normal"><a href="#__codelineno-15-12">12</a></span>
+<span class="normal"><a href="#__codelineno-15-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="w">      </span><span class="c1">#设置路由：路由id、路由到微服务的uri、断言</span><span class="w"></span>
+<a id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-15-6" name="__codelineno-15-6"></a>
+<a id="__codelineno-15-7" name="__codelineno-15-7"></a><span class="w">  </span><span class="w w-Error"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">order_route</span><span class="w">  </span><span class="c1">#路由ID，全局唯一</span><span class="w"></span>
+<a id="__codelineno-15-8" name="__codelineno-15-8"></a><span class="w">     </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://localhost:8020</span><span class="w">  </span><span class="c1">#目标微服务的请求地址和端口</span><span class="w"></span>
+<a id="__codelineno-15-9" name="__codelineno-15-9"></a><span class="w">     </span><span class="nt">predicates</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-15-10" name="__codelineno-15-10"></a><span class="w">     </span><span class="c1"># 测试：http://localhost:8888/order/findOrderByUserId/1</span><span class="w"></span>
+<a id="__codelineno-15-11" name="__codelineno-15-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Path=/order/**</span><span class="w">   </span><span class="c1">#Path路径匹配</span><span class="w"></span>
+<a id="__codelineno-15-12" name="__codelineno-15-12"></a><span class="w">      </span><span class="c1">#自定义CheckAuth断言工厂 </span><span class="w"></span>
+<a id="__codelineno-15-13" name="__codelineno-15-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckAuth=xushu</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<h4 id="23-gatewayfilter-factories">2.3 过滤器工厂（ GatewayFilter Factories）配置</h4>
+<p>Gateway 内置了很多的过滤器工厂，我们通过一些过滤器工厂可以进行一些业务逻辑处理器，比如添加剔除响应头，添加去除参数等</p>
+<p><img alt="iShot_2022-12-02_00.11.13.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_00.11.13.png" /></p>
+<table>
+<thead>
+<tr>
+<th><strong>过滤器工厂</strong></th>
+<th><strong>作用</strong></th>
+<th><strong>参数</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AddRequestHeader</td>
+<td>为原始请求添加Header</td>
+<td>Header的名称及值</td>
+</tr>
+<tr>
+<td>AddRequestParameter</td>
+<td>为原始请求添加请求参数</td>
+<td>参数名称及值</td>
+</tr>
+<tr>
+<td>AddResponseHeader</td>
+<td>为原始响应添加Header</td>
+<td>Header的名称及值</td>
+</tr>
+<tr>
+<td>DedupeResponseHeader</td>
+<td>剔除响应头中重复的值</td>
+<td>需要去重的Header名称及去重策略</td>
+</tr>
+<tr>
+<td>Hystrix</td>
+<td>为路由引入Hystrix的断路器保护</td>
+<td>HystrixCommand 的名称</td>
+</tr>
+<tr>
+<td>FallbackHeaders</td>
+<td>为fallbackUri的请求头中添加具体的异常信息</td>
+<td>Header的名称</td>
+</tr>
+<tr>
+<td>PreﬁxPath</td>
+<td>为原始请求路径添加前缀</td>
+<td>前缀路径</td>
+</tr>
+<tr>
+<td>PreserveHostHeader</td>
+<td>为请求添加一个preserveHostHeader=true 的 属 性，路由过滤器会检查该属性以决定是否要发送原始的Host</td>
+<td>无</td>
+</tr>
+<tr>
+<td>RequestRateLimiter</td>
+<td>用于对请求限流，限流算法为令牌桶</td>
+<td>keyResolver、rateLimiter、statusCode、denyEmptyKey、emptyKeyStatus</td>
+</tr>
+<tr>
+<td>RedirectTo</td>
+<td>将原始请求重定向到指定的URL</td>
+<td>http状态码及重定向的url</td>
+</tr>
+<tr>
+<td>RemoveHopByHopHeadersFilter</td>
+<td>为原始请求删除IETF组织规定的一系列Header</td>
+<td>默认就会启用，可以通过配置指定仅删除哪些Header</td>
+</tr>
+<tr>
+<td>RemoveRequestHeader</td>
+<td>为原始请求删除某个Header</td>
+<td>Header名称</td>
+</tr>
+<tr>
+<td>RemoveResponseHeader</td>
+<td>为原始响应删除某个Header</td>
+<td>Header名称</td>
+</tr>
+<tr>
+<td>RewritePath</td>
+<td>重写原始的请求路径</td>
+<td>原始路径正则表达式以及重写后路径的正则表达式</td>
+</tr>
+<tr>
+<td>RewriteResponseHeader</td>
+<td>重写原始响应中的某个Header</td>
+<td>Header名称，值的正 则表达式，重写后的值</td>
+</tr>
+<tr>
+<td>SaveSession</td>
+<td>在转发请求之前，强制执行WebSession::save 操作</td>
+<td>无</td>
+</tr>
+<tr>
+<td>secureHeaders</td>
+<td>为原始响应添加一系列起安全作用的响应头</td>
+<td>无，支持修改这些安全响应头的值</td>
+</tr>
+<tr>
+<td>SetPath</td>
+<td>修改原始的请求路径</td>
+<td>修改后的路径</td>
+</tr>
+<tr>
+<td>SetResponseHeader</td>
+<td>修改原始响应中某个Header的值</td>
+<td>Header名称，修改后的值</td>
+</tr>
+<tr>
+<td>SetStatus</td>
+<td>修改原始响应的状态码</td>
+<td>HTTP 状态码，可以是数字，也可以是字符串</td>
+</tr>
+<tr>
+<td>StripPreﬁx</td>
+<td>用于截断原始请求的路径</td>
+<td>使用数字表示要截断的路径的数量</td>
+</tr>
+<tr>
+<td>Retry</td>
+<td>针对不同的响应进行重试</td>
+<td>retries、statuses、methods、series</td>
+</tr>
+<tr>
+<td>RequestSize</td>
+<td>设置允许接收最大请求包的大 小。如果请求包大小超过设置的值，则返回 413 Payload TooLarge</td>
+<td>请求包大小，单位为字节，默认值为5M</td>
+</tr>
+<tr>
+<td>ModifyRequestBody</td>
+<td>在转发请求之前修改原始请求体内容</td>
+<td>修改后的请求体内容</td>
+</tr>
+<tr>
+<td>ModifyResponseBody</td>
+<td>修改原始响应体的内容</td>
+<td>修改后的响应体内容</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#gatewayfilter-factories">https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#gatewayfilter-factories</a></p>
+<p><strong>2.3.1 添加请求头</strong> </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-16-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-16-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-16-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-16-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-16-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-16-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-16-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-16-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-16-10">10</a></span>
+<span class="normal"><a href="#__codelineno-16-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-16-4" name="__codelineno-16-4"></a><span class="w">      </span><span class="c1">#设置路由：路由id、路由到微服务的uri、断言</span><span class="w"></span>
+<a id="__codelineno-16-5" name="__codelineno-16-5"></a><span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-16-6" name="__codelineno-16-6"></a>
+<a id="__codelineno-16-7" name="__codelineno-16-7"></a><span class="w">  </span><span class="w w-Error"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">order_route</span><span class="w">  </span><span class="c1">#路由ID，全局唯一</span><span class="w"></span>
+<a id="__codelineno-16-8" name="__codelineno-16-8"></a><span class="w">     </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://localhost:8020</span><span class="w">  </span><span class="c1">#目标微服务的请求地址和端口</span><span class="w"></span>
+<a id="__codelineno-16-9" name="__codelineno-16-9"></a><span class="w">     </span><span class="c1">#配置过滤器工厂</span><span class="w"></span>
+<a id="__codelineno-16-10" name="__codelineno-16-10"></a><span class="w">     </span><span class="nt">filters</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-16-11" name="__codelineno-16-11"></a><span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AddRequestHeader=X-Request-color, red</span><span class="w">  </span><span class="c1">#添加请求头</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>测试http://localhost:8888/order/testgateway</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-17-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-17-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-17-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-17-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-17-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-17-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-17-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-17-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-17-10">10</a></span>
+<span class="normal"><a href="#__codelineno-17-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/testgateway&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">testGateway</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;gateWay获取请求头X-Request-color：&quot;</span><span class="w"></span>
+<a id="__codelineno-17-4" name="__codelineno-17-4"></a><span class="w">            </span><span class="o">+</span><span class="n">request</span><span class="p">.</span><span class="na">getHeader</span><span class="p">(</span><span class="s">&quot;X-Request-color&quot;</span><span class="p">));</span><span class="w"></span>
+<a id="__codelineno-17-5" name="__codelineno-17-5"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;success&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-17-6" name="__codelineno-17-6"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-17-7" name="__codelineno-17-7"></a><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/testgateway2&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-17-8" name="__codelineno-17-8"></a><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">testGateway</span><span class="p">(</span><span class="nd">@RequestHeader</span><span class="p">(</span><span class="s">&quot;X-Request-color&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">color</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-17-9" name="__codelineno-17-9"></a><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;gateWay获取请求头X-Request-color：&quot;</span><span class="o">+</span><span class="n">color</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-17-10" name="__codelineno-17-10"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;success&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-17-11" name="__codelineno-17-11"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p><img alt="iShot_2022-12-02_00.25.54.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_00.25.54.png" /></p>
+<p><strong>2.3.2 添加请求参数</strong></p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-18-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-18-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-18-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-18-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-18-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-18-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-18-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-18-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-18-10">10</a></span>
+<span class="normal"><a href="#__codelineno-18-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-18-3" name="__codelineno-18-3"></a><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="w">      </span><span class="c1">#设置路由：路由id、路由到微服务的uri、断言</span><span class="w"></span>
+<a id="__codelineno-18-5" name="__codelineno-18-5"></a><span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-18-6" name="__codelineno-18-6"></a>
+<a id="__codelineno-18-7" name="__codelineno-18-7"></a><span class="w">  </span><span class="w w-Error"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">order_route</span><span class="w">  </span><span class="c1">#路由ID，全局唯一</span><span class="w"></span>
+<a id="__codelineno-18-8" name="__codelineno-18-8"></a><span class="w">     </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://localhost:8020</span><span class="w">  </span><span class="c1">#目标微服务的请求地址和端口</span><span class="w"></span>
+<a id="__codelineno-18-9" name="__codelineno-18-9"></a><span class="w">     </span><span class="c1">#配置过滤器工厂</span><span class="w"></span>
+<a id="__codelineno-18-10" name="__codelineno-18-10"></a><span class="w">     </span><span class="nt">filters</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-18-11" name="__codelineno-18-11"></a><span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AddRequestParameter=color, blue</span><span class="w">  </span><span class="c1"># 添加请求参数</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>测试http://localhost:8888/order/testgateway3</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span>
+<span class="normal"><a href="#__codelineno-19-2">2</a></span>
+<span class="normal"><a href="#__codelineno-19-3">3</a></span>
+<span class="normal"><a href="#__codelineno-19-4">4</a></span>
+<span class="normal"><a href="#__codelineno-19-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/testgateway3&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-19-2" name="__codelineno-19-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">testGateway3</span><span class="p">(</span><span class="nd">@RequestParam</span><span class="p">(</span><span class="s">&quot;color&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">color</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-19-3" name="__codelineno-19-3"></a><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;gateWay获取请求参数color:&quot;</span><span class="o">+</span><span class="n">color</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-19-4" name="__codelineno-19-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;success&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-19-5" name="__codelineno-19-5"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p><img alt="iShot_2022-12-02_00.26.44.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_00.26.44.png" /></p>
+<p><strong>2.3.3 为匹配的路由统一添加前缀</strong></p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-20-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-20-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-20-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-20-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-20-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-20-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-20-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-20-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-20-10">10</a></span>
+<span class="normal"><a href="#__codelineno-20-11">11</a></span>
+<span class="normal"><a href="#__codelineno-20-12">12</a></span>
+<span class="normal"><a href="#__codelineno-20-13">13</a></span>
+<span class="normal"><a href="#__codelineno-20-14">14</a></span>
+<span class="normal"><a href="#__codelineno-20-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-20-4" name="__codelineno-20-4"></a><span class="w">      </span><span class="c1">#设置路由：路由id、路由到微服务的uri、断言</span><span class="w"></span>
+<a id="__codelineno-20-5" name="__codelineno-20-5"></a><span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-20-6" name="__codelineno-20-6"></a>
+<a id="__codelineno-20-7" name="__codelineno-20-7"></a><span class="w">  </span><span class="w w-Error"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">order_route</span><span class="w">  </span><span class="c1">#路由ID，全局唯一</span><span class="w"></span>
+<a id="__codelineno-20-8" name="__codelineno-20-8"></a><span class="w">     </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://localhost:8020</span><span class="w">  </span><span class="c1">#目标微服务的请求地址和端口</span><span class="w"></span>
+<a id="__codelineno-20-9" name="__codelineno-20-9"></a><span class="w">     </span><span class="c1">#配置过滤器工厂</span><span class="w"></span>
+<a id="__codelineno-20-10" name="__codelineno-20-10"></a><span class="w">     </span><span class="nt">filters</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-20-11" name="__codelineno-20-11"></a><span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PrefixPath=/mall-order</span><span class="w">  </span><span class="c1"># 添加前缀 对应微服务需要配置context-path</span><span class="w"></span>
+<a id="__codelineno-20-12" name="__codelineno-20-12"></a><span class="w">       </span><span class="l l-Scalar l-Scalar-Plain">mall-order中需要配置</span><span class="w"></span>
+<a id="__codelineno-20-13" name="__codelineno-20-13"></a><span class="w">       </span><span class="l l-Scalar l-Scalar-Plain">server</span><span class="p p-Indicator">:</span><span class="w"></span>
+<a id="__codelineno-20-14" name="__codelineno-20-14"></a><span class="w">       </span><span class="nt">servlet</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-20-15" name="__codelineno-20-15"></a><span class="w">         </span><span class="nt">context-path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/mall-order</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>测试：</p>
+<p>http://localhost:8888/order/findOrderByUserId/1  ====》 http://localhost:8020/mall-order/order/findOrderByUserId/1</p>
+<p><strong>2.3.4  重定向操作</strong></p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-21-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-21-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-21-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-21-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-21-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-21-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-21-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-21-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-21-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-21-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1"></a>spring:
+<a id="__codelineno-21-2" name="__codelineno-21-2"></a>  cloud:
+<a id="__codelineno-21-3" name="__codelineno-21-3"></a>    gateway:
+<a id="__codelineno-21-4" name="__codelineno-21-4"></a>      #设置路由：路由id、路由到微服务的uri、断言
+<a id="__codelineno-21-5" name="__codelineno-21-5"></a>      routes:
+<a id="__codelineno-21-6" name="__codelineno-21-6"></a>      - id: order_route  #路由ID，全局唯一
+<a id="__codelineno-21-7" name="__codelineno-21-7"></a>        uri: http://localhost:8020  #目标微服务的请求地址和端口
+<a id="__codelineno-21-8" name="__codelineno-21-8"></a>        #配置过滤器工厂
+<a id="__codelineno-21-9" name="__codelineno-21-9"></a>        filters:
+<a id="__codelineno-21-10" name="__codelineno-21-10"></a>        - RedirectTo=302, https://www.baidu.com/  #重定向到百度
+</code></pre></div></td></tr></table></div>
+<p>测试：http://localhost:8888/order/findOrderByUserId/1 </p>
+<p><strong>2.3.5 自定义过滤器工厂</strong>
+继承AbstractNameValueGatewayFilterFactory且我们的自定义名称必须要以GatewayFilterFactory结尾并交给spring管理。</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-22-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-22-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-22-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-22-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-22-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-22-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-22-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-22-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-22-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-22-10">10</a></span>
+<span class="normal"><a href="#__codelineno-22-11">11</a></span>
+<span class="normal"><a href="#__codelineno-22-12">12</a></span>
+<span class="normal"><a href="#__codelineno-22-13">13</a></span>
+<span class="normal"><a href="#__codelineno-22-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1"></a><span class="nd">@Component</span><span class="w"></span>
+<a id="__codelineno-22-2" name="__codelineno-22-2"></a><span class="nd">@Slf4j</span><span class="w"></span>
+<a id="__codelineno-22-3" name="__codelineno-22-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CheckAuthGatewayFilterFactory</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AbstractNameValueGatewayFilterFactory</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-22-4" name="__codelineno-22-4"></a>
+<a id="__codelineno-22-5" name="__codelineno-22-5"></a><span class="w">    </span><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-22-6" name="__codelineno-22-6"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">GatewayFilter</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">NameValueConfig</span><span class="w"> </span><span class="n">config</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-22-7" name="__codelineno-22-7"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">exchange</span><span class="p">,</span><span class="w"> </span><span class="n">chain</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-22-8" name="__codelineno-22-8"></a><span class="w">            </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;调用CheckAuthGatewayFilterFactory===&quot;</span><span class="w"></span>
+<a id="__codelineno-22-9" name="__codelineno-22-9"></a><span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="n">config</span><span class="p">.</span><span class="na">getName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;:&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">config</span><span class="p">.</span><span class="na">getValue</span><span class="p">());</span><span class="w"></span>
+<a id="__codelineno-22-10" name="__codelineno-22-10"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">chain</span><span class="p">.</span><span class="na">filter</span><span class="p">(</span><span class="n">exchange</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-22-11" name="__codelineno-22-11"></a><span class="w">        </span><span class="p">};</span><span class="w"></span>
+<a id="__codelineno-22-12" name="__codelineno-22-12"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-22-13" name="__codelineno-22-13"></a>
+<a id="__codelineno-22-14" name="__codelineno-22-14"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>配置自定义的过滤器工厂</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-23-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-23-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-23-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-23-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-23-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-23-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-23-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-23-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-23-10">10</a></span>
+<span class="normal"><a href="#__codelineno-23-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a>spring:
+<a id="__codelineno-23-2" name="__codelineno-23-2"></a>  cloud:
+<a id="__codelineno-23-3" name="__codelineno-23-3"></a>    gateway:
+<a id="__codelineno-23-4" name="__codelineno-23-4"></a>      #设置路由：路由id、路由到微服务的uri、断言
+<a id="__codelineno-23-5" name="__codelineno-23-5"></a>      routes:
+<a id="__codelineno-23-6" name="__codelineno-23-6"></a>
+<a id="__codelineno-23-7" name="__codelineno-23-7"></a>   - id: order_route  #路由ID，全局唯一
+<a id="__codelineno-23-8" name="__codelineno-23-8"></a>     uri: http://localhost:8020  #目标微服务的请求地址和端口
+<a id="__codelineno-23-9" name="__codelineno-23-9"></a>     #配置过滤器工厂
+<a id="__codelineno-23-10" name="__codelineno-23-10"></a>     filters:
+<a id="__codelineno-23-11" name="__codelineno-23-11"></a>     - CheckAuth=fox,男
+</code></pre></div></td></tr></table></div>
+<p>测试</p>
+<p><img alt="iShot_2022-12-02_00.27.22.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_00.27.22.png" /></p>
+<h4 id="24-global-filters">2.4 全局过滤器（Global Filters）配置</h4>
+<p><img alt="iShot_2022-12-02_00.27.38.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_00.27.38.png" /></p>
+<p>局部过滤器和全局过滤器区别：  </p>
+<p>局部：局部针对某个路由， 需要在路由中进行配置</p>
+<p>全局：针对所有路由请求， 一旦定义就会投入使用</p>
+<p>GlobalFilter 接口和 GatewayFilter 有一样的接口定义，只不过， GlobalFilter 会作用于所有路由。 </p>
+<p><strong>2.4.1 LoadBalancerClientFilter</strong></p>
+<p>LoadBalancerClientFilter 会查看exchange的属性 ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR 的值（一个URI），如果该值的scheme是 lb，比如：lb://myservice ，它将会使用Spring Cloud的LoadBalancerClient 来将 myservice 解析成实际的host和port，并替换掉 ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR 的内容。</p>
+<p>其实就是用来整合负载均衡器Ribbon的</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1">1</a></span>
+<span class="normal"><a href="#__codelineno-24-2">2</a></span>
+<span class="normal"><a href="#__codelineno-24-3">3</a></span>
+<span class="normal"><a href="#__codelineno-24-4">4</a></span>
+<span class="normal"><a href="#__codelineno-24-5">5</a></span>
+<span class="normal"><a href="#__codelineno-24-6">6</a></span>
+<span class="normal"><a href="#__codelineno-24-7">7</a></span>
+<span class="normal"><a href="#__codelineno-24-8">8</a></span>
+<span class="normal"><a href="#__codelineno-24-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-24-2" name="__codelineno-24-2"></a><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-24-3" name="__codelineno-24-3"></a><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-24-4" name="__codelineno-24-4"></a><span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-24-5" name="__codelineno-24-5"></a>
+<a id="__codelineno-24-6" name="__codelineno-24-6"></a><span class="w">  </span><span class="w w-Error"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">order_route</span><span class="w"></span>
+<a id="__codelineno-24-7" name="__codelineno-24-7"></a><span class="w">     </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lb://mall-order</span><span class="w"></span>
+<a id="__codelineno-24-8" name="__codelineno-24-8"></a><span class="w">     </span><span class="nt">predicates</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-24-9" name="__codelineno-24-9"></a><span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Path=/order/**</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p><strong>2.4.2 自定义全局过滤器</strong></p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-25-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-25-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-25-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-25-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-25-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-25-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-25-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-25-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-25-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-25-10">10</a></span>
+<span class="normal"><a href="#__codelineno-25-11">11</a></span>
+<span class="normal"><a href="#__codelineno-25-12">12</a></span>
+<span class="normal"><a href="#__codelineno-25-13">13</a></span>
+<span class="normal"><a href="#__codelineno-25-14">14</a></span>
+<span class="normal"><a href="#__codelineno-25-15">15</a></span>
+<span class="normal"><a href="#__codelineno-25-16">16</a></span>
+<span class="normal"><a href="#__codelineno-25-17">17</a></span>
+<span class="normal"><a href="#__codelineno-25-18">18</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1"></a><span class="cm">/***</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2"></a>
+<a id="__codelineno-25-3" name="__codelineno-25-3"></a><span class="cm"> * @Author 徐庶   QQ:1092002729</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4"></a>
+<a id="__codelineno-25-5" name="__codelineno-25-5"></a><span class="cm"> * @Slogan 致敬大师，致敬未来的你</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6"></a><span class="cm">   */</span><span class="w"></span>
+<a id="__codelineno-25-7" name="__codelineno-25-7"></a><span class="nd">@Component</span><span class="w"></span>
+<a id="__codelineno-25-8" name="__codelineno-25-8"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LogFilter</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">GlobalFilter</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-25-9" name="__codelineno-25-9"></a><span class="w">  </span><span class="n">Logger</span><span class="w"> </span><span class="n">log</span><span class="o">=</span><span class="w"> </span><span class="n">LoggerFactory</span><span class="p">.</span><span class="na">getLogger</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">getClass</span><span class="p">());</span><span class="w"></span>
+<a id="__codelineno-25-10" name="__codelineno-25-10"></a>
+<a id="__codelineno-25-11" name="__codelineno-25-11"></a><span class="w">  </span><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-25-12" name="__codelineno-25-12"></a><span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="n">Mono</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="n">ServerWebExchange</span><span class="w"> </span><span class="n">exchange</span><span class="p">,</span><span class="w"> </span><span class="n">GatewayFilterChain</span><span class="w"> </span><span class="n">chain</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-25-13" name="__codelineno-25-13"></a>
+<a id="__codelineno-25-14" name="__codelineno-25-14"></a><span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="n">exchange</span><span class="p">.</span><span class="na">getRequest</span><span class="p">().</span><span class="na">getPath</span><span class="p">().</span><span class="na">value</span><span class="p">());</span><span class="w"></span>
+<a id="__codelineno-25-15" name="__codelineno-25-15"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">chain</span><span class="p">.</span><span class="na">filter</span><span class="p">(</span><span class="n">exchange</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-25-16" name="__codelineno-25-16"></a>
+<a id="__codelineno-25-17" name="__codelineno-25-17"></a><span class="w">  </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-25-18" name="__codelineno-25-18"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>Reactor Netty 访问日志</p>
+<p>要启用 Reactor Netty 访问日志，请设置-Dreactor.netty.http.server.accessLogEnabled=true.</p>
+<p>它必须是 Java 系统属性，而不是 Spring Boot 属性。</p>
+<p>您可以将日志记录系统配置为具有单独的访问日志文件。以下示例创建一个 Logback 配置：</p>
+<p>例 67.logback.xml</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-26-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-26-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-26-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-26-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-26-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-26-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-26-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-26-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-26-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-26-10">10</a></span>
+<span class="normal"><a href="#__codelineno-26-11">11</a></span>
+<span class="normal"><a href="#__codelineno-26-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1"></a><span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;accessLog&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.FileAppender&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2"></a>        <span class="nt">&lt;file&gt;</span>access_log.log<span class="nt">&lt;/file&gt;</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3"></a>        <span class="nt">&lt;encoder&gt;</span>
+<a id="__codelineno-26-4" name="__codelineno-26-4"></a>            <span class="nt">&lt;pattern&gt;</span>%msg%n<span class="nt">&lt;/pattern&gt;</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5"></a>        <span class="nt">&lt;/encoder&gt;</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6"></a><span class="nt">&lt;/appender&gt;</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7"></a><span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;async&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.classic.AsyncAppender&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8"></a>  <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;accessLog&quot;</span> <span class="nt">/&gt;</span>
+<a id="__codelineno-26-9" name="__codelineno-26-9"></a><span class="nt">&lt;/appender&gt;</span>
+<a id="__codelineno-26-10" name="__codelineno-26-10"></a><span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">&quot;reactor.netty.http.server.AccessLog&quot;</span> <span class="na">level=</span><span class="s">&quot;INFO&quot;</span> <span class="na">additivity=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-26-11" name="__codelineno-26-11"></a>    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;async&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-26-12" name="__codelineno-26-12"></a><span class="nt">&lt;/logger&gt;</span>
+</code></pre></div></td></tr></table></div>
+<h4 id="25-gatewaycors-configuration">2.5 Gateway跨域配置（CORS Configuration）</h4>
+<p><img alt="iShot_2022-12-02_00.28.16.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_00.28.16.png" /></p>
+<p>通过yml配置的方式
+https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#cors-configuration</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-27-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-27-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-27-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-27-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-27-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-27-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-27-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-27-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-27-10">10</a></span>
+<span class="normal"><a href="#__codelineno-27-11">11</a></span>
+<span class="normal"><a href="#__codelineno-27-12">12</a></span>
+<span class="normal"><a href="#__codelineno-27-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1"></a><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-27-2" name="__codelineno-27-2"></a><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-27-3" name="__codelineno-27-3"></a><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-27-4" name="__codelineno-27-4"></a><span class="w">        </span><span class="nt">globalcors</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-27-5" name="__codelineno-27-5"></a><span class="w">          </span><span class="nt">cors-configurations</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-27-6" name="__codelineno-27-6"></a><span class="w">            </span><span class="s">&#39;[/**]&#39;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<a id="__codelineno-27-7" name="__codelineno-27-7"></a><span class="w">              </span><span class="nt">allowedOrigins</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*&quot;</span><span class="w"></span>
+<a id="__codelineno-27-8" name="__codelineno-27-8"></a><span class="w">              </span><span class="nt">allowedMethods</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-27-9" name="__codelineno-27-9"></a><span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GET</span><span class="w"></span>
+<a id="__codelineno-27-10" name="__codelineno-27-10"></a><span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">POST</span><span class="w"></span>
+<a id="__codelineno-27-11" name="__codelineno-27-11"></a><span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DELETE</span><span class="w"></span>
+<a id="__codelineno-27-12" name="__codelineno-27-12"></a><span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PUT</span><span class="w"></span>
+<a id="__codelineno-27-13" name="__codelineno-27-13"></a><span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OPTION</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>通过java配置的方式</p>
+<p><img alt="iShot_2022-12-02_00.28.43.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_00.28.43.png" /></p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-28-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-28-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-28-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-28-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-28-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-28-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-28-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-28-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-28-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-28-10">10</a></span>
+<span class="normal"><a href="#__codelineno-28-11">11</a></span>
+<span class="normal"><a href="#__codelineno-28-12">12</a></span>
+<span class="normal"><a href="#__codelineno-28-13">13</a></span>
+<span class="normal"><a href="#__codelineno-28-14">14</a></span>
+<span class="normal"><a href="#__codelineno-28-15">15</a></span>
+<span class="normal"><a href="#__codelineno-28-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1"></a><span class="nd">@Configuration</span><span class="w"></span>
+<a id="__codelineno-28-2" name="__codelineno-28-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CorsConfig</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-28-3" name="__codelineno-28-3"></a><span class="w">    </span><span class="nd">@Bean</span><span class="w"></span>
+<a id="__codelineno-28-4" name="__codelineno-28-4"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">CorsWebFilter</span><span class="w"> </span><span class="nf">corsFilter</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-28-5" name="__codelineno-28-5"></a><span class="w">        </span><span class="n">CorsConfiguration</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CorsConfiguration</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-28-6" name="__codelineno-28-6"></a><span class="w">        </span><span class="n">config</span><span class="p">.</span><span class="na">addAllowedMethod</span><span class="p">(</span><span class="s">&quot;*&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-28-7" name="__codelineno-28-7"></a><span class="w">        </span><span class="n">config</span><span class="p">.</span><span class="na">addAllowedOrigin</span><span class="p">(</span><span class="s">&quot;*&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-28-8" name="__codelineno-28-8"></a><span class="w">        </span><span class="n">config</span><span class="p">.</span><span class="na">addAllowedHeader</span><span class="p">(</span><span class="s">&quot;*&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-28-9" name="__codelineno-28-9"></a>
+<a id="__codelineno-28-10" name="__codelineno-28-10"></a><span class="w">        </span><span class="n">UrlBasedCorsConfigurationSource</span><span class="w"> </span><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">UrlBasedCorsConfigurationSource</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">PathPatternParser</span><span class="p">());</span><span class="w"></span>
+<a id="__codelineno-28-11" name="__codelineno-28-11"></a><span class="w">        </span><span class="n">source</span><span class="p">.</span><span class="na">registerCorsConfiguration</span><span class="p">(</span><span class="s">&quot;/**&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-28-12" name="__codelineno-28-12"></a>
+<a id="__codelineno-28-13" name="__codelineno-28-13"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CorsWebFilter</span><span class="p">(</span><span class="n">source</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-28-14" name="__codelineno-28-14"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-28-15" name="__codelineno-28-15"></a>
+<a id="__codelineno-28-16" name="__codelineno-28-16"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<h4 id="26-gatewaysentinel">2.6 gateway整合sentinel流控降级</h4>
+<p>网关作为内部系统外的一层屏障, 对内起到一定的保护作用, 限流便是其中之一. 网关层的限流可以简单地针对不同路由进行限流, 也可针对业务的接口进行限流，或者根据接口的特征分组限流。</p>
+<p><a href="https://github.com/alibaba/Sentinel/wiki/%E7%BD%91%E5%85%B3%E9%99%90%E6%B5%81">https://github.com/alibaba/Sentinel/wiki/%E7%BD%91%E5%85%B3%E9%99%90%E6%B5%81</a></p>
+<p>添加依赖</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-29-1">1</a></span>
+<span class="normal"><a href="#__codelineno-29-2">2</a></span>
+<span class="normal"><a href="#__codelineno-29-3">3</a></span>
+<span class="normal"><a href="#__codelineno-29-4">4</a></span>
+<span class="normal"><a href="#__codelineno-29-5">5</a></span>
+<span class="normal"><a href="#__codelineno-29-6">6</a></span>
+<span class="normal"><a href="#__codelineno-29-7">7</a></span>
+<span class="normal"><a href="#__codelineno-29-8">8</a></span>
+<span class="normal"><a href="#__codelineno-29-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2"></a>    <span class="nt">&lt;groupId&gt;</span>com.alibaba.cloud<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3"></a>    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-alibaba-sentinel-gateway<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-29-4" name="__codelineno-29-4"></a><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-29-5" name="__codelineno-29-5"></a>
+<a id="__codelineno-29-6" name="__codelineno-29-6"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-29-7" name="__codelineno-29-7"></a>    <span class="nt">&lt;groupId&gt;</span>com.alibaba.cloud<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-29-8" name="__codelineno-29-8"></a>    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-alibaba-sentinel<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-29-9" name="__codelineno-29-9"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>2.添加配置</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-30-1">1</a></span>
+<span class="normal"><a href="#__codelineno-30-2">2</a></span>
+<span class="normal"><a href="#__codelineno-30-3">3</a></span>
+<span class="normal"><a href="#__codelineno-30-4">4</a></span>
+<span class="normal"><a href="#__codelineno-30-5">5</a></span>
+<span class="normal"><a href="#__codelineno-30-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1"></a><span class="w"> </span><span class="nt">sentinel</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-30-2" name="__codelineno-30-2"></a><span class="w">      </span><span class="nt">transport</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-30-3" name="__codelineno-30-3"></a>
+<a id="__codelineno-30-4" name="__codelineno-30-4"></a><span class="w">        </span><span class="c1"># 添加sentinel的控制台地址</span><span class="w"></span>
+<a id="__codelineno-30-5" name="__codelineno-30-5"></a>
+<a id="__codelineno-30-6" name="__codelineno-30-6"></a><span class="w">        </span><span class="nt">dashboard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1:8080</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p><strong>2.6.1 控制台实现方式：</strong></p>
+<p>Sentinel 1.6.3 引入了网关流控控制台的支持，用户可以直接在 Sentinel 控制台上查看 API Gateway 实时的 route 和自定义 API 分组监控，管理网关规则和 API 分组配置。</p>
+<p>从 1.6.0 版本开始，Sentinel 提供了 Spring Cloud Gateway 的适配模块，可以提供两种资源维度的限流：
+route 维度：即在 Spring 配置文件中配置的路由条目，资源名为对应的 routeId
+自定义 API 维度：用户可以利用 Sentinel 提供的 API 来自定义一些 API 分组</p>
+<p>自定义异常方式：</p>
+<p>1.通过yml</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-31-1">1</a></span>
+<span class="normal"><a href="#__codelineno-31-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1"></a>spring:cloud.sentinel.scg.fallback.mode = response
+<a id="__codelineno-31-2" name="__codelineno-31-2"></a>spring.cloud.sentinel.scg.fallback.response-body = &#39;{&quot;code&quot;:403,&quot;mes&quot;:&quot;限流了&quot;}&#39;
+</code></pre></div></td></tr></table></div>
+<p>2.通过GatewayCallbackManager</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-32-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-32-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-32-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-32-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-32-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-32-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-32-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-32-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-32-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-32-10">10</a></span>
+<span class="normal"><a href="#__codelineno-32-11">11</a></span>
+<span class="normal"><a href="#__codelineno-32-12">12</a></span>
+<span class="normal"><a href="#__codelineno-32-13">13</a></span>
+<span class="normal"><a href="#__codelineno-32-14">14</a></span>
+<span class="normal"><a href="#__codelineno-32-15">15</a></span>
+<span class="normal"><a href="#__codelineno-32-16">16</a></span>
+<span class="normal"><a href="#__codelineno-32-17">17</a></span>
+<span class="normal"><a href="#__codelineno-32-18">18</a></span>
+<span class="normal"><a href="#__codelineno-32-19">19</a></span>
+<span class="normal"><a href="#__codelineno-32-20">20</a></span>
+<span class="normal"><a href="#__codelineno-32-21">21</a></span>
+<span class="normal"><a href="#__codelineno-32-22">22</a></span>
+<span class="normal"><a href="#__codelineno-32-23">23</a></span>
+<span class="normal"><a href="#__codelineno-32-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1"></a><span class="cm">/***</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2"></a>
+<a id="__codelineno-32-3" name="__codelineno-32-3"></a><span class="cm"> * @Author 徐庶   QQ:1092002729</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4"></a>
+<a id="__codelineno-32-5" name="__codelineno-32-5"></a><span class="cm"> * @Slogan 致敬大师，致敬未来的你</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6"></a><span class="cm">   */</span><span class="w"></span>
+<a id="__codelineno-32-7" name="__codelineno-32-7"></a><span class="nd">@Configuration</span><span class="w"></span>
+<a id="__codelineno-32-8" name="__codelineno-32-8"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">GatewayConfig</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-32-9" name="__codelineno-32-9"></a>
+<a id="__codelineno-32-10" name="__codelineno-32-10"></a><span class="w">  </span><span class="nd">@PostConstruct</span><span class="w"></span>
+<a id="__codelineno-32-11" name="__codelineno-32-11"></a><span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">init</span><span class="p">(){</span><span class="w"></span>
+<a id="__codelineno-32-12" name="__codelineno-32-12"></a><span class="w">    </span><span class="n">BlockRequestHandler</span><span class="w"> </span><span class="n">blockRequestHandler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BlockRequestHandler</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-32-13" name="__codelineno-32-13"></a><span class="w">      </span><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-32-14" name="__codelineno-32-14"></a><span class="w">      </span><span class="kd">public</span><span class="w"> </span><span class="n">Mono</span><span class="o">&lt;</span><span class="n">ServerResponse</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">handleRequest</span><span class="p">(</span><span class="n">ServerWebExchange</span><span class="w"> </span><span class="n">exchange</span><span class="p">,</span><span class="w"> </span><span class="n">Throwable</span><span class="w"> </span><span class="n">throwable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-32-15" name="__codelineno-32-15"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ServerResponse</span><span class="p">.</span><span class="na">status</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">OK</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-32-16" name="__codelineno-32-16"></a><span class="w">          </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-32-17" name="__codelineno-32-17"></a><span class="w">          </span><span class="p">.</span><span class="na">body</span><span class="p">(</span><span class="n">BodyInserters</span><span class="p">.</span><span class="na">fromValue</span><span class="p">(</span><span class="s">&quot;降级了!&quot;</span><span class="p">));</span><span class="w"></span>
+<a id="__codelineno-32-18" name="__codelineno-32-18"></a><span class="w">      </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-32-19" name="__codelineno-32-19"></a><span class="w">    </span><span class="p">};</span><span class="w"></span>
+<a id="__codelineno-32-20" name="__codelineno-32-20"></a>
+<a id="__codelineno-32-21" name="__codelineno-32-21"></a><span class="w">    </span><span class="n">GatewayCallbackManager</span><span class="p">.</span><span class="na">setBlockHandler</span><span class="p">(</span><span class="n">blockRequestHandler</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-32-22" name="__codelineno-32-22"></a>
+<a id="__codelineno-32-23" name="__codelineno-32-23"></a><span class="w">  </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-32-24" name="__codelineno-32-24"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p><strong>2.6.2 代码实现方式：（了解）</strong></p>
+<p>用户可以通过 GatewayRuleManager.loadRules(rules) 手动加载网关规则</p>
+<p>GatewayConfiguration中添加</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-33-1">1</a></span>
+<span class="normal"><a href="#__codelineno-33-2">2</a></span>
+<span class="normal"><a href="#__codelineno-33-3">3</a></span>
+<span class="normal"><a href="#__codelineno-33-4">4</a></span>
+<span class="normal"><a href="#__codelineno-33-5">5</a></span>
+<span class="normal"><a href="#__codelineno-33-6">6</a></span>
+<span class="normal"><a href="#__codelineno-33-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1"></a><span class="nd">@PostConstruct</span><span class="w"></span>
+<a id="__codelineno-33-2" name="__codelineno-33-2"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doInit</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<a id="__codelineno-33-3" name="__codelineno-33-3"></a><span class="w">  </span><span class="c1">//初始化网关限流规则</span><span class="w"></span>
+<a id="__codelineno-33-4" name="__codelineno-33-4"></a><span class="w">  </span><span class="n">initGatewayRules</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-33-5" name="__codelineno-33-5"></a><span class="w">  </span><span class="c1">//自定义限流异常处理器</span><span class="w"></span>
+<a id="__codelineno-33-6" name="__codelineno-33-6"></a><span class="w">  </span><span class="n">initBlockRequestHandler</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-33-7" name="__codelineno-33-7"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-34-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-34-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-34-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-34-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-34-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-34-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-34-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-34-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-34-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-34-10">10</a></span>
+<span class="normal"><a href="#__codelineno-34-11">11</a></span>
+<span class="normal"><a href="#__codelineno-34-12">12</a></span>
+<span class="normal"><a href="#__codelineno-34-13">13</a></span>
+<span class="normal"><a href="#__codelineno-34-14">14</a></span>
+<span class="normal"><a href="#__codelineno-34-15">15</a></span>
+<span class="normal"><a href="#__codelineno-34-16">16</a></span>
+<span class="normal"><a href="#__codelineno-34-17">17</a></span>
+<span class="normal"><a href="#__codelineno-34-18">18</a></span>
+<span class="normal"><a href="#__codelineno-34-19">19</a></span>
+<span class="normal"><a href="#__codelineno-34-20">20</a></span>
+<span class="normal"><a href="#__codelineno-34-21">21</a></span>
+<span class="normal"><a href="#__codelineno-34-22">22</a></span>
+<span class="normal"><a href="#__codelineno-34-23">23</a></span>
+<span class="normal"><a href="#__codelineno-34-24">24</a></span>
+<span class="normal"><a href="#__codelineno-34-25">25</a></span>
+<span class="normal"><a href="#__codelineno-34-26">26</a></span>
+<span class="normal"><a href="#__codelineno-34-27">27</a></span>
+<span class="normal"><a href="#__codelineno-34-28">28</a></span>
+<span class="normal"><a href="#__codelineno-34-29">29</a></span>
+<span class="normal"><a href="#__codelineno-34-30">30</a></span>
+<span class="normal"><a href="#__codelineno-34-31">31</a></span>
+<span class="normal"><a href="#__codelineno-34-32">32</a></span>
+<span class="normal"><a href="#__codelineno-34-33">33</a></span>
+<span class="normal"><a href="#__codelineno-34-34">34</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1"></a><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">initGatewayRules</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-34-2" name="__codelineno-34-2"></a><span class="w">  </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">GatewayFlowRule</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rules</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashSet</span><span class="o">&lt;&gt;</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-34-3" name="__codelineno-34-3"></a><span class="w">  </span><span class="c1">//resource：资源名称，可以是网关中的 route 名称或者用户自定义的 API 分组名称。</span><span class="w"></span>
+<a id="__codelineno-34-4" name="__codelineno-34-4"></a><span class="w">  </span><span class="c1">//count：限流阈值</span><span class="w"></span>
+<a id="__codelineno-34-5" name="__codelineno-34-5"></a><span class="w">  </span><span class="c1">//intervalSec：统计时间窗口，单位是秒，默认是 1 秒。</span><span class="w"></span>
+<a id="__codelineno-34-6" name="__codelineno-34-6"></a><span class="w">  </span><span class="n">rules</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">GatewayFlowRule</span><span class="p">(</span><span class="s">&quot;order_route&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-34-7" name="__codelineno-34-7"></a><span class="w">            </span><span class="p">.</span><span class="na">setCount</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-34-8" name="__codelineno-34-8"></a><span class="w">            </span><span class="p">.</span><span class="na">setIntervalSec</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-34-9" name="__codelineno-34-9"></a><span class="w">           </span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-34-10" name="__codelineno-34-10"></a><span class="w">  </span><span class="n">rules</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">GatewayFlowRule</span><span class="p">(</span><span class="s">&quot;user_service_api&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-34-11" name="__codelineno-34-11"></a><span class="w">            </span><span class="p">.</span><span class="na">setCount</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-34-12" name="__codelineno-34-12"></a><span class="w">            </span><span class="p">.</span><span class="na">setIntervalSec</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-34-13" name="__codelineno-34-13"></a><span class="w">           </span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-34-14" name="__codelineno-34-14"></a>
+<a id="__codelineno-34-15" name="__codelineno-34-15"></a><span class="w">  </span><span class="c1">// 加载网关规则</span><span class="w"></span>
+<a id="__codelineno-34-16" name="__codelineno-34-16"></a><span class="w">  </span><span class="n">GatewayRuleManager</span><span class="p">.</span><span class="na">loadRules</span><span class="p">(</span><span class="n">rules</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-34-17" name="__codelineno-34-17"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-34-18" name="__codelineno-34-18"></a>
+<a id="__codelineno-34-19" name="__codelineno-34-19"></a><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">initBlockRequestHandler</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-34-20" name="__codelineno-34-20"></a><span class="w">  </span><span class="n">BlockRequestHandler</span><span class="w"> </span><span class="n">blockRequestHandler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BlockRequestHandler</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-34-21" name="__codelineno-34-21"></a><span class="w">    </span><span class="nd">@Override</span><span class="w"></span>
+<a id="__codelineno-34-22" name="__codelineno-34-22"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Mono</span><span class="o">&lt;</span><span class="n">ServerResponse</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">handleRequest</span><span class="p">(</span><span class="n">ServerWebExchange</span><span class="w"> </span><span class="n">exchange</span><span class="p">,</span><span class="w"> </span><span class="n">Throwable</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-34-23" name="__codelineno-34-23"></a><span class="w">      </span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;&gt;</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-34-24" name="__codelineno-34-24"></a><span class="w">      </span><span class="n">result</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;code&quot;</span><span class="p">,</span><span class="n">String</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">TOO_MANY_REQUESTS</span><span class="p">.</span><span class="na">value</span><span class="p">()));</span><span class="w"></span>
+<a id="__codelineno-34-25" name="__codelineno-34-25"></a><span class="w">      </span><span class="n">result</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;msg&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">TOO_MANY_REQUESTS</span><span class="p">.</span><span class="na">getReasonPhrase</span><span class="p">());</span><span class="w"></span>
+<a id="__codelineno-34-26" name="__codelineno-34-26"></a>
+<a id="__codelineno-34-27" name="__codelineno-34-27"></a><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">ServerResponse</span><span class="p">.</span><span class="na">status</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">TOO_MANY_REQUESTS</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-34-28" name="__codelineno-34-28"></a><span class="w">        </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-34-29" name="__codelineno-34-29"></a><span class="w">        </span><span class="p">.</span><span class="na">body</span><span class="p">(</span><span class="n">BodyInserters</span><span class="p">.</span><span class="na">fromValue</span><span class="p">(</span><span class="n">result</span><span class="p">));</span><span class="w"></span>
+<a id="__codelineno-34-30" name="__codelineno-34-30"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-34-31" name="__codelineno-34-31"></a><span class="w">  </span><span class="p">};</span><span class="w"></span>
+<a id="__codelineno-34-32" name="__codelineno-34-32"></a><span class="w">  </span><span class="c1">//设置自定义异常处理器</span><span class="w"></span>
+<a id="__codelineno-34-33" name="__codelineno-34-33"></a><span class="w">  </span><span class="n">GatewayCallbackManager</span><span class="p">.</span><span class="na">setBlockHandler</span><span class="p">(</span><span class="n">blockRequestHandler</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-34-34" name="__codelineno-34-34"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<h4 id="27">2.7 网关高可用</h4>
+<p>为了保证 Gateway 的高可用性，可以同时启动多个 Gateway 实例进行负载，在 Gateway 的上游使用 Nginx 或者 F5 进行负载转发以达到高可用。</p>
+<p><img alt="iShot_2022-12-02_00.29.51.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_00.29.51.png" /></p>
+<p><img alt="iShot_2022-12-02_00.30.07.png" src="https://img.zivplus.xyz/images/2022/12/02/iShot_2022-12-02_00.30.07.png" /></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            回到页面顶部
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="页脚" >
+      
+        
+        <a href="../06Alibaba%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%84%E4%BB%B6Sentinel/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 06微服务调用组件Feign" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              06微服务调用组件Feign
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../09%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AASkyWalking/" class="md-footer__link md-footer__link--next" aria-label="下一页: 09微服务链路追踪SkyWalking" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              09微服务链路追踪SkyWalking
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.top"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      
+    
+  </body>
+</html>
