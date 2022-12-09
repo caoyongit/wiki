@@ -1,0 +1,1408 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.8">
+    
+    
+      
+        <title>04-00-微服务架构介绍 - Java Architect</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.815d1a91.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-vs" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Java Architect" class="md-header__button md-logo" aria-label="Java Architect" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Java Architect
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              04-00-微服务架构介绍
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Java Architect" class="md-nav__button md-logo" aria-label="Java Architect" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Java Architect
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Java源码系列
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Java源码系列" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Java源码系列
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_1">
+          Spring
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Spring" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Spring
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/00Spring%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/" class="md-nav__link">
+        0.Spring源码编译教程
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/01Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="md-nav__link">
+        1.Spring核心知识点
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/02%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="md-nav__link">
+        2.手写模拟Spring底层原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/03Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        3.Spring之底层架构核心概念解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/04Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+        4.Spring之Bean生命周期源码解析上
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/05Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+        5.Spring之Bean生命周期源码解析下
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/06Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+        6.Spring依赖注入源码解析上.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/07Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+        7.Spring依赖注入源码解析下.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/08Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E6%BA%90%E7%A0%81/" class="md-nav__link">
+        8.Spring循环依赖源码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/09Spring%E4%B9%8B%E6%8E%A8%E6%96%AD%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        9.Spring之推断构造方法源码解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/10Spring%E4%B9%8B%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        10.Spring之启动过程源码解析
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          微服务源码
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="微服务源码" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          微服务源码
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpringBoot%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B/" class="md-nav__link">
+        01手写模拟SpringBoot核心流程
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02SpringBoot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%BA%95%E5%B1%82%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        02SpringBoot自动配置底层源码解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03%E6%9E%84%E9%80%A0SpringApplication%E5%AF%B9%E8%B1%A1/" class="md-nav__link">
+        03构造SpringApplication对象
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          04-00-微服务架构介绍
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        04-00-微服务架构介绍
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-vs" class="md-nav__link">
+    1. 单体架构vs微服务架构
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 单体架构vs微服务架构">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    1.1 单机架构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    1.2 微服务以及微服务架构
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-spring-cloud" class="md-nav__link">
+    2. Spring Cloud 微服务技术栈
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Spring Cloud 微服务技术栈">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    2.1）介绍
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-springcloud" class="md-nav__link">
+    2.2) SpringCloud微服务架构生态圈
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-spring-cloud-netflix" class="md-nav__link">
+    2.3） Spring Cloud Netflix包含的组件：
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-spring-cloud-alibaba" class="md-nav__link">
+    3. Spring Cloud Alibaba技术栈
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Spring Cloud Alibaba技术栈">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-spring-cloud-alibaba" class="md-nav__link">
+    3.1) Spring Cloud Alibaba 包含组件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32spring-cloud-alibaba" class="md-nav__link">
+    3.2）Spring Cloud Alibaba版本选择
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-01-Alibaba%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%84%E4%BB%B6Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%AE%9E%E6%88%98/" class="md-nav__link">
+        04-01-Alibaba微服务组件Nacos注册中心实战
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Spring Cloud Alibaba
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Spring Cloud Alibaba" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Spring Cloud Alibaba
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/04%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E7%BB%84%E4%BB%B6Feign/" class="md-nav__link">
+        04微服务调用组件Feign
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/06Alibaba%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%84%E4%BB%B6Sentinel/" class="md-nav__link">
+        06Alibaba微服务组件Sentinel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/08Spring%20Cloud%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3Gateway%E7%BB%84%E4%BB%B6/" class="md-nav__link">
+        08Spring Cloud微服务网关Gateway组件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/09%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AASkyWalking/" class="md-nav__link">
+        09微服务链路追踪SkyWalking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/09%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AASkyWalkingUI/" class="md-nav__link">
+        09微服务链路追踪SkyWalkingUI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/10SpringBoot%20Actuator%E6%8C%87%E6%A0%87%E7%9B%91%E6%8E%A7/" class="md-nav__link">
+        10SpringBoot Actuator指标监控
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Nginx
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Nginx" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Nginx
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/01Nginx%E5%AE%89%E8%A3%85/" class="md-nav__link">
+        01Nginx安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/02Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        02Nginx配置文件解读
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/03Nginx%E4%BB%A3%E7%90%86/" class="md-nav__link">
+        03Nginx代理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/04Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="md-nav__link">
+        04Nginx负载均衡
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/05Nginx%E9%99%90%E6%B5%81%E7%86%94%E6%96%AD/" class="md-nav__link">
+        05Nginx限流熔断
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/06Nginx%E5%AE%9E%E7%8E%B0%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/" class="md-nav__link">
+        06Nginx实现动静分离
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/07Nginx%E8%B0%83%E4%BC%98/" class="md-nav__link">
+        07Nginx调优
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/08Nginx%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="md-nav__link">
+        08Nginx镜像服务器
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/09Nginx%E7%83%AD%E5%A4%87%E9%83%A8%E7%BD%B2/" class="md-nav__link">
+        09Nginx热备部署
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        10Nginx安全认证
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Redis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Redis" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Redis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB/" class="md-nav__link">
+        Redis面试突击
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB2/" class="md-nav__link">
+        Redis面试突击2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-vs" class="md-nav__link">
+    1. 单体架构vs微服务架构
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 单体架构vs微服务架构">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    1.1 单机架构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    1.2 微服务以及微服务架构
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-spring-cloud" class="md-nav__link">
+    2. Spring Cloud 微服务技术栈
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Spring Cloud 微服务技术栈">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    2.1）介绍
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-springcloud" class="md-nav__link">
+    2.2) SpringCloud微服务架构生态圈
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-spring-cloud-netflix" class="md-nav__link">
+    2.3） Spring Cloud Netflix包含的组件：
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-spring-cloud-alibaba" class="md-nav__link">
+    3. Spring Cloud Alibaba技术栈
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Spring Cloud Alibaba技术栈">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-spring-cloud-alibaba" class="md-nav__link">
+    3.1) Spring Cloud Alibaba 包含组件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32spring-cloud-alibaba" class="md-nav__link">
+    3.2）Spring Cloud Alibaba版本选择
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>04-00-微服务架构介绍</h1>
+
+<h3 id="1-vs">1. 单体架构vs微服务架构</h3>
+<h4 id="11">1.1 单机架构</h4>
+<p><strong>1.1.1 什么是单体架构</strong></p>
+<p>一个归档包（例如war格式）包含了应用所有功能的应用程序，我们通常称之为单体应用。架构单体应用的方法论，我们称之为单体应用架构。（就是一个war包打天下）</p>
+<p><strong>1.1.2 单体架构示意图</strong></p>
+<p><img alt="iShot_2022-12-07_16.48.48.png" src="https://img.zivplus.xyz/images/2022/12/07/iShot_2022-12-07_16.48.48.png" /></p>
+<p><strong>1.1.3 单体架构的优缺点</strong></p>
+<p>优点:</p>
+<p>①: 架构简单明了，没有”花里胡哨“的问题需要解决。</p>
+<p>②:开发，测试，部署简单（尤其是运维人员 睡着都会笑醒）</p>
+<p>缺点:</p>
+<p>①：随着业务扩展，代码越来越复杂，代码质量参差不齐(开发人员的水平不一),会让你每次提交代码 ，修改每一个小bug都是心惊胆战的。</p>
+<p>②:  部署慢(由于单体架构，功能复杂) 能想像下一个来自200W+代码部署的速度(15分钟)</p>
+<p>③:  扩展成本高，根据单体架构图 假设用户模块是一个CPU密集型的模块(涉及到大量的运算)，那么我们需要替换更加牛逼的CPU，而我们的订单模块是一个IO密集模块（涉及大量的读写磁盘）,那我们需要替换更加牛逼的内存以及高效的磁盘。但是我们的单体架构上 无法针对单个功能模块进行扩展，那么就需要替换更牛逼的CPU，更牛逼的内存，更牛逼的磁盘，价格蹭蹭的往上涨。</p>
+<p>④:  阻碍了新技术的发展。。。。。。比如我们的web架构模块 从struts2迁移到springboot，那么就会成为灾难</p>
+<h4 id="12">1.2 微服务以及微服务架构</h4>
+<p><img alt="iShot_2022-12-07_16.49.07.png" src="https://img.zivplus.xyz/images/2022/12/07/iShot_2022-12-07_16.49.07.png" /></p>
+<p><strong>1.2.1 微服务的定义</strong></p>
+<p>①：英文:https://martinfowler.com/articles/microservices.html</p>
+<p>②: 中文:http://blog.cuicc.com/blog/2015/07/22/microservices</p>
+<p>微服务核心就是把传统的单机应用，根据业务将单机应用拆分为一个一个的服务，彻底的解耦，每一个服务都是提供特定的功能，一个服务只做一件事,类似进程，每个服务都能够单独部署，甚至可以拥有自己的数据库。这样的一个一个的小服务就是微服务。</p>
+<p>①: 比如传统的单机电商应用,有 订单/支付/库存/物流/积分等模块(理解为service)</p>
+<p>②: 我们根据 业务模型来拆分,可以拆分为 订单服务，支付服务，库存服务，物流服务，积分服务</p>
+<p>③: 若不拆分的时候，我的非核心业务积分模块 出现了重大bug 导致系统内存溢出，导致整个服务宕机,若拆分之后，只是说我的积分微服务不可用，我的整个系统核心功能还是能使用</p>
+<p><strong>1.2.2 微服务的特点</strong></p>
+<p>1）独立部署，灵活扩展</p>
+<p>传统的单体架构是以整个系统为单位进行部署，而微服务则是以每一个独立组件（例如用户服务，商品服务）为单位进行部署。</p>
+<p><img alt="iShot_2022-12-07_16.49.45.png" src="https://img.zivplus.xyz/images/2022/12/07/iShot_2022-12-07_16.49.45.png" /></p>
+<p>2）资源的有效隔离</p>
+<p>微服务设计的原则之一，就是每一个微服务拥有独立的数据源，假如微服务A想要读写微服务B的数据库，只能调用微服务B对外暴露的接口来完成。这样有效避免了服务之间争用数据库和缓存资源所带来的问题。</p>
+<p><a href="https://img.zivplus.xyz/image/TjDd"><img alt="iShot_2022-12-07_16.50.02.png" src="https://img.zivplus.xyz/images/2022/12/07/iShot_2022-12-07_16.50.02.png" /></a></p>
+<p>3）团队组织架构的调整</p>
+<p>微服务设计的思想也改变了原有的企业研发团队组织架构。传统的研发组织架构是水平架构，前端有前端的团队，后端有后端的团队，DBA有DBA的团队，测试有测试的团队。而微服务的设计思想对团队的划分有着一定的影响，使得团队组织架构的划分更倾向于垂直架构，比如用户业务是一个团队来负责，支付业务是一个团队来负责。</p>
+<p><img alt="iShot_2022-12-07_16.50.23.png" src="https://img.zivplus.xyz/images/2022/12/07/iShot_2022-12-07_16.50.23.png" /></p>
+<p><strong>1.2.3 微服务架构是什么？</strong></p>
+<p>微服务架构风格是一种将单个应用程序作为一套小型服务开发的方法，每种应用程序都在自己的进程中运行，并与轻量级机制（通常是HTTP资源API）进行通信。 这些服务是围绕业务功能构建的，可以通过全自动部署机制独立部署。 这些服务的集中管理最少，可以用不同的编程语言编写，并使用不同的数据存储技术。</p>
+<p>SOA架构强调的是异构系统之间的通信和解耦合，而微服务架构强调的是系统按业务边界做细粒度的拆分和部署
+微服务架构是一个架构风格, 提倡: </p>
+<p>①:将一个单一应用程序开发为一组小型服务.
+②:每个服务运行在自己的进程中
+③:服务之间通过轻量级的通信机制(http rest api)
+④:每个服务都能够独立的部署
+⑤:每个服务甚至可以拥有自己的数据库</p>
+<p>微服务以及微服务架构的是二个完全不同的概念。微服务强调的是服务的大小和对外提供的单一功能，而微服务架构是指把 一个一个的微服务组合管理起来，对外提供一套完整的服务。</p>
+<p>1.2.3 微服务的优缺点</p>
+<p>优点:</p>
+<p>①：每个服务足够小,足够内聚，代码更加容易理解,专注一个业务功能点(对比传统应用，可能改几行代码 需要了解整个系统)</p>
+<p>②: 开发简单，一个服务只干一个事情。（加入你做支付服务，你只要了解支付相关代码就可以了）</p>
+<p>③: 微服务能够被2-5个人的小团队开发，提高效率</p>
+<p>④: 按需伸缩，服务松耦合，每个服务都能够开发部署</p>
+<p>⑤: 前后端分离, 作为java开发人员，我们只要关系后端接口的安全性以及性能，不要去关注页面的人机交互(H5工程师)根据前后端接口协议，根据入参，返回json的回参。</p>
+<p>⑥:一个服务可用拥有自己的数据库，也可以多个服务连接同一个数据库。</p>
+<p>缺点:</p>
+<p>①:增加了运维人员的工作量，以前只要部署一个war包，现在可能需要部署成百上千个war包 (k8s+docker+jenkins )</p>
+<p>②: 服务之间相互调用，增加通信成本</p>
+<p>③:数据一致性问题(分布式事务问题)</p>
+<p>④:性能监控等,问题定位..........................</p>
+<p>**1.2.4）微服务的适用场景</p>
+<p>合适</p>
+<p>①:大型复杂的项目............(来自单体架构200W行代码的恐惧)</p>
+<p>②:快速迭代的项目............(来自一天一版的恐惧)</p>
+<p>③:并发高的项目................(考虑弹性伸缩扩容的恐惧)</p>
+<p>不合适</p>
+<p>①：业务稳定，就是修修bug ，改改数据</p>
+<p>②：迭代周期长 发版频率 一二个月一次.</p>
+<h3 id="2-spring-cloud">2. Spring Cloud 微服务技术栈</h3>
+<h4 id="21">2.1）介绍</h4>
+<p>Spring Cloud是分布式微服务架构的一站式解决方案，是多种微服务架构落地技术的集合体，俗称微服务全家桶。 
+Spring Cloud为开发人员提供了快速构建分布式系统中的一些常见模式的工具(例如配置管理、服务发现、断路器、智能路由、微代理、控制总线、一次性令牌、全局锁、领导选举、分布式会话、集群状态)。</p>
+<p><img alt="iShot_2022-12-07_16.50.56.png" src="https://img.zivplus.xyz/images/2022/12/07/iShot_2022-12-07_16.50.56.png" /></p>
+<p>官网： https://spring.io/projects/spring-cloud</p>
+<p>中文文档： https://www.springcloud.cc/</p>
+<p>Spring Cloud中国社区：http://springcloud.cn/</p>
+<h4 id="22-springcloud">2.2) SpringCloud微服务架构生态圈</h4>
+<p><img alt="iShot_2022-12-07_16.51.20.png" src="https://img.zivplus.xyz/images/2022/12/07/iShot_2022-12-07_16.51.20.png" /></p>
+<h4 id="23-spring-cloud-netflix">2.3） Spring Cloud Netflix包含的组件：</h4>
+<p>Eureka，服务注册和发现，它提供了一个服务注册中心、服务发现的客户端，还有一个方便的查看所有注册的服务的界面。 所有的服务使用Eureka的服务发现客户端来将自己注册到Eureka的服务器上。</p>
+<p>Zuul，网关，所有的客户端请求通过这个网关访问后台的服务。他可以使用一定的路由配置来判断某一个URL由哪个服务来处理。并从Eureka获取注册的服务来转发请求。</p>
+<p>Ribbon，即负载均衡，Zuul网关将一个请求发送给某一个服务的应用的时候，如果一个服务启动了多个实例，就会通过Ribbon来通过一定的负载均衡策略来发送给某一个服务实例。</p>
+<p>Feign，服务客户端，服务之间如果需要相互访问，可以使用RestTemplate，也可以使用Feign客户端访问。它默认会使用Ribbon来实现负载均衡。</p>
+<p>Hystrix，监控和断路器。我们只需要在服务接口上添加Hystrix标签，就可以实现对这个接口的监控和断路器功能。</p>
+<p>Hystrix Dashboard，监控面板，他提供了一个界面，可以监控各个服务上的服务调用所消耗的时间等。</p>
+<p>Turbine，监控聚合，使用Hystrix监控，我们需要打开每一个服务实例的监控信息来查看。而Turbine可以帮助我们把所有的服务实例的监控信息聚合到一个地方统一查看。这样就不需要挨个打开一个个的页面一个个查看。</p>
+<p><img alt="iShot_2022-12-07_16.51.35.png" src="https://img.zivplus.xyz/images/2022/12/07/iShot_2022-12-07_16.51.35.png" /></p>
+<h3 id="3-spring-cloud-alibaba">3. Spring Cloud Alibaba技术栈</h3>
+<p>同 Spring Cloud 一样，Spring Cloud Alibaba 也是一套微服务解决方案，包含开发分布式应用微服务的必需组件，方便开发者通过 Spring Cloud 编程模型轻松使用这些组件来开发分布式应用服务。</p>
+<p>依托 Spring Cloud Alibaba，您只需要添加一些注解和少量配置，就可以将 Spring Cloud 应用接入阿里微服务解决方案，通过阿里中间件来迅速搭建分布式应用系统。</p>
+<p>作为 Spring Cloud 体系下的新实现，Spring Cloud Alibaba 跟官方的组件或其它的第三方实现如 Netflix, Consul，Zookeeper 等对比，具备了更多的功能:</p>
+<p><img alt="iShot_2022-12-07_16.51.46.png" src="https://img.zivplus.xyz/images/2022/12/07/iShot_2022-12-07_16.51.46.png" /></p>
+<h4 id="31-spring-cloud-alibaba">3.1) Spring Cloud Alibaba 包含组件</h4>
+<p>阿里开源组件</p>
+<p>Nacos：一个更易于构建云原生应用的动态服务发现、配置管理和服务管理平台。</p>
+<p>Sentinel：把流量作为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务的稳定性。</p>
+<p>RocketMQ：开源的分布式消息系统，基于高可用分布式集群技术，提供低延时的、高可靠的消息发布与订阅服务。</p>
+<p>Dubbo：在国内应用非常广泛的一款高性能 Java RPC 框架。</p>
+<p>Seata：阿里巴巴开源产品，一个易于使用的高性能微服务分布式事务解决方案。</p>
+<p>Arthas：开源的Java动态追踪工具，基于字节码增强技术，功能非常强大。</p>
+<p>阿里商业化组件</p>
+<p>作为一家商业公司，阿里巴巴推出 Spring Cloud Alibaba，很大程度上市希望通过抢占开发者生态，来帮助推广自家的云产品。</p>
+<p>Alibaba Cloud ACM：一款在分布式架构环境中对应用配置进行集中管理和推送的应用配置中心产品。</p>
+<p>Alibaba Cloud OSS：阿里云对象存储服务（Object Storage Service，简称 OSS），是阿里云提供的云存储服务。</p>
+<p>Alibaba Cloud SchedulerX：阿里中间件团队开发的一款分布式任务调度产品，提供秒级、精准的定时（基于 Cron 表达式）任务调度服务。</p>
+<p><img alt="IMG_4085.jpg" src="https://img.zivplus.xyz/images/2022/12/07/IMG_4085.jpg" /></p>
+<h4 id="32spring-cloud-alibaba">3.2）Spring Cloud Alibaba版本选择</h4>
+<p>https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E</p>
+<p>版本选择： Spring Cloud Alibaba 2.2.8.RELEASE</p>
+<p>父pom如下：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span>
+<span class="normal"><a href="#__codelineno-0-29">29</a></span>
+<span class="normal"><a href="#__codelineno-0-30">30</a></span>
+<span class="normal"><a href="#__codelineno-0-31">31</a></span>
+<span class="normal"><a href="#__codelineno-0-32">32</a></span>
+<span class="normal"><a href="#__codelineno-0-33">33</a></span>
+<span class="normal"><a href="#__codelineno-0-34">34</a></span>
+<span class="normal"><a href="#__codelineno-0-35">35</a></span>
+<span class="normal"><a href="#__codelineno-0-36">36</a></span>
+<span class="normal"><a href="#__codelineno-0-37">37</a></span>
+<span class="normal"><a href="#__codelineno-0-38">38</a></span>
+<span class="normal"><a href="#__codelineno-0-39">39</a></span>
+<span class="normal"><a href="#__codelineno-0-40">40</a></span>
+<span class="normal"><a href="#__codelineno-0-41">41</a></span>
+<span class="normal"><a href="#__codelineno-0-42">42</a></span>
+<span class="normal"><a href="#__codelineno-0-43">43</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0&quot;</span> <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>         <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a>  <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a>  <span class="nt">&lt;parent&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a>    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a>    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a>    <span class="nt">&lt;version&gt;</span>2.3.12.RELEASE<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a>    <span class="nt">&lt;relativePath/&gt;</span> <span class="cm">&lt;!-- lookup parent from repository --&gt;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a>  <span class="nt">&lt;/parent&gt;</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a>  <span class="nt">&lt;groupId&gt;</span>com.tuling.mall<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a>  <span class="nt">&lt;artifactId&gt;</span>vip-spring-cloud-alibaba<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a>  <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a>  <span class="nt">&lt;name&gt;</span>vip-spring-cloud-alibaba<span class="nt">&lt;/name&gt;</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a>  <span class="nt">&lt;packaging&gt;</span>pom<span class="nt">&lt;/packaging&gt;</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a>  <span class="nt">&lt;description&gt;</span>Demo project for Spring Cloud Alibaba<span class="nt">&lt;/description&gt;</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a>  <span class="nt">&lt;properties&gt;</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a>    <span class="nt">&lt;java.version&gt;</span>1.8<span class="nt">&lt;/java.version&gt;</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a>    <span class="nt">&lt;spring-cloud.version&gt;</span>Hoxton.SR12<span class="nt">&lt;/spring-cloud.version&gt;</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21"></a>    <span class="nt">&lt;spring-cloud-alibaba.version&gt;</span>2.2.8.RELEASE<span class="nt">&lt;/spring-cloud-alibaba.version&gt;</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22"></a>  <span class="nt">&lt;/properties&gt;</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a>
+<a id="__codelineno-0-24" name="__codelineno-0-24"></a>  <span class="nt">&lt;dependencyManagement&gt;</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25"></a>    <span class="nt">&lt;dependencies&gt;</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26"></a>      <span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27"></a>        <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28"></a>        <span class="nt">&lt;artifactId&gt;</span>spring-cloud-dependencies<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29"></a>        <span class="nt">&lt;version&gt;</span>${spring-cloud.version}<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30"></a>        <span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31"></a>        <span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32"></a>      <span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33"></a>      <span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34"></a>        <span class="nt">&lt;groupId&gt;</span>com.alibaba.cloud<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35"></a>        <span class="nt">&lt;artifactId&gt;</span>spring-cloud-alibaba-dependencies<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36"></a>        <span class="nt">&lt;version&gt;</span>${spring-cloud-alibaba.version}<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37"></a>        <span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38"></a>        <span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39"></a>      <span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40"></a>    <span class="nt">&lt;/dependencies&gt;</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41"></a>  <span class="nt">&lt;/dependencyManagement&gt;</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42"></a>
+<a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="nt">&lt;/project&gt;</span>
+</code></pre></div></td></tr></table></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            回到页面顶部
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="页脚" >
+      
+        
+        <a href="../03%E6%9E%84%E9%80%A0SpringApplication%E5%AF%B9%E8%B1%A1/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 03构造SpringApplication对象" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              03构造SpringApplication对象
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../04-01-Alibaba%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%84%E4%BB%B6Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%AE%9E%E6%88%98/" class="md-footer__link md-footer__link--next" aria-label="下一页: 04-01-Alibaba微服务组件Nacos注册中心实战" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              04-01-Alibaba微服务组件Nacos注册中心实战
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.top"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1649 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.8">
+    
+    
+      
+        <title>04-01-Alibaba微服务组件Nacos注册中心实战 - Java Architect</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.815d1a91.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Java Architect" class="md-header__button md-logo" aria-label="Java Architect" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Java Architect
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              04-01-Alibaba微服务组件Nacos注册中心实战
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Java Architect" class="md-nav__button md-logo" aria-label="Java Architect" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Java Architect
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Java源码系列
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Java源码系列" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Java源码系列
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_1">
+          Spring
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Spring" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Spring
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/00Spring%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/" class="md-nav__link">
+        0.Spring源码编译教程
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/01Spring%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" class="md-nav__link">
+        1.Spring核心知识点
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/02%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpring%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="md-nav__link">
+        2.手写模拟Spring底层原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/03Spring%E4%B9%8B%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        3.Spring之底层架构核心概念解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/04Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+        4.Spring之Bean生命周期源码解析上
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/05Spring%E4%B9%8BBean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+        5.Spring之Bean生命周期源码解析下
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/06Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8A/" class="md-nav__link">
+        6.Spring依赖注入源码解析上.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/07Spring%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%B8%8B/" class="md-nav__link">
+        7.Spring依赖注入源码解析下.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/08Spring%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E6%BA%90%E7%A0%81/" class="md-nav__link">
+        8.Spring循环依赖源码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/09Spring%E4%B9%8B%E6%8E%A8%E6%96%AD%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        9.Spring之推断构造方法源码解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Java%E6%BA%90%E7%A0%81%E7%B3%BB%E5%88%97/Spring/10Spring%E4%B9%8B%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        10.Spring之启动过程源码解析
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          微服务源码
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="微服务源码" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          微服务源码
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01%E6%89%8B%E5%86%99%E6%A8%A1%E6%8B%9FSpringBoot%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B/" class="md-nav__link">
+        01手写模拟SpringBoot核心流程
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02SpringBoot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%BA%95%E5%B1%82%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="md-nav__link">
+        02SpringBoot自动配置底层源码解析
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03%E6%9E%84%E9%80%A0SpringApplication%E5%AF%B9%E8%B1%A1/" class="md-nav__link">
+        03构造SpringApplication对象
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-00-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E4%BB%8B%E7%BB%8D/" class="md-nav__link">
+        04-00-微服务架构介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          04-01-Alibaba微服务组件Nacos注册中心实战
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        04-01-Alibaba微服务组件Nacos注册中心实战
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    1. 注册中心介绍
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 注册中心介绍">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    1.1 注册中心的作用
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-nacos" class="md-nav__link">
+    2. 什么是 Nacos
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 什么是 Nacos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-nacos" class="md-nav__link">
+    2.1 Nacos 注册中心架构和基本概念
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-nacos" class="md-nav__link">
+    2.2 Nacos注册中心核心功能
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-nacosnacos-server" class="md-nav__link">
+    2.3 Nacos注册中心（Nacos Server）环境搭建
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-spring-cloud-alibaba-nacos" class="md-nav__link">
+    2.4 Spring Cloud Alibaba Nacos快速开始
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-nacos" class="md-nav__link">
+    2.5 Nacos注册中心常见配置
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Spring Cloud Alibaba
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Spring Cloud Alibaba" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Spring Cloud Alibaba
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/04%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E7%BB%84%E4%BB%B6Feign/" class="md-nav__link">
+        04微服务调用组件Feign
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/06Alibaba%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%84%E4%BB%B6Sentinel/" class="md-nav__link">
+        06Alibaba微服务组件Sentinel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/08Spring%20Cloud%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3Gateway%E7%BB%84%E4%BB%B6/" class="md-nav__link">
+        08Spring Cloud微服务网关Gateway组件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/09%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AASkyWalking/" class="md-nav__link">
+        09微服务链路追踪SkyWalking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/09%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AASkyWalkingUI/" class="md-nav__link">
+        09微服务链路追踪SkyWalkingUI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SpringCloudAlibaba/10SpringBoot%20Actuator%E6%8C%87%E6%A0%87%E7%9B%91%E6%8E%A7/" class="md-nav__link">
+        10SpringBoot Actuator指标监控
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Nginx
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Nginx" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Nginx
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/01Nginx%E5%AE%89%E8%A3%85/" class="md-nav__link">
+        01Nginx安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/02Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        02Nginx配置文件解读
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/03Nginx%E4%BB%A3%E7%90%86/" class="md-nav__link">
+        03Nginx代理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/04Nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="md-nav__link">
+        04Nginx负载均衡
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/05Nginx%E9%99%90%E6%B5%81%E7%86%94%E6%96%AD/" class="md-nav__link">
+        05Nginx限流熔断
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/06Nginx%E5%AE%9E%E7%8E%B0%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/" class="md-nav__link">
+        06Nginx实现动静分离
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/07Nginx%E8%B0%83%E4%BC%98/" class="md-nav__link">
+        07Nginx调优
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/08Nginx%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="md-nav__link">
+        08Nginx镜像服务器
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/09Nginx%E7%83%AD%E5%A4%87%E9%83%A8%E7%BD%B2/" class="md-nav__link">
+        09Nginx热备部署
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Nginx/10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/" class="md-nav__link">
+        10Nginx安全认证
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Redis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Redis" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Redis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB/" class="md-nav__link">
+        Redis面试突击
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB2/" class="md-nav__link">
+        Redis面试突击2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    1. 注册中心介绍
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 注册中心介绍">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    1.1 注册中心的作用
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-nacos" class="md-nav__link">
+    2. 什么是 Nacos
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 什么是 Nacos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-nacos" class="md-nav__link">
+    2.1 Nacos 注册中心架构和基本概念
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-nacos" class="md-nav__link">
+    2.2 Nacos注册中心核心功能
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-nacosnacos-server" class="md-nav__link">
+    2.3 Nacos注册中心（Nacos Server）环境搭建
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-spring-cloud-alibaba-nacos" class="md-nav__link">
+    2.4 Spring Cloud Alibaba Nacos快速开始
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-nacos" class="md-nav__link">
+    2.5 Nacos注册中心常见配置
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>04-01-Alibaba微服务组件Nacos注册中心实战</h1>
+
+<h3 id="1">1. 注册中心介绍</h3>
+<h4 id="11">1.1 注册中心的作用</h4>
+<p>思考：不同的微服务如何维护复杂的调用关系？</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">//服务之间通过RestTemplate调用，url写死</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="n">String</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;http://localhost:8020/order/findOrderByUserId/&quot;</span><span class="o">+</span><span class="n">id</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="n">R</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">restTemplate</span><span class="p">.</span><span class="na">getForObject</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">R</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>实现服务发现的设计思路：</p>
+<p><img alt="iShot_2022-12-07_21.36.27.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-07_21.36.27.png" /></p>
+<p>服务注册中心的作用就是服务注册与发现</p>
+<ul>
+<li>服务注册，就是将提供某个服务的模块信息(通常是这个服务的ip和端口)注册到1个公共的组件上去。</li>
+<li>服务发现，就是新注册的这个服务模块能够及时的被其他调用者发现。不管是服务新增和服务删减都能实现自动发现。</li>
+</ul>
+<p>1.2 注册中心设计思路分析</p>
+<p>https://www.processon.com/view/link/5e71cc85e4b011fcce9d604d</p>
+<p><img alt="e6aea7f47ddb2cc93dfb6614ebad36fc.png" src="https://img.zivplus.xyz/images/2022/12/08/e6aea7f47ddb2cc93dfb6614ebad36fc.png" /></p>
+<p>1.3 注册中心对比</p>
+<p><img alt="iShot_2022-12-07_21.36.14.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-07_21.36.14.png" /></p>
+<h3 id="2-nacos">2. 什么是 Nacos</h3>
+<p>Nacos 是 Dynamic Naming and Configuration Service 的首字母简称；一个更易于构建云原生应用的动态服务发现、配置管理和服务管理平台。</p>
+<p>Nacos 致力于帮助您发现、配置和管理微服务。Nacos 提供了一组简单易用的特性集，帮助您快速实现动态服务发现、服务配置、服务元数据及流量管理。</p>
+<p>Nacos 的关键特性包括:</p>
+<ul>
+<li>服务发现和服务健康监测</li>
+<li>动态配置服务</li>
+<li>动态 DNS 服务</li>
+<li>服务及其元数据管理</li>
+</ul>
+<p>官方文档： https://nacos.io/zh-cn/docs/what-is-nacos.html</p>
+<p>OpenAPI文档：https://nacos.io/zh-cn/docs/open-api.html</p>
+<p>nacos版本： v2.1.0</p>
+<p><strong>Nacos 优势</strong> </p>
+<ul>
+<li>易用：简单的数据模型，标准的 restfulAPI，易用的控制台，丰富的使用文档。</li>
+<li>稳定：99.9% 高可用，脱胎于历经阿里巴巴 10 年生产验证的内部产品，支持具有数百万服务的大规模场景，具备企业级 SLA 的开源产品。 </li>
+<li>实时：数据变更毫秒级推送生效；1w 级，SLA 承诺 1w 实例上下线 1s，99.9% 推送完成；10w 级，SLA 承诺 1w 实例上下线 3s，99.9% 推送完成；100w 级别，SLA 承诺 1w 实例上下线 9s 99.9% 推送完成。 </li>
+<li>规模：十万级服务/配置，百万级连接，具备强大扩展性。</li>
+</ul>
+<h4 id="21-nacos">2.1 Nacos 注册中心架构和基本概念</h4>
+<p><img alt="iShot_2022-12-08_21.20.04.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-08_21.20.04.png" /></p>
+<p><strong>服务 (Service)</strong></p>
+<p>服务是指一个或一组软件功能（例如特定信息的检索或一组操作的执行），其目的是不同的客户端可以为不同的目的重用（例如通过跨进程的网络调用）。Nacos 支持主流的服务生态，如 Kubernetes Service、gRPC|Dubbo RPC Service 或者 Spring Cloud RESTful Service。</p>
+<p><strong>服务注册中心 (Service Registry)</strong></p>
+<p>服务注册中心，它是服务及其实例和元数据的数据库。服务实例在启动时注册到服务注册表，并在关闭时注销。服务和路由器的客户端查询服务注册表以查找服务的可用实例。服务注册中心可能会调用服务实例的健康检查 API 来验证它是否能够处理请求。</p>
+<p><strong>服务元数据 (Service Metadata)</strong></p>
+<p>服务元数据是指包括服务端点(endpoints)、服务标签、服务版本号、服务实例权重、路由规则、安全策略等描述服务的数据。</p>
+<p><strong>服务提供方 (Service Provider)</strong></p>
+<p>是指提供可复用和可调用服务的应用方。</p>
+<p><strong>服务消费方 (Service Consumer)</strong></p>
+<p>是指会发起对某个服务调用的应用方。</p>
+<h4 id="22-nacos">2.2 Nacos注册中心核心功能</h4>
+<p><strong>服务注册：</strong>Nacos Client会通过发送REST请求的方式向Nacos Server注册自己的服务，提供自身的元数据，比如ip地址、端口等信息。Nacos Server接收到注册请求后，就会把这些元数据信息存储在一个双层的内存Map中。</p>
+<p><strong>服务心跳：</strong>在服务注册后，Nacos Client会维护一个定时心跳来持续通知Nacos Server，说明服务一直处于可用状态，防止被剔除。默认5s发送一次心跳。</p>
+<p><strong>服务同步：</strong>Nacos Server集群之间会互相同步服务实例，用来保证服务信息的一致性。</p>
+<p><strong>服务发现：</strong>服务消费者（Nacos Client）在调用服务提供者的服务时，会发送一个REST请求给Nacos Server，获取上面注册的服务清单，并且缓存在Nacos Client本地，同时会在Nacos Client本地开启一个定时任务定时拉取服务端最新的注册表信息更新到本地缓存</p>
+<p><strong>服务健康检查：</strong>Nacos Server会开启一个定时任务用来检查注册服务实例的健康情况，对于超过15s没有收到客户端心跳的实例会将它的healthy属性置为false(客户端服务发现时不会发现)，如果某个实例超过30秒没有收到心跳，直接剔除该实例(被剔除的实例如果恢复发送心跳则会重新注册)</p>
+<h4 id="23-nacosnacos-server">2.3 Nacos注册中心（Nacos Server）环境搭建</h4>
+<p>单机模式</p>
+<p>官方文档： https://nacos.io/zh-cn/docs/deployment.html
+下载安装包</p>
+<p>下载地址：https://github.com/alibaba/nacos/releases/download/2.1.0/nacos-server-2.1.0.tar.gz</p>
+<p>解压，进入nacos目录，单机模式启动nacos</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1">#单机模式启动nacos</span>
+</code></pre></div></td></tr></table></div>
+<p>也可以修改默认启动方式</p>
+<p>​   <img alt="iShot_2022-12-08_21.20.24.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-08_21.20.24.png" /></p>
+<p>访问nacos的管理端：http://192.168.65.103:8848/nacos ，默认的用户名密码是 nacos/nacos</p>
+<p><img alt="iShot_2022-12-08_21.30.55.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-08_21.30.55.png" /></p>
+<p>集群模式</p>
+<p>官网文档： https://nacos.io/zh-cn/docs/cluster-mode-quick-start.html</p>
+<p>1）环境准备</p>
+<ul>
+<li>安装好 JDK，需要 1.8 及其以上版本</li>
+<li>建议: 2核 CPU / 4G 内存 及其以上</li>
+<li>建议: 生产环境 3 个节点 及其以上</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># 准备三台centos7服务器</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="m">192</span>.168.65.174
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="m">192</span>.168.65.192
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="m">192</span>.168.65.204
+</code></pre></div></td></tr></table></div>
+<p>注意：在单台服务器上搭建伪集群不能使用连续端口号（比如8848,8849,8850）， 因为使用8848（grpc会占用9848,9849），8849（grpc会占用9849,9850），会导致端口冲突</p>
+<p>原因：Nacos2.x版本相比1.X新增了gRPC的通信方式，因此需要增加2个端口。新增端口是在配置的主端口(server.port)基础上，进行一定偏移量自动生成。</p>
+<table>
+<thead>
+<tr>
+<th>端口</th>
+<th>与主端口的偏移量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9848</td>
+<td>1000</td>
+<td>客户端gRPC请求服务端端口，用于客户端向服务端发起连接和请求</td>
+</tr>
+<tr>
+<td>9849</td>
+<td>1001</td>
+<td>服务端gRPC请求服务端端口，用于服务间同步等</td>
+</tr>
+</tbody>
+</table>
+<p>2）以192.168.65.204为例，进入nacos目录</p>
+<p>2.1）修改conf/application.properties的配置，使用外置数据源</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1">#使用外置mysql数据源 </span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="l l-Scalar l-Scalar-Plain">spring.datasource.platform=mysql</span><span class="w"> </span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="l l-Scalar l-Scalar-Plain">### Count of DB</span><span class="p p-Indicator">:</span><span class="w"></span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db.num=1</span><span class="w"></span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="c1">### Connect URL of DB:</span><span class="w"></span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="l l-Scalar l-Scalar-Plain">db.url.0=jdbc:mysql://192.168.65.204:3306/nacos?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=UTC</span><span class="w"></span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="l l-Scalar l-Scalar-Plain">db.user.0=root</span><span class="w"></span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="l l-Scalar l-Scalar-Plain">db.password.0=root</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p><img alt="iShot_2022-12-08_21.34.06.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-08_21.34.06.png" /></p>
+<p>2.2）将conf/cluster.conf.example改为cluster.conf,添加节点配置</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span>
+<span class="normal"><a href="#__codelineno-4-4">4</a></span>
+<span class="normal"><a href="#__codelineno-4-5">5</a></span>
+<span class="normal"><a href="#__codelineno-4-6">6</a></span>
+<span class="normal"><a href="#__codelineno-4-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>mv conf/cluster.conf.example conf/cluster.conf
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a>vim  conf/cluster.conf
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="c1"># ip:port </span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="m">192</span>.168.65.174:8848
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="m">192</span>.168.65.192:8848
+</code></pre></div></td></tr></table></div>
+<p>注意：不要使用localhost或127.0.0.1，针对多网卡环境，nacos可以指定网卡或ip</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span>
+<span class="normal"><a href="#__codelineno-5-13">13</a></span>
+<span class="normal"><a href="#__codelineno-5-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1">#多网卡选择</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="c1">#ip-address参数可以直接设置nacos的ip</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="c1">#该参数设置后，将会使用这个IP去cluster.conf里进行匹配，请确保这个IP的值在cluster.conf里是存在的</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a>nacos.inetutils.ip-address<span class="o">=</span><span class="m">192</span>.168.65.206
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="c1">#use-only-site-local-interfaces参数可以让nacos使用局域网ip，这个在nacos部署的机器有多网卡时很有用，可以让nacos选择局域网网卡</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a>nacos.inetutils.use-only-site-local-interfaces<span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="c1">#ignored-interfaces支持网卡数组，可以让nacos忽略多个网卡</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a>nacos.inetutils.ignored-interfaces<span class="o">[</span><span class="m">0</span><span class="o">]=</span>eth0
+<a id="__codelineno-5-11" name="__codelineno-5-11"></a>nacos.inetutils.ignored-interfaces<span class="o">[</span><span class="m">1</span><span class="o">]=</span>eth1
+<a id="__codelineno-5-12" name="__codelineno-5-12"></a>
+<a id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="c1">#preferred-networks参数可以让nacos优先选择匹配的ip，支持正则匹配和前缀匹配</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14"></a>nacos.inetutils.preferred-networks<span class="o">[</span><span class="m">0</span><span class="o">]=</span><span class="m">30</span>.5.124.
+</code></pre></div></td></tr></table></div>
+<p>192.168.65.174，192.168.65.192 按同样的方式配置。</p>
+<p>3）mysql中创建nacos数据库</p>
+<p>sql脚本：https://github.com/alibaba/nacos/blob/2.1.0/distribution/conf/nacos-mysql.sql</p>
+<p>4)  如果内存不够，可以调整jvm参数</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="c1">#修改启动脚本</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a>vim bin<span class="se">\s</span>tartup.sh
+</code></pre></div></td></tr></table></div>
+<p><img alt="iShot_2022-12-08_21.34.21.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-08_21.34.21.png" /></p>
+<ol>
+<li>分别启动三个节点上的nacos
+   以192.168.65.204为例，进入nacos目录，启动nacos</li>
+</ol>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1">#启动nacos</span>
+</code></pre></div></td></tr></table></div>
+<p><img alt="iShot_2022-12-08_21.34.34.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-08_21.34.34.png" /></p>
+<ol>
+<li>访问nacos管理界面
+   登录http://192.168.65.204:8848/nacos，用户名和密码都是nacos</li>
+</ol>
+<p><img alt="iShot_2022-12-08_21.34.43.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-08_21.34.43.png" /></p>
+<h4 id="24-spring-cloud-alibaba-nacos">2.4 Spring Cloud Alibaba Nacos快速开始</h4>
+<p>Spring Cloud Alibaba版本选型</p>
+<p>版本说明:https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E</p>
+<p>父pom配置</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span>
+<span class="normal"><a href="#__codelineno-8-11">11</a></span>
+<span class="normal"><a href="#__codelineno-8-12">12</a></span>
+<span class="normal"><a href="#__codelineno-8-13">13</a></span>
+<span class="normal"><a href="#__codelineno-8-14">14</a></span>
+<span class="normal"><a href="#__codelineno-8-15">15</a></span>
+<span class="normal"><a href="#__codelineno-8-16">16</a></span>
+<span class="normal"><a href="#__codelineno-8-17">17</a></span>
+<span class="normal"><a href="#__codelineno-8-18">18</a></span>
+<span class="normal"><a href="#__codelineno-8-19">19</a></span>
+<span class="normal"><a href="#__codelineno-8-20">20</a></span>
+<span class="normal"><a href="#__codelineno-8-21">21</a></span>
+<span class="normal"><a href="#__codelineno-8-22">22</a></span>
+<span class="normal"><a href="#__codelineno-8-23">23</a></span>
+<span class="normal"><a href="#__codelineno-8-24">24</a></span>
+<span class="normal"><a href="#__codelineno-8-25">25</a></span>
+<span class="normal"><a href="#__codelineno-8-26">26</a></span>
+<span class="normal"><a href="#__codelineno-8-27">27</a></span>
+<span class="normal"><a href="#__codelineno-8-28">28</a></span>
+<span class="normal"><a href="#__codelineno-8-29">29</a></span>
+<span class="normal"><a href="#__codelineno-8-30">30</a></span>
+<span class="normal"><a href="#__codelineno-8-31">31</a></span>
+<span class="normal"><a href="#__codelineno-8-32">32</a></span>
+<span class="normal"><a href="#__codelineno-8-33">33</a></span>
+<span class="normal"><a href="#__codelineno-8-34">34</a></span>
+<span class="normal"><a href="#__codelineno-8-35">35</a></span>
+<span class="normal"><a href="#__codelineno-8-36">36</a></span>
+<span class="normal"><a href="#__codelineno-8-37">37</a></span>
+<span class="normal"><a href="#__codelineno-8-38">38</a></span>
+<span class="normal"><a href="#__codelineno-8-39">39</a></span>
+<span class="normal"><a href="#__codelineno-8-40">40</a></span>
+<span class="normal"><a href="#__codelineno-8-41">41</a></span>
+<span class="normal"><a href="#__codelineno-8-42">42</a></span>
+<span class="normal"><a href="#__codelineno-8-43">43</a></span>
+<span class="normal"><a href="#__codelineno-8-44">44</a></span>
+<span class="normal"><a href="#__codelineno-8-45">45</a></span>
+<span class="normal"><a href="#__codelineno-8-46">46</a></span>
+<span class="normal"><a href="#__codelineno-8-47">47</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0&quot;</span> <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a>         <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a>    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a>    <span class="nt">&lt;parent&gt;</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a>        <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7"></a>        <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8"></a>        <span class="nt">&lt;version&gt;</span>2.3.12.RELEASE<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9"></a>        <span class="nt">&lt;relativePath/&gt;</span> <span class="cm">&lt;!-- lookup parent from repository --&gt;</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10"></a>    <span class="nt">&lt;/parent&gt;</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11"></a>    <span class="nt">&lt;groupId&gt;</span>com.tuling.mall<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12"></a>    <span class="nt">&lt;artifactId&gt;</span>vip-spring-cloud-alibaba<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13"></a>    <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14"></a>    <span class="nt">&lt;name&gt;</span>vip-spring-cloud-alibaba<span class="nt">&lt;/name&gt;</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15"></a>    <span class="nt">&lt;packaging&gt;</span>pom<span class="nt">&lt;/packaging&gt;</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16"></a>    <span class="nt">&lt;description&gt;</span>Demo project for vip-spring-cloud-alibaba<span class="nt">&lt;/description&gt;</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17"></a>
+<a id="__codelineno-8-18" name="__codelineno-8-18"></a>    <span class="nt">&lt;properties&gt;</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19"></a>        <span class="nt">&lt;java.version&gt;</span>1.8<span class="nt">&lt;/java.version&gt;</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20"></a>        <span class="nt">&lt;spring-cloud.version&gt;</span>Hoxton.SR12<span class="nt">&lt;/spring-cloud.version&gt;</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21"></a>        <span class="nt">&lt;spring-cloud-alibaba.version&gt;</span>2.2.8.RELEASE<span class="nt">&lt;/spring-cloud-alibaba.version&gt;</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22"></a>    <span class="nt">&lt;/properties&gt;</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23"></a>
+<a id="__codelineno-8-24" name="__codelineno-8-24"></a>
+<a id="__codelineno-8-25" name="__codelineno-8-25"></a>    <span class="nt">&lt;dependencyManagement&gt;</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26"></a>        <span class="nt">&lt;dependencies&gt;</span>
+<a id="__codelineno-8-27" name="__codelineno-8-27"></a>
+<a id="__codelineno-8-28" name="__codelineno-8-28"></a>            <span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-8-29" name="__codelineno-8-29"></a>                <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-8-30" name="__codelineno-8-30"></a>                <span class="nt">&lt;artifactId&gt;</span>spring-cloud-dependencies<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-8-31" name="__codelineno-8-31"></a>                <span class="nt">&lt;version&gt;</span>${spring-cloud.version}<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-8-32" name="__codelineno-8-32"></a>                <span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
+<a id="__codelineno-8-33" name="__codelineno-8-33"></a>                <span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-8-34" name="__codelineno-8-34"></a>            <span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-8-35" name="__codelineno-8-35"></a>            <span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-8-36" name="__codelineno-8-36"></a>                <span class="nt">&lt;groupId&gt;</span>com.alibaba.cloud<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-8-37" name="__codelineno-8-37"></a>                <span class="nt">&lt;artifactId&gt;</span>spring-cloud-alibaba-dependencies<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-8-38" name="__codelineno-8-38"></a>                <span class="nt">&lt;version&gt;</span>${spring-cloud-alibaba.version}<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-8-39" name="__codelineno-8-39"></a>                <span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
+<a id="__codelineno-8-40" name="__codelineno-8-40"></a>                <span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-8-41" name="__codelineno-8-41"></a>            <span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-8-42" name="__codelineno-8-42"></a>
+<a id="__codelineno-8-43" name="__codelineno-8-43"></a>        <span class="nt">&lt;/dependencies&gt;</span>
+<a id="__codelineno-8-44" name="__codelineno-8-44"></a>    <span class="nt">&lt;/dependencyManagement&gt;</span>
+<a id="__codelineno-8-45" name="__codelineno-8-45"></a>
+<a id="__codelineno-8-46" name="__codelineno-8-46"></a>
+<a id="__codelineno-8-47" name="__codelineno-8-47"></a><span class="nt">&lt;/project&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>微服务(Nacos Client)整合Nacos注册中心(Nacos Server)</p>
+<p>配置服务提供者mall-order</p>
+<p>服务提供者可以通过 Nacos 的服务注册发现功能将其服务注册到 Nacos server 上。</p>
+<p>1）引入依赖</p>
+<p>当前项目pom中引入依赖</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-9-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a>    <span class="nt">&lt;groupId&gt;</span>com.alibaba.cloud<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a>    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a>    <span class="nt">&lt;groupId&gt;</span>com.alibaba.nacos<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8"></a>    <span class="nt">&lt;artifactId&gt;</span>nacos-common<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a>    <span class="nt">&lt;version&gt;</span>2.1.0<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>注意：只引入spring-cloud-starter-alibaba-nacos-discovery包会出现下面的错误，还需要再引入nacos-common包</p>
+<p>此bug已经修复了，不需要再引入nacos-common了，只需要引入spring-cloud-starter-alibaba-nacos-discovery</p>
+<p>2)配置nacos注册中心 </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-10-10">10</a></span>
+<span class="normal"><a href="#__codelineno-10-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="nt">server</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8020</span><span class="w"></span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="w">  </span><span class="nt">application</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mall-order</span><span class="w">  </span><span class="c1">#微服务名称</span><span class="w"></span>
+<a id="__codelineno-10-7" name="__codelineno-10-7"></a>
+<a id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">  </span><span class="c1">#配置nacos注册中心地址</span><span class="w"></span>
+<a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="w">    </span><span class="nt">nacos</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="w">      </span><span class="nt">discovery</span><span class="p">:</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>更多配置：https://github.com/alibaba/spring-cloud-alibaba/wiki/Nacos-discover</p>
+<p><img alt="nacos_propertits.png" src="https://img.zivplus.xyz/images/2022/12/08/nacos_propertits.png" /></p>
+<p>3）启动mall-order，nacos管理端界面查看是否成功注册</p>
+<p>测试，通过Open API查询实例列表</p>
+<p>http://localhost:8848/nacos/v1/ns/instance/list?serviceName=mall-order</p>
+<p>配置服务消费者mall-user</p>
+<p>服务消费者可以通过 Nacos 的服务注册发现功能从 Nacos server 上获取到它要调用的服务。</p>
+<p>1）引入依赖</p>
+<p>当前项目pom中引入依赖</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-11-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-11-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-11-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-11-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-11-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-11-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-11-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-11-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-11-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a>    <span class="nt">&lt;groupId&gt;</span>com.alibaba.cloud<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3"></a>    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7"></a>    <span class="nt">&lt;groupId&gt;</span>com.alibaba.nacos<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8"></a>    <span class="nt">&lt;artifactId&gt;</span>nacos-common<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9"></a>    <span class="nt">&lt;version&gt;</span>2.1.0<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>2)配置nacos注册中心 </p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-12-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-12-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-12-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-12-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-12-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-12-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-12-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-12-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-12-10">10</a></span>
+<span class="normal"><a href="#__codelineno-12-11">11</a></span>
+<span class="normal"><a href="#__codelineno-12-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="nt">server</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8040</span><span class="w"></span>
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="w">  </span><span class="nt">application</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mall-user</span><span class="w">  </span><span class="c1">#微服务名称</span><span class="w"></span>
+<a id="__codelineno-12-7" name="__codelineno-12-7"></a>
+<a id="__codelineno-12-8" name="__codelineno-12-8"></a><span class="w">  </span><span class="c1">#配置nacos注册中心地址</span><span class="w"></span>
+<a id="__codelineno-12-9" name="__codelineno-12-9"></a><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-12-10" name="__codelineno-12-10"></a><span class="w">    </span><span class="nt">nacos</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-12-11" name="__codelineno-12-11"></a><span class="w">      </span><span class="nt">discovery</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-12-12" name="__codelineno-12-12"></a><span class="w">        </span><span class="nt">server-addr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1:8848</span><span class="w">       </span>
+</code></pre></div></td></tr></table></div>
+<p>3）启动mall-user，nacos管理端界面查看是否成功注册</p>
+<p>4）使用RestTemplate进行服务调用</p>
+<p>给 RestTemplate 实例添加 @LoadBalanced 注解，开启 @LoadBalanced 与 Ribbon 的集成</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
+<span class="normal"><a href="#__codelineno-13-2">2</a></span>
+<span class="normal"><a href="#__codelineno-13-3">3</a></span>
+<span class="normal"><a href="#__codelineno-13-4">4</a></span>
+<span class="normal"><a href="#__codelineno-13-5">5</a></span>
+<span class="normal"><a href="#__codelineno-13-6">6</a></span>
+<span class="normal"><a href="#__codelineno-13-7">7</a></span>
+<span class="normal"><a href="#__codelineno-13-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="nd">@Configuration</span><span class="w"></span>
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RestConfig</span><span class="w"> </span><span class="p">{</span><span class="w">   </span>
+<a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="w">    </span><span class="nd">@Bean</span><span class="w"></span>
+<a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="w">    </span><span class="nd">@LoadBalanced</span><span class="w">  </span>
+<a id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">RestTemplate</span><span class="w"> </span><span class="nf">restTemplate</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-13-6" name="__codelineno-13-6"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RestTemplate</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-13-7" name="__codelineno-13-7"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-13-8" name="__codelineno-13-8"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>调用逻辑</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
+<span class="normal"><a href="#__codelineno-14-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="err">#</span><span class="n">使用微服务名发起调用</span><span class="w"></span>
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="n">String</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;http://mall-order/order/findOrderByUserId/&quot;</span><span class="o">+</span><span class="n">id</span><span class="p">;</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>测试：http://localhost:8040/user/findOrderByUserId/1，返回数据：</p>
+<h4 id="25-nacos">2.5 Nacos注册中心常见配置</h4>
+<p>服务分级存储模型</p>
+<p>注册中心的核心数据是服务的名字和它对应的网络地址，当服务注册了多个实例时，我们需要对不 健康的实例进行过滤或者针对实例的⼀些特征进行流量的分配，那么就需要在实例上存储⼀些例如 健康状态、权重等属性。随着服务规模的扩大，渐渐的又需要在整个服务级别设定⼀些权限规则、 以及对所有实例都生效的⼀些开关，于是在服务级别又会设立⼀些属性。再往后，我们又发现单个 服务的实例又会有划分为多个子集的需求，例如⼀个服务是多机房部署的，那么可能需要对每个机 房的实例做不同的配置，这样又需要在服务和实例之间再设定⼀个数据级别。</p>
+<p>Nacos 在经过内部多年生 产经验后提炼出的数据模型，则是⼀种服务-集群-实例的三层模型。这样基本可以满足 服务在所有场景下的数据存储和管理。</p>
+<p><img alt="iShot_2022-12-08_21.37.58.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-08_21.37.58.png" /></p>
+<p>服务逻辑隔离</p>
+<p>Nacos 数据模型 Key 由三元组唯一确定, Namespace默认是空串，公共命名空间（public），分组默认是 DEFAULT_GROUP。</p>
+<p><img alt="iShot_2022-12-08_21.38.11.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-08_21.38.11.png" /></p>
+<p>Namespace 隔离设计</p>
+<p>命名空间(Namespace)用于进行租户（用户）粒度的隔离，Namespace 的常用场景之一是不同环境的隔离，例如开发测试环境和生产环境的资源（如配置、服务）隔离等。   </p>
+<p><img alt="iShot_2022-12-08_21.38.29.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-08_21.38.29.png" /></p>
+<p>修改yml配置</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
+<span class="normal"><a href="#__codelineno-15-2">2</a></span>
+<span class="normal"><a href="#__codelineno-15-3">3</a></span>
+<span class="normal"><a href="#__codelineno-15-4">4</a></span>
+<span class="normal"><a href="#__codelineno-15-5">5</a></span>
+<span class="normal"><a href="#__codelineno-15-6">6</a></span>
+<span class="normal"><a href="#__codelineno-15-7">7</a></span>
+<span class="normal"><a href="#__codelineno-15-8">8</a></span>
+<span class="normal"><a href="#__codelineno-15-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="nt">spring</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="w">  </span><span class="nt">application</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mall-user</span><span class="w">  </span><span class="c1">#微服务名称</span><span class="w"></span>
+<a id="__codelineno-15-4" name="__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="w">    </span><span class="nt">nacos</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-15-7" name="__codelineno-15-7"></a><span class="w">      </span><span class="nt">discovery</span><span class="p">:</span><span class="w"></span>
+<a id="__codelineno-15-8" name="__codelineno-15-8"></a><span class="w">        </span><span class="nt">server-addr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1:8848</span><span class="w">   </span><span class="c1">#配置nacos注册中心地址</span><span class="w"></span>
+<a id="__codelineno-15-9" name="__codelineno-15-9"></a><span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bc50d386-8870-4a26-8803-0187486c57be</span><span class="w">  </span><span class="c1"># dev 开发环境</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+<p>启动mall-user，进入nacos控制台可以看到mall-user注册成功，所属namespace是dev</p>
+<p><img alt="iShot_2022-12-08_21.38.44.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-08_21.38.44.png" /></p>
+<p>测试：http://localhost:8040/user/findOrderByUserId/1，报错</p>
+<p><img alt="iShot_2022-12-08_21.38.54.png" src="https://img.zivplus.xyz/images/2022/12/08/iShot_2022-12-08_21.38.54.png" /></p>
+<p>原因：mall-order和mall-user使用了不同的namespace，导致服务隔离。</p>
+<p>group服务分组</p>
+<p>不同的服务可以归类到同一分组，group也可以起到服务隔离的作用。yml中可以通过spring.cloud.nacos.discovery.group参数配置</p>
+<p>临时实例和持久化实例</p>
+<p>在定义上区分临时实例和持久化 实例的关键是健康检查的方式。临时实例使用客户端上报模式，而持久化实例使用服务端反向探测模式。临时实例需要能够自动摘除不健康实例，而且无需持久化存储实例。持久化实例使用服务端探测的健康检查方式，因为客户端不会上报心跳， 所以不能自动摘除下线的实例。</p>
+<p>在大中型的公司里，这两种类型的服务往往都有。⼀些基础的组件例如数据库、缓存等，这些往往不能上报心跳，这种类型的服务在注册时，就需要作为持久化实例注册。而上层的业务服务，例如 微服务或者 Dubbo 服务，服务的 Provider 端支持添加汇报心跳的逻辑，此时就可以使用动态服务的注册方式。</p>
+<p>Nacos 1.x 中持久化及非 持久化的属性是作为实例的⼀个元数据进行存储和识别。Nacos 2.x 中继续沿用了持久化及非持久化的设定，但是有了⼀些调整。在 Nacos2.0 中将是否持久化的数据抽象至服务级别， 且不再允许⼀个服务同时存在持久化实例和非持久化实例，实例的持久化属性继承自服务的持久化属性。</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span>
+<span class="normal"><a href="#__codelineno-16-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="err">#</span><span class="w"> </span><span class="n">持久化实例</span><span class="w"></span>
+<a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="n">spring</span><span class="p">.</span><span class="na">cloud</span><span class="p">.</span><span class="na">nacos</span><span class="p">.</span><span class="na">discovery</span><span class="p">.</span><span class="na">ephemeral</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">       </span>
+</code></pre></div></td></tr></table></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            回到页面顶部
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="页脚" >
+      
+        
+        <a href="../04-00-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E4%BB%8B%E7%BB%8D/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 04-00-微服务架构介绍" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              04-00-微服务架构介绍
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../SpringCloudAlibaba/04%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E7%BB%84%E4%BB%B6Feign/" class="md-footer__link md-footer__link--next" aria-label="下一页: 04微服务调用组件Feign" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              04微服务调用组件Feign
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.top"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      
+    
+  </body>
+</html>
