@@ -13,7 +13,7 @@
     
     
       
-        <title>Redis面试突击 - Java Architect</title>
+        <title>TCP面试20问 - Java Architect</title>
       
     
     
@@ -65,11 +65,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#redis" class="md-skip">
-          跳转至
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -99,7 +94,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Redis面试突击
+              TCP面试20问
             
           </span>
         </div>
@@ -835,14 +830,103 @@
       
       
         <label class="md-nav__link" for="__nav_5">
+          面试突击
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="面试突击" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          面试突击
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
           Redis
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Redis" data-md-level="1">
-        <label class="md-nav__title" for="__nav_5">
+      <nav class="md-nav" aria-label="Redis" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
           <span class="md-nav__icon md-icon"></span>
           Redis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB/" class="md-nav__link">
+        Redis面试突击
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB2/" class="md-nav__link">
+        Redis面试突击2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          TCP面试
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="TCP面试" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          TCP面试
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -859,172 +943,17 @@
       
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Redis面试突击
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
-        Redis面试突击
+        TCP面试20问
       </a>
       
-        
+    </li>
+  
 
-<nav class="md-nav md-nav--secondary" aria-label="目录">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目录
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#redis" class="md-nav__link">
-    Redis是单线程还是多线程
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_1" class="md-nav__link">
-    Redis单线程为什么还能这么快
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_2" class="md-nav__link">
-    Redis底层数据是如何用跳表来存储的
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis-key" class="md-nav__link">
-    Redis Key过期了为什么内存没释放
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis-keyredis" class="md-nav__link">
-    Redis Key没设置过期时间为什么被Redis主动删除了
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#rediskeylrulfu" class="md-nav__link">
-    Redis淘汰Key的算法LRU与LFU区别
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#keyredis" class="md-nav__link">
-    删除Key的命令会阻塞Redis吗
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_3" class="md-nav__link">
-    Redis主从、哨兵、集群架构优缺点比较
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redishash" class="md-nav__link">
-    Redis集群数据hash分片算法是怎么回事
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redisbug" class="md-nav__link">
-    Redis执行命令竟然有死循环阻塞Bug
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_4" class="md-nav__link">
-    一次线上事故，Redis主从切换导致了缓存雪崩
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redisrdbaof" class="md-nav__link">
-    Redis持久化RDB、AOF、混合持久化是怎么回事
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_5" class="md-nav__link">
-    线上Redis持久化策略一般如何设置
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_6" class="md-nav__link">
-    一次线上事故，Redis主节点宕机导致数据全部丢失
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_7" class="md-nav__link">
-    Redis线上数据如何备份
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_8" class="md-nav__link">
-    Redis主从复制风暴是怎么回事
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_9" class="md-nav__link">
-    Redis集群网络抖动导致频繁主从切换怎么处理
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redismaster" class="md-nav__link">
-    Redis集群为什么至少需要三个master节点
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_10" class="md-nav__link">
-    Redis集群为什么推荐奇数个节点
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_11" class="md-nav__link">
-    Redis集群支持批量操作命令吗
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -1036,8 +965,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB2/" class="md-nav__link">
-        Redis面试突击2
+      <a href="../%E5%A4%A7%E5%8E%82%E9%9D%A2%E8%AF%95/" class="md-nav__link">
+        大厂面试
       </a>
     </li>
   
@@ -1068,154 +997,6 @@
   
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目录
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#redis" class="md-nav__link">
-    Redis是单线程还是多线程
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_1" class="md-nav__link">
-    Redis单线程为什么还能这么快
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_2" class="md-nav__link">
-    Redis底层数据是如何用跳表来存储的
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis-key" class="md-nav__link">
-    Redis Key过期了为什么内存没释放
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis-keyredis" class="md-nav__link">
-    Redis Key没设置过期时间为什么被Redis主动删除了
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#rediskeylrulfu" class="md-nav__link">
-    Redis淘汰Key的算法LRU与LFU区别
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#keyredis" class="md-nav__link">
-    删除Key的命令会阻塞Redis吗
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_3" class="md-nav__link">
-    Redis主从、哨兵、集群架构优缺点比较
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redishash" class="md-nav__link">
-    Redis集群数据hash分片算法是怎么回事
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redisbug" class="md-nav__link">
-    Redis执行命令竟然有死循环阻塞Bug
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_4" class="md-nav__link">
-    一次线上事故，Redis主从切换导致了缓存雪崩
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redisrdbaof" class="md-nav__link">
-    Redis持久化RDB、AOF、混合持久化是怎么回事
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_5" class="md-nav__link">
-    线上Redis持久化策略一般如何设置
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_6" class="md-nav__link">
-    一次线上事故，Redis主节点宕机导致数据全部丢失
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_7" class="md-nav__link">
-    Redis线上数据如何备份
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_8" class="md-nav__link">
-    Redis主从复制风暴是怎么回事
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_9" class="md-nav__link">
-    Redis集群网络抖动导致频繁主从切换怎么处理
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redismaster" class="md-nav__link">
-    Redis集群为什么至少需要三个master节点
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_10" class="md-nav__link">
-    Redis集群为什么推荐奇数个节点
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#redis_11" class="md-nav__link">
-    Redis集群支持批量操作命令吗
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -1229,60 +1010,151 @@
                   
 
 
-  <h1>Redis面试突击</h1>
+  <h1>TCP面试20问</h1>
 
-<h3 id="redis">Redis是单线程还是多线程</h3>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_CChWu3VLJ1.png" /></p>
-<h3 id="redis_1">Redis单线程为什么还能这么快</h3>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_CeZ6EMD44b.png" /></p>
-<h3 id="redis_2">Redis底层数据是如何用跳表来存储的</h3>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_yOJihtEpxI.png" /></p>
-<h3 id="redis-key">Redis Key过期了为什么内存没释放</h3>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_8bcILgVpFo.png" /></p>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_9LvpvJYDUn.png" /></p>
-<h3 id="redis-keyredis">Redis Key没设置过期时间为什么被Redis主动删除了</h3>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_fjI9I0E4pi.png" /></p>
-<h3 id="rediskeylrulfu">Redis淘汰Key的算法LRU与LFU区别</h3>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_T6E1O2Vd13.png" /></p>
-<h3 id="keyredis">删除Key的命令会阻塞Redis吗</h3>
-<p>删除单个字符串类型的key，时间复杂度为o(1)</p>
-<p>删除单个列表、集合、有序集合或哈希表类型的key，时间复杂度为O(M)，M为以上数据结构内的元素数据</p>
-<h3 id="redis_3">Redis主从、哨兵、集群架构优缺点比较</h3>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_P39oTskdrB.png" /></p>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_BHXrwAqluo.png" /></p>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_NlhUJfi32z.png" /></p>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_BE0leN9zBF.png" /></p>
-<h3 id="redishash">Redis集群数据hash分片算法是怎么回事</h3>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_QLZC0kHf63.png" /></p>
-<h3 id="redisbug">Redis执行命令竟然有死循环阻塞Bug</h3>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_btPeGtJsut.png" /></p>
-<p><img alt="" src="https://img.zivplus.xyz/images/2022/11/15/chrome_riWF1kNZdE.png" /></p>
-<h3 id="redis_4">一次线上事故，Redis主从切换导致了缓存雪崩</h3>
-<p><img alt="chrome_meuVXejhWl.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_meuVXejhWl.png" /></p>
-<h3 id="redisrdbaof">Redis持久化RDB、AOF、混合持久化是怎么回事</h3>
-<p><img alt="chrome_m0MsYC9IRH.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_m0MsYC9IRH.png" /></p>
-<p><img alt="chrome_UcnynltecW.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_UcnynltecW.png" /></p>
-<p><img alt="chrome_JHHqnj6FVi.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_JHHqnj6FVi.png" /></p>
-<p><img alt="chrome_kJ0IwIFI3x.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_kJ0IwIFI3x.png" /></p>
-<p><img alt="chrome_VNJdetjTzy.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_VNJdetjTzy.png" /></p>
-<p><img alt="chrome_ViuXcAjTZl.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_ViuXcAjTZl.png" /></p>
-<p><img alt="chrome_MrcLDVs0eM.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_MrcLDVs0eM.png" /></p>
-<h3 id="redis_5">线上Redis持久化策略一般如何设置</h3>
-<p>如果对性能要求较高，在Master最好不要做持久化，可以在某个Salve开启AOF备份数据，策略设置为每秒同步一次即可。</p>
-<h3 id="redis_6">一次线上事故，Redis主节点宕机导致数据全部丢失</h3>
-<p><img alt="chrome_TzLrLUHK5v.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_TzLrLUHK5v.png" /></p>
-<h3 id="redis_7">Redis线上数据如何备份</h3>
-<p><img alt="chrome_pZ8Zhpg9Ti.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_pZ8Zhpg9Ti.png" /></p>
-<h3 id="redis_8">Redis主从复制风暴是怎么回事</h3>
-<p><img alt="chrome_kmlc4cKFnY.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_kmlc4cKFnY.png" /></p>
-<h3 id="redis_9">Redis集群网络抖动导致频繁主从切换怎么处理</h3>
-<p><img alt="chrome_89pkX25Lsu.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_89pkX25Lsu.png" /></p>
-<h3 id="redismaster">Redis集群为什么至少需要三个master节点</h3>
-<p><img alt="chrome_y1GwIi5uZu.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_y1GwIi5uZu.png" /></p>
-<h3 id="redis_10">Redis集群为什么推荐奇数个节点</h3>
-<p><img alt="chrome_rU0pxMo5kx.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_rU0pxMo5kx.png" /></p>
-<h3 id="redis_11">Redis集群支持批量操作命令吗</h3>
-<p><img alt="chrome_laWwlVd2P9.png" src="https://img.zivplus.xyz/images/2022/11/17/chrome_laWwlVd2P9.png" /></p>
+<p>1、什么事TCP网络分层</p>
+<p><img alt="iShot_2022-12-13_09.16.36.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_09.16.36.png" /></p>
+<p><img alt="iShot_2022-12-13_09.30.57.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_09.30.57.png" /></p>
+<p>2、TCP的三次握手中为什么是三次？为什么不是两次、四次？</p>
+<p><img alt="iShot_2022-12-13_09.40.40.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_09.40.40.png" /></p>
+<p>如果只有两次，没办法确认客户端的接收能力，只有服务端单方面确认链接已经建立，这时客户端可以选择不响应服务端。三次已经可以确认客户端对服务端、服务端对客户端是链接的状态，再多就是资源多浪费。</p>
+<p>3、TCP的四次挥手为什么是四次？为什么不能是三次？</p>
+<p><img alt="iShot_2022-12-13_10.26.10.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_10.26.10.png" /></p>
+<p>如将2、3次合并成一次，作为服务端收到客户端的关闭链接请求，首先进入的是close_wait状态。为什么是close_wait状态，首先作为服务端收到链接关闭请求后，服务端马上要发送ACK链接确认信号，第二服务端可能有些资源未释放，有些请求未处理，2、3次之间可能有相当大的延时或时差，如把2、3次合为一体，客户端要以最后发送LAST_ACK最后的时刻为准，客户端未收到LAST_ACK，服务端会一直重试，造成资源的浪费。</p>
+<p>4、为什么 SYNFIN 不包含数据却要消耗一个序列号</p>
+<p>凡是需要对端确认的，一定消耗TCP报文的序列号</p>
+<p>SYN和FIN需要对端的确认，所以需要消耗一个序列号</p>
+<p><img alt="iShot_2022-12-13_13.59.20.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_13.59.20.png" /></p>
+<p>5、什么是半连接队列？什么是SYN Flood攻击？</p>
+<p>客户端大量伪造 IP 发送SYN 包，服务端回复的 ACK+SYN 去到了一个「未知」的P地址，势
+必会造成服务端大量的连接处于 SYN_RCVD 状态，而服务器的半连接队列大小也是有限的，如
+果半连接队列满，也会出现无法处理正常请求的情况。</p>
+<p><img alt="iShot_2022-12-13_13.59.20.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_13.59.20.png" /></p>
+<p>6、说说TCP快速打开(TFO)的原理</p>
+<p>TCP 快速打开(TCP Fast Open, TFO)
+TFO 是在原来 TCP 协议上的扩展协议，它的主要原理就在发送第一个 SYN 包的时候就开始传数
+据了，不过它要求当前客户端之前已经完成过「正常」的三次握手。
+快速打开分两个阶段：请求 Fast Open Cookie 和 真正开始 TCP Fast Open</p>
+<p><img alt="iShot_2022-12-13_14.46.20.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_14.46.20.png" /></p>
+<p>TCP Fast Open的优势
+一个最显著的优点是可以利用握手去除一个往返 RTT
+可以防止 SYN-Flood 攻击之类的</p>
+<p><img alt="iShot_2022-12-13_15.09.48.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_15.09.48.png" /></p>
+<p>7、TCP报文中的时间戳有什么作用？</p>
+<p><img alt="iShot_2022-12-13_15.18.52.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_15.18.52.png" /></p>
+<p>TCP Timestamps Option 由四部分构成：
+类别（kind）、长度（Length）、发送方时间戳（TS value）、回显时间戳（TS
+Echo Reply)</p>
+<p>TCP 的时间戳主要解决两大问题：</p>
+<ul>
+<li>计算往返时延 RTT(Round-Trip Time)</li>
+</ul>
+<p><img alt="iShot_2022-12-13_15.20.02.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_15.20.02.png" /></p>
+<ul>
+<li>防止序列居的回绕问题</li>
+</ul>
+<p>TCP 的序列号用 32bit 来表示，因此在2^32 字节的数据传输后序列号就会溢出回
+  绕。TCP 的窗口经过窗口缩放可以最高到 1GB(2^30)，在高速网络中，序列号在很
+  短的时间内就会被重复使用。</p>
+<p>假设发送了6个数据包，每个数据包的大小为 1GB，第5个包序列号发生回绕。
+  第2个包因为某些原因延迟导致重传，但没有丢失到时间t7 才到达。
+  这个迷途数据包与后面要发送的第6个包序列号完全相同，如果没有一些措施进行区
+  分，将会造成数据的紊乱。
+  有 Timestamps 的存在，迷途数据包与第6个包可以区分。</p>
+<p><img alt="iShot_2022-12-13_15.22.27.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_15.22.27.png" /></p>
+<p>8、TCP 的超时重传时间是如何计算的</p>
+<p>TCP 具有超时重传机制，即间隔一段时间没有等到数据包的回复时，重传这个数据
+包。
+这个重传间隔也叫做超时重传时间(Retransmission Timeout, 简称RTO)</p>
+<p><img alt="iShot_2022-12-13_17.06.56.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_17.06.56.png" />经典方法（适用 RTT 波动较小的情况）</p>
+<p>往返时延 RTT(Round-Trip Time)
+一个最简单的想法就是取平均值，比如第一次 RTT 为 500ms， 第二次 RTT 为
+800ms，那么第三次发送时，各让一步取平均值 RTO 为650ms。
+经典算法引入了「平滑往返时间」(Smoothed round trip time, SRTT)：经过平滑
+后的RTT的值，每测量一次 RTT 就对 SRTT 作一次更新计算。 </p>
+<p><img alt="iShot_2022-12-13_17.08.18.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_17.08.18.png" /></p>
+<p>a是平滑因子，建议值是0.8~0.9
+假设平滑因子a= 0.8
+SRTT = 80% 的原始值 +20%的新采样RTT值
+当Q趋近于1时：SRTT 越接近上一次的 SRTT 值，与新的 RTT 值的关系越小，表现
+出来就是对短暂的时延变化越不敏感。
+当Q趋近于◎时，1-Q趋近于 1，SRTT 越接近新采样的RTT 值，与旧的 SRTT 值关
+系越小，表现出来就是对时延变化更敏感，能够更快速的跟随时延的变化而变化</p>
+<p>9、能不能说一说 TCP 的流量控制？</p>
+<p>对于发送端和接收端而言，TCP 需要把发送的数据放到发送缓存区，将接收的数据放到
+接收缓存区。
+而流量控制要做的事情，就是在通过接收缓存区的大小，控制发送端的发送。如果对
+方的接收缓存区满了，就不能再继续发送了，
+为了控制发送端的速率，接收端会告知客户端自己接收窗口（rwnd），也就是接收缓
+冲区中空闲的部分。</p>
+<p><img alt="iShot_2022-12-13_20.00.40.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_20.00.40.png" /></p>
+<p><img alt="iShot_2022-12-13_20.00.59.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_20.00.59.png" /></p>
+<p><img alt="iShot_2022-12-13_20.02.06.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_20.02.06.png" /></p>
+<p>10、如何理解 TCP 的keep-alive的原理？</p>
+<p>一个 TCP 连接上，如果通信双方都不向对方发送数据，那么 TCP 连接就不会有任何数
+据交换。假设应用程序是一个 web服务器，客户端发出三次握手以后故障宕机或被踢掉网线，
+对于 web 服务器而已，下一个数据包将永远无法到来，但是它一无所知。</p>
+<p>TCP 协议的设计者考虑到了这种检测长时间死连接的需求，于是乎设计了 keepalive
+机制。它的作用就是探测对端的连接有没有失效，通过定时发送探测包来探测连接的对端是
+否存活，不过默认情况下需要 7200s 没有数据包交互才会发送 keepalive 探测包，往
+往这个时间太久了，我们熟知的很多组件都没有开启 keepalive 特性，而是选择在应
+用层做心跳机制。</p>
+<p>11、聊一聊TCP中的端口号</p>
+<p>12、TCP场景问题1</p>
+<p><img alt="iShot_2022-12-13_22.09.46.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_22.09.46.png" /></p>
+<p>13、TCP场景问题2</p>
+<p>收到 1P 数据包解析以后，它怎么知道这个分组应该投递到上层的哪一个协议（UDP
+或 TCP)？</p>
+<p>协议：区分1P协议上的上层协议。在Linux系统的/etc/protocols文件中定义了所有上层
+协议对应的协议字段，ICMP为1，TCP为6，UDP为17</p>
+<p>14、TCP场景问题3</p>
+<p><img alt="iShot_2022-12-13_22.13.46.png" src="https://img.zivplus.xyz/images/2022/12/13/iShot_2022-12-13_22.13.46.png" /></p>
+<p>15、讲一讲telnet的用法</p>
+<p>检查端口是否打开
+telnet 的一个最大作用就是检查一个端口是否处于打开，使用的命令是 telnet
+[domainname or ip] [portl，这条命令能告诉我们到远端 server 指定端口的网连接是
+否可达。</p>
+<p>telnet 发送http 请求</p>
+<p>执行 telnet www.baidu.com 80，粘贴下面的文本（注意总共有四行，最后两行为两
+个空行）</p>
+<p>16、讲一讲netstat的用法</p>
+<p>netstat 命令用于显示各种网络相关信息</p>
+<p>常见参数</p>
+<ul>
+<li>-a (all)显示所有选项，默认不显示LISTEN相关</li>
+<li>(tcp)仅显示tcp相关选项</li>
+<li>-u (udp)仅显示udp相关选项</li>
+<li>-n 拒绝显示别名，能显示数字的全部转化成数字。</li>
+<li>-| 仅列出有在 Listen（监听） 的服務状态</li>
+<li>-p 显示建立相关链接的程序名</li>
+<li>r显示路由信息，路由表</li>
+<li>-e 显示扩展信息，例如uid等</li>
+<li>-s按各个协议进行统计</li>
+<li>-c 每隔一个固定时间，执行该netstat命令</li>
+</ul>
+<p>17、讲一讲tcpdump的用法</p>
+<p>tcpdump 则是一个命令行的网络流量分析工具，功能非常强大，一般我们用来抓TCP的
+包。</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>tcpdump -i any
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a>tucdump -i any host <span class="m">14</span>.215.177.38
+</code></pre></div></td></tr></table></div>
+<p>18、讲一讲wireshark的用法</p>
+<p>19、TCP和UDP的区别</p>
+<p>TCP是一个面向连接的、可靠的、基于字节流的传输层协议。而UDP是一个面向无连接的传输层协议</p>
+<p><strong>面向连接。</strong>所谓的连接，指的是客户端和服务器的连接，在双方互相通信之前，TCP
+需要三次握手建立连接，而 UDP 没有相应建立连接的过程。</p>
+<p><strong>可靠性。</strong>TCP 花了非常多的功夫保证连接的可靠，这个可靠性体现在哪些方面呢？</p>
+<p>1)TCP有状态：TCP 会精准记录哪些数据发送了，哪些数据被对方接收了，哪些没有被
+接收到，而且保证数据包按序到达，不允许半点差错</p>
+<p>2)TCP可控制：意识到丢包了或者网络环境不佳，TCP 会根据具体情况调整自己的行
+为，控制自己的发送速度或者重发</p>
+<p>20、如果要你来设计一个QQ，在网络协议上你会考虑如何设计？</p>
+<p>登陆采用TCP协议和HTTP协议，你和好友之间发送消息，主要采用UDP协议，内网传文件采用了P2P技术。</p>
+<p>总来的说：</p>
+<p>1.登陆过程，客户端client 采用TCP协议向服务器server发送信息，HTTP协议下载信息。登陆之后，会有一个TCP连接来保持在线状态。</p>
+<p>2.和好友发消息，客户端client采用UDP协议，但是需要通过服务器转发。腾讯为了确保传输消息的可靠，采用上层协议来保证可靠传输。如果消息发送失败，客户端会提示消息发送失败，并可重新发送。</p>
+<p>3.如果是在内网里面的两个客户端传文件，QQ采用的是P2P技术，不需要服务器中转。</p>
 
 
 
@@ -1308,7 +1180,7 @@
     <nav class="md-footer__inner md-grid" aria-label="页脚" >
       
         
-        <a href="../../Nginx/10Nginx%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 10Nginx安全认证" rel="prev">
+        <a href="../Redis/Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB2/" class="md-footer__link md-footer__link--prev" aria-label="上一页: Redis面试突击2" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -1317,20 +1189,20 @@
               <span class="md-footer__direction">
                 上一页
               </span>
-              10Nginx安全认证
+              Redis面试突击2
             </div>
           </div>
         </a>
       
       
         
-        <a href="../Redis%E9%9D%A2%E8%AF%95%E7%AA%81%E5%87%BB2/" class="md-footer__link md-footer__link--next" aria-label="下一页: Redis面试突击2" rel="next">
+        <a href="../%E5%A4%A7%E5%8E%82%E9%9D%A2%E8%AF%95/" class="md-footer__link md-footer__link--next" aria-label="下一页: 大厂面试" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 下一页
               </span>
-              Redis面试突击2
+              大厂面试
             </div>
           </div>
           <div class="md-footer__button md-icon">
